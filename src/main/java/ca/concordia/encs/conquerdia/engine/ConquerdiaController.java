@@ -1,7 +1,6 @@
 package ca.concordia.encs.conquerdia.engine;
 
 import ca.concordia.encs.conquerdia.engine.command.Command;
-import ca.concordia.encs.conquerdia.engine.command.CommandExecutor;
 import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
 
 import java.io.PrintStream;
@@ -14,12 +13,13 @@ import java.util.Scanner;
 public class ConquerdiaController {
 
     private final ConquerdiaModel conquerdiaModel = new ConquerdiaModel();
-    private final CommandFactory commandFactory = new CommandFactory();
 
+    /**
+     * @param scanner
+     * @param output
+     */
     public void start(Scanner scanner, PrintStream output) {
         output.println("Welcome to Conquerdia Game");
-
-
         while (true) {
             output.print("> ");
             String commandStr = scanner.nextLine();
@@ -31,11 +31,14 @@ public class ConquerdiaController {
         }
     }
 
+    /**
+     * @param commandStr
+     * @param output
+     */
     void executeCommand(String commandStr, PrintStream output) {
-        CommandExecutor commandExecutor = new CommandExecutor();
-        List<Command> commands = commandFactory.getCommands(commandStr, conquerdiaModel);
+        List<Command> commands = CommandFactory.getCommands(conquerdiaModel, commandStr);
         for (Command command : commands) {
-            output.println(commandExecutor.executeCommand(command));
+            output.println(command.execute());
         }
     }
 }
