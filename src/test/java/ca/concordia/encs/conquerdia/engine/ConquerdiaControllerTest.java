@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.engine;
 
+import ca.concordia.encs.conquerdia.engine.util.MessageUtil;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -35,7 +36,7 @@ public class ConquerdiaControllerTest extends TestCase {
         ConquerdiaController conquerdia = new ConquerdiaController();
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             conquerdia.executeCommand("editcontinent", new PrintStream(output));
-            assertEquals("Invalid Command" + System.getProperty("line.separator"), output.toString());
+            assertEquals(MessageUtil.EDIT_CONTINENT_COMMAND_ERR1 + System.getProperty("line.separator"), output.toString());
         } catch (Exception ex) {
             fail();
         }
