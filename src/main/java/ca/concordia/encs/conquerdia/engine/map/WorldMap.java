@@ -4,9 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WorldMap {
-    private final Set<Continent> continents = new HashSet<>();
+    private Set<Continent> continents = new HashSet<>();
 
-    public Set<Continent> getContinents() {
+    public void setContinents(Set<Continent> continents) {
+		this.continents = continents;
+	}
+
+	public Set<Continent> getContinents() {
         return continents;
     }
 }

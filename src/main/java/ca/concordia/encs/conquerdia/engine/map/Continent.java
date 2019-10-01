@@ -16,7 +16,24 @@ public class Continent {
     private String name;
     private Integer value;
     private Set<Country> countries;
-    private WorldMap worldMap;
+    
+/**
+ * Setter method for the countries
+ * @param countries the countries to set for the continent
+ */
+    public void setCountries(Set<Country> countries) {
+		this.countries = countries;
+	}
+    
+/**
+ * Getter method for the countries
+ * @return the countries of a given continent returned as a set.
+ */
+	public Set<Country> getCountries() {
+		return countries;
+	}
+
+	private WorldMap worldMap;
 
     private Continent() {
     }
@@ -106,13 +123,7 @@ public class Continent {
         public Builder(String name) {
             continent.name = name;
         }
-
-        /**
-         * Set value to the continent
-         *
-         * @param value The value of continent
-         * @return return current builder object
-         */
+        
         public Builder setValue(Integer value) {
             continent.value = value;
             return this;

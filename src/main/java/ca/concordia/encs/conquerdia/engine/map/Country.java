@@ -64,6 +64,14 @@ public class Country {
     public Set<Country> getAdjacentCountries() {
         return adjacentCountries;
     }
+    
+    /**
+     * 
+     * @param adjacentCountries set of adjacent countries.
+     */
+    public void setAdjacentCountries(Set<Country> adjacentCountries) {
+        this.adjacentCountries.addAll(adjacentCountries);
+    }
 
     /**
      * This getter method return the continent object that this country is placed on
