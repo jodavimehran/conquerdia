@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -95,7 +94,7 @@ public class MapValidationTest {
 		europe.setCountries(europeCountries);
 
     }
-	
+    
 	/**
 	 * This TestCase is designed to check the result of 
 	 * {@link MapValidation#isContinentAConnectedSubGraphOfWorldMap(Continent)} method in {@link MapValidation} class.
@@ -108,6 +107,7 @@ public class MapValidationTest {
 		// Check if the continent is a valid Subgraph of the Map
 		assertTrue(mapValidation.isContinentAConnectedSubGraphOfWorldMap(asia));
 	}
+	
 	/**
 	 * This TestCase is designed to check the result of {@link MapValidation#isMapAConnectedGraph(WorldMap)} 
 	 * method in {@link MapValidation} class
@@ -119,6 +119,7 @@ public class MapValidationTest {
 		mapValidation.setContinents(worldMap.getContinents());		
 		assertTrue(mapValidation.isMapAConnectedGraph());
 	}
+	
 	/**
 	 * This TestCase is designed to check the result of {@link MapValidation#isEeachCountryBelongingToOnlyOneContinent(WorldMap)}
 	 * in {@link MapValidation} class.
@@ -130,10 +131,10 @@ public class MapValidationTest {
 		mapValidation.setContinents(worldMap.getContinents());
 		assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent());
 	}
+	
 	/**
-	 * This TEsCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules(WorldMap)}
+	 * This TestCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules(WorldMap)}
 	 * in {@link MapValidation} class.
-	 * @return
 	 */
 	@Test
 	public void checkAllMapValidationRulesTestCase() {
@@ -141,6 +142,18 @@ public class MapValidationTest {
 		mapValidation.setWorldMap(worldMap);
 		mapValidation.setContinents(worldMap.getContinents());
 		assertTrue(mapValidation.checkAllMapValidationRules());
+	}
+	
+	/**
+	 * This TestCase is designed to check the result of {@link MapValidation#isAllContinentsAConnectedSubgraphofWorldMap(Set)} 
+	 * in {@link MapValidation} class. 
+	 */
+	@Test
+	public void isAllContinentsAConnectedSubgraphofWorldMap() {
+			MapValidation mapValidation = new MapValidation();
+			mapValidation.setWorldMap(worldMap);
+			mapValidation.setContinents(worldMap.getContinents());
+			assertTrue(mapValidation.isAllContinentsAConnectedSubgraphofWorldMap(worldMap.getContinents()));
 	}
 	
 }
