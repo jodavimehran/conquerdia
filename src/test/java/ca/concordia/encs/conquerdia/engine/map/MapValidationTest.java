@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -101,7 +102,9 @@ public class MapValidationTest {
 	 */
 	@Test 
 	public void isContinentAConnectedSubGraphOfWorldMapTestCase(){	
-		MapValidation mapValidation = new MapValidation(model.getWorldMap());
+		MapValidation mapValidation = new MapValidation();
+		mapValidation.setWorldMap(worldMap);
+		mapValidation.setContinents(worldMap.getContinents());
 		// Check if the continent is a valid Subgraph of the Map
 		assertTrue(mapValidation.isContinentAConnectedSubGraphOfWorldMap(asia));
 	}
@@ -111,9 +114,10 @@ public class MapValidationTest {
 	 */
 	@Test 
 	public void isMapAConnectedGraphTestCase(){
-				
-		MapValidation mapValidation = new MapValidation(model.getWorldMap());
-		assertTrue(mapValidation.isMapAConnectedGraph(worldMap));
+		MapValidation mapValidation = new MapValidation();
+		mapValidation.setWorldMap(worldMap);
+		mapValidation.setContinents(worldMap.getContinents());		
+		assertTrue(mapValidation.isMapAConnectedGraph());
 	}
 	/**
 	 * This TestCase is designed to check the result of {@link MapValidation#isEeachCountryBelongingToOnlyOneContinent(WorldMap)}
@@ -121,8 +125,10 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void isEeachCountryBelongingToOnlyOneContinentTestCase() {
-		MapValidation mapValidation = new MapValidation(model.getWorldMap());
-		assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent(worldMap));
+		MapValidation mapValidation = new MapValidation();
+		mapValidation.setWorldMap(worldMap);
+		mapValidation.setContinents(worldMap.getContinents());
+		assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent());
 	}
 	/**
 	 * This TEsCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules(WorldMap)}
@@ -131,8 +137,10 @@ public class MapValidationTest {
 	 */
 	@Test
 	public void checkAllMapValidationRulesTestCase() {
-		MapValidation mapValidation = new MapValidation(model.getWorldMap());
-		assertTrue(mapValidation.checkAllMapValidationRules(worldMap));
+		MapValidation mapValidation = new MapValidation();
+		mapValidation.setWorldMap(worldMap);
+		mapValidation.setContinents(worldMap.getContinents());
+		assertTrue(mapValidation.checkAllMapValidationRules());
 	}
 	
 }
