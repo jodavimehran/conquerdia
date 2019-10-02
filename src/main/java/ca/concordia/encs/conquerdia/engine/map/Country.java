@@ -18,11 +18,6 @@ public class Country {
     private final Set<Country> adjacentCountries = new HashSet<>();
 
     /**
-     * a unique Id for every country
-     */
-    private Integer id;
-
-    /**
      * name of the country
      */
     private String name;
@@ -39,13 +34,14 @@ public class Country {
     }
 
     /**
-     * This getter method return the Identifier of this country
+     * This Method add this country to the map
      *
-     * @return Identifier
+     * @return return message result
      */
-    public Integer getId() {
-        return id;
+    public String addCountry() {
+        return continent.addCountry(this);
     }
+
 
     /**
      * This getter method return the name of this country
@@ -64,14 +60,6 @@ public class Country {
     public Set<Country> getAdjacentCountries() {
         return adjacentCountries;
     }
-    
-    /**
-     * 
-     * @param adjacentCountries set of adjacent countries.
-     */
-    public void setAdjacentCountries(Set<Country> adjacentCountries) {
-        this.adjacentCountries.addAll(adjacentCountries);
-    }
 
     /**
      * This getter method return the continent object that this country is placed on
@@ -89,14 +77,13 @@ public class Country {
         private final Country country = new Country();
 
         /**
-         * Country-Builder's constructor has two parameter because identifier and name for a country is required.
+         * Country-Builder's constructor has two parameter because name and continent for a country is required.
          *
-         * @param id   The identifier of a country
          * @param name The name of a country
          */
-        public Builder(Integer id, String name) {
-            country.id = id;
+        public Builder(String name, Continent continent) {
             country.name = name;
+            country.continent = continent;
         }
 
         /**
@@ -118,17 +105,6 @@ public class Country {
          */
         public Builder adjacentTo(Set<Country> adjacentCountries) {
             country.getAdjacentCountries().addAll(adjacentCountries);
-            return this;
-        }
-
-        /**
-         * This method sets the continent of under construction country.
-         *
-         * @param continent Continent object that under construction country placed in it
-         * @return return current builder object
-         */
-        public Builder placedIn(Continent continent) {
-            country.continent = continent;
             return this;
         }
 

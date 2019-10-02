@@ -13,13 +13,11 @@ import static org.junit.Assert.*;
  */
 public class CountryTest {
 
-    private final Country adjacentCountry = new Country.Builder(1, "country one").build();
-    private final Country[] adjacentCountries = {
-            new Country.Builder(2, "country two").build(),
-            new Country.Builder(3, "country tree").build(),
-    };
     private Country country;
     private Continent testContinent;
+    private Country country1;
+    private Country country2;
+    private Country country3;
 
     /**
      * All common activities are placed here
@@ -27,10 +25,14 @@ public class CountryTest {
     @Before
     public void setUp() {
         testContinent = new Continent.Builder("testContinent").build();
-        country = new Country.Builder(1, "test")
-                .placedIn(testContinent)
-                .adjacentTo(adjacentCountry)
-                .adjacentTo(new HashSet<>(Arrays.asList(adjacentCountries)))
+        country1 = new Country.Builder("country one", testContinent).build();
+        country2 = new Country.Builder("country two", testContinent).build();
+        country3 = new Country.Builder("country tree", testContinent).build();
+
+
+        country = new Country.Builder("test", testContinent)
+                .adjacentTo(country1)
+                .adjacentTo(new HashSet<>(Arrays.asList(country2, country3)))
                 .build();
     }
 
@@ -45,8 +47,8 @@ public class CountryTest {
     }
 
     /**
-     * This test case is designed to check {@link Country.Builder#placedIn(Continent)}  placedIn} method of {@link Country.Builder builder} and {@link Country#getContinent()}  getContinent} method of {@link Country country}.
-     * Continent object of a country that is build by {@link Country.Builder} class must be same object that is passed to {@link Country.Builder#placedIn(Continent)}  placedIn} method.
+     * This test case is designed to check {@link Country#getContinent()}  getContinent} method of {@link Country country}.
+     * Continent object of a country that is build by {@link Country.Builder} class must be same object that is passed to constructor.
      */
     @Test
     public void addContinentTestCase() {
@@ -58,7 +60,7 @@ public class CountryTest {
      */
     @Test
     public void addAdjacentCountryTestCase() {
-        assertTrue(country.getAdjacentCountries().contains(adjacentCountry));
+        assertTrue(country.getAdjacentCountries().contains(country1));
     }
 
     /**
@@ -66,7 +68,7 @@ public class CountryTest {
      */
     @Test
     public void addAdjacentCountriesTestCase() {
-        assertTrue(country.getAdjacentCountries().contains(adjacentCountries[0]));
-        assertTrue(country.getAdjacentCountries().contains(adjacentCountries[1]));
+        assertTrue(country.getAdjacentCountries().contains(country2));
+        assertTrue(country.getAdjacentCountries().contains(country3));
     }
 }

@@ -2,19 +2,17 @@ package ca.concordia.encs.conquerdia.engine.command;
 
 import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
 import ca.concordia.encs.conquerdia.engine.map.Continent;
+import ca.concordia.encs.conquerdia.engine.map.Country;
 
 import java.util.*;
 
-/**
- *
- */
-public class EditContinentCommandFactory implements CommandFactory {
-    public final static String EDIT_CONTINENT_COMMAND_ERR1 = "Invalid input! The \"editcontinent\" command must has at least one option like \"-add\" or \"-remove\".";
+public class EditCountryCommandFactory implements CommandFactory {
+    public final static String EDIT_COUNTRY_COMMAND_ERR1 = "Invalid input! The \"editcountry\" command must has at least one option like \"-add\" or \"-remove\".";
 
     @Override
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 3)
-            return Arrays.asList(() -> EDIT_CONTINENT_COMMAND_ERR1);
+            return Arrays.asList(() -> EDIT_COUNTRY_COMMAND_ERR1);
 
         List<Command> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
@@ -22,13 +20,16 @@ public class EditContinentCommandFactory implements CommandFactory {
             while (iterator.hasNext()) {
                 switch (iterator.next()) {
                     case ("-add"): {
-                        String continentName = iterator.next();
-                        String continentValue = iterator.next();
-                        Continent continent = new Continent.Builder(continentName)
-                                .setValue(Integer.valueOf(continentValue))
-                                .setWorldMap(model.getWorldMap())
-                                .build();
-                        commands.add(continent::addContinentToWorldMap);
+                        String countryName = iterator.next().toLowerCase();
+                        String continentName = iterator.next().toLowerCase();
+                        Continent continentByName = model.getWorldMap().findContinentByName(continentName);
+                        if (continentByName == null)
+                            commands.add(() -> String.format("Continent with name \"%s\" was not found.", continentName));
+                        else {
+
+                            Country country = new Country.Builder(countryName, continentByName).build();
+                            commands.add(country::addCountry);
+                        }
                         break;
                     }
                     case "-remove": {

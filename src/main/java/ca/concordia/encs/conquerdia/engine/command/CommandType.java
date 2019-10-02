@@ -5,7 +5,9 @@ package ca.concordia.encs.conquerdia.engine.command;
  * that implement {@link CommandFactory command factory}.
  */
 public enum CommandType {
-    EDIT_CONTINENT("editcontinent", new EditContinentCommandFactory());
+    EDIT_CONTINENT("editcontinent", new EditContinentCommandFactory()),
+    EDIT_MAP("editmap", new EditMapCommandFactory()),
+    VALIDATE_MAP("validatemap", new ValidateMapCommandFactory());
 
     private final String name;
     private final CommandFactory factory;
