@@ -92,6 +92,6 @@ public class WorldMap {
      * @return
      */
     public String validateMap() {
-        return "";
+        return new MapValidation(this).validate();
     }
 }
