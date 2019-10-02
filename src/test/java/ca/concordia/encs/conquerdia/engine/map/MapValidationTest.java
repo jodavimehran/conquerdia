@@ -106,13 +106,23 @@ public class MapValidationTest {
 		assertTrue(mapValidation.isContinentAConnectedSubGraphOfWorldMap(asia));
 	}
 	/**
-	 * This TestCase is designed to check the result of {@link MapValidation#isMapAConnectedGraph(WorldMap)} in {@link MapValidation} calss
+	 * This TestCase is designed to check the result of {@link MapValidation#isMapAConnectedGraph(WorldMap)} 
+	 * method in {@link MapValidation} class
 	 */
 	@Test 
 	public void isMapAConnectedGraphTestCase(){
 				
 		MapValidation mapValidation = new MapValidation(model.getWorldMap());
 		assertTrue(mapValidation.isMapAConnectedGraph(worldMap));
+	}
+	/**
+	 * This TestCase is designed to check the result of {@link MapValidation#isEeachCountryBelongingToOnlyOneContinent(WorldMap)}
+	 * in {@link MapValidation} class.
+	 */
+	@Test
+	public void isEeachCountryBelongingToOnlyOneContinentTestCase() {
+		MapValidation mapValidation = new MapValidation(model.getWorldMap());
+		assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent(worldMap));
 	}
 	
 }
