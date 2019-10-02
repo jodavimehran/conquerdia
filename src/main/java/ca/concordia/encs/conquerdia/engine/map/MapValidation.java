@@ -57,7 +57,7 @@ public class MapValidation implements CommandFactory {
                 return Arrays.asList(() -> MessageUtil.MAP_VALIDATION_COMMAND_ERR1);
             }
             if(checkAllMapValidationRules()){
-                commands.addAll(Arrays.asList(() -> "Map ss Valid: \n1.Map is a connected Graph\n"
+                commands.addAll(Arrays.asList(() -> "Map is Valid: \n1.Map is a connected Graph\n"
                 		+ "2.Every continent is a connected subgraph in the Map\n"
                 		+ "3.There is no country which belongs to more than one continent." ));
             }else {
