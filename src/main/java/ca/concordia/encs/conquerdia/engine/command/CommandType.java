@@ -1,12 +1,13 @@
 package ca.concordia.encs.conquerdia.engine.command;
-import ca.concordia.encs.conquerdia.engine.map.*;
+
 /**
  * Every command in the game must be declare in this Enum class and also every command must have an implementation Factory
  * that implement {@link CommandFactory command factory}.
  */
 public enum CommandType {
     EDIT_CONTINENT("editcontinent", new EditContinentCommandFactory()),
-	VALIDATE_MAP("validatemap" , new MapValidation());
+    EDIT_MAP("editmap", new EditMapCommandFactory()),
+    VALIDATE_MAP("validatemap", new ValidateMapCommandFactory());
 
     private final String name;
     private final CommandFactory factory;

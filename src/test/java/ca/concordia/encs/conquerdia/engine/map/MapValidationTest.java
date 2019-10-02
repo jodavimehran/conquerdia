@@ -1,159 +1,135 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
-import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
 /**
- *This class Tests the behavior of {@link MapValidation} class.
+ * This class Tests the behavior of {@link MapValidation} class.
+ *
  * @author Sadegh Aalizadeh
  */
 public class MapValidationTest {
 
-	ConquerdiaModel model = new ConquerdiaModel();
-	//Build The World
-	WorldMap  worldMap = model.getWorldMap();
-	//Build Asia as a continent 
-	Continent asia = new Continent.Builder("Asia")
-            .setValue(1)
-            .setWorldMap(model.getWorldMap())
-            .build();
-	//Build Europe as a continent 
-	Continent europe = new Continent.Builder("Europe")
-            .setValue(3)
-            .setWorldMap(model.getWorldMap())
-            .build();
-	/**
+    //Build The World
+    private MapValidation mapValidation;
+    private Continent asia;
+    private WorldMap worldMap;
+
+    /**
      * All common activities are placed here
      */
     @Before
     public void setUp() {
+        worldMap = new WorldMap();
+        //CONTINENTS
+        //Build Asia as a continent
+        asia = new Continent.Builder("Asia")
+                .setValue(1)
+                .setWorldMap(worldMap)
+                .build();
+        asia.addContinentToWorldMap();
 
-		Set<Continent> continents= new HashSet<Continent>();
-		continents.add(asia);
-		continents.add(europe);
-		worldMap.setContinents(continents);
-		
+        //Build Europe as a continent
+        Continent europe = new Continent.Builder("Europe")
+                .setValue(3)
+                .setWorldMap(worldMap)
+                .build();
+        asia.addContinentToWorldMap();
 
+        //Build sample countries in Asia and determine their adjacent countries
+        Country iran = new Country.Builder("Iran", asia).build();
+        iran.addCountry();
 
-		//Build sample countries in Asia and determine their adjacent countries
-		Country iran = new Country.Builder(1, "Iran").placedIn(asia).build();
-		Country saudiArabia = new Country.Builder(2, "Saudi Arabia").placedIn(asia).build();
-		Country armenia = new Country.Builder(3, "Armenia").placedIn(asia).build();
-		Country turkey = new Country.Builder(4, "Turkey").placedIn(asia).build();
-		
-		//Build a sample country in Europe and add its adjacent.
-		Country greece = new Country.Builder(5, "Greece").placedIn(europe).build();
-		
-		Set<Country> iranAdjacentCountries = new HashSet<Country>();
-		iranAdjacentCountries.add(saudiArabia);
-		iranAdjacentCountries.add(armenia);
-		iranAdjacentCountries.add(turkey);
-		iran.setAdjacentCountries(iranAdjacentCountries);
-		
-		Set<Country> saudiArabiaAdjacentCountries = new HashSet<Country>();
-		saudiArabiaAdjacentCountries.add(iran);
-		saudiArabiaAdjacentCountries.add(turkey);
-		saudiArabia.setAdjacentCountries(saudiArabiaAdjacentCountries);
-		
-		Set<Country> armeniaAdjacentCountries = new HashSet<Country>();
-		armeniaAdjacentCountries.add(iran);
-		armenia.setAdjacentCountries(armeniaAdjacentCountries);
-		
-		Set<Country> turkeyAdjacentCountries = new HashSet<Country>();
-		turkeyAdjacentCountries.add(saudiArabia);
-		turkeyAdjacentCountries.add(iran);
-		turkeyAdjacentCountries.add(greece);
-		turkey.setAdjacentCountries(turkeyAdjacentCountries);
-		
-		Set<Country> asiaCountries = new HashSet<Country>();
-		asiaCountries.add(iran);
-		asiaCountries.add(saudiArabia);
-		asiaCountries.add(armenia);
-		asiaCountries.add(turkey);
-		
-		
-		//Set the countries that are placed in Asia.
-		asia.setCountries(asiaCountries);
-		
+        Country saudiArabia = new Country.Builder("Saudi Arabia", asia).build();
+        saudiArabia.addCountry();
 
-		Set<Country> greeceAdjacentCountries = new HashSet<Country>();
-		greeceAdjacentCountries.add(turkey);	
-		greece.setAdjacentCountries(greeceAdjacentCountries);
-		
-		Set<Country> europeCountries = new HashSet<Country>();
-		europeCountries.add(greece);
-		
-		
-		//Set the countries that are placed in Europe.
-		europe.setCountries(europeCountries);
+        Country armenia = new Country.Builder("Armenia", asia).build();
+        armenia.addCountry();
 
+        Country turkey = new Country.Builder("Turkey", asia).build();
+        turkey.addCountry();
+
+        //Build a sample country in Europe and add its adjacent.
+        Country greece = new Country.Builder("Greece", europe).build();
+        greece.addCountry();
+
+        Set<Country> iranAdjacentCountries = new HashSet<Country>();
+        iranAdjacentCountries.add(saudiArabia);
+        iranAdjacentCountries.add(armenia);
+        iranAdjacentCountries.add(turkey);
+        iran.getAdjacentCountries().addAll(iranAdjacentCountries);
+
+        Set<Country> saudiArabiaAdjacentCountries = new HashSet<Country>();
+        saudiArabiaAdjacentCountries.add(iran);
+        saudiArabiaAdjacentCountries.add(turkey);
+        saudiArabia.getAdjacentCountries().addAll(saudiArabiaAdjacentCountries);
+
+        Set<Country> armeniaAdjacentCountries = new HashSet<Country>();
+        armeniaAdjacentCountries.add(iran);
+        armenia.getAdjacentCountries().addAll(armeniaAdjacentCountries);
+
+        Set<Country> turkeyAdjacentCountries = new HashSet<Country>();
+        turkeyAdjacentCountries.add(saudiArabia);
+        turkeyAdjacentCountries.add(iran);
+        turkeyAdjacentCountries.add(greece);
+        turkey.getAdjacentCountries().addAll(turkeyAdjacentCountries);
+
+        Set<Country> greeceAdjacentCountries = new HashSet<Country>();
+        greeceAdjacentCountries.add(turkey);
+        greece.getAdjacentCountries().addAll(greeceAdjacentCountries);
+
+        mapValidation = new MapValidation(worldMap);
     }
-    
-	/**
-	 * This TestCase is designed to check the result of 
-	 * {@link MapValidation#isContinentAConnectedSubGraphOfWorldMap(Continent)} method in {@link MapValidation} class.
-	 */
-	@Test 
-	public void isContinentAConnectedSubGraphOfWorldMapTestCase(){	
-		MapValidation mapValidation = new MapValidation();
-		mapValidation.setWorldMap(worldMap);
-		mapValidation.setContinents(worldMap.getContinents());
-		// Check if the continent is a valid Subgraph of the Map
-		assertTrue(mapValidation.isContinentAConnectedSubGraphOfWorldMap(asia));
-	}
-	
-	/**
-	 * This TestCase is designed to check the result of {@link MapValidation#isMapAConnectedGraph(WorldMap)} 
-	 * method in {@link MapValidation} class
-	 */
-	@Test 
-	public void isMapAConnectedGraphTestCase(){
-		MapValidation mapValidation = new MapValidation();
-		mapValidation.setWorldMap(worldMap);
-		mapValidation.setContinents(worldMap.getContinents());		
-		assertTrue(mapValidation.isMapAConnectedGraph());
-	}
-	
-	/**
-	 * This TestCase is designed to check the result of {@link MapValidation#isEeachCountryBelongingToOnlyOneContinent(WorldMap)}
-	 * in {@link MapValidation} class.
-	 */
-	@Test
-	public void isEeachCountryBelongingToOnlyOneContinentTestCase() {
-		MapValidation mapValidation = new MapValidation();
-		mapValidation.setWorldMap(worldMap);
-		mapValidation.setContinents(worldMap.getContinents());
-		assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent());
-	}
-	
-	/**
-	 * This TestCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules(WorldMap)}
-	 * in {@link MapValidation} class.
-	 */
-	@Test
-	public void checkAllMapValidationRulesTestCase() {
-		MapValidation mapValidation = new MapValidation();
-		mapValidation.setWorldMap(worldMap);
-		mapValidation.setContinents(worldMap.getContinents());
-		assertTrue(mapValidation.checkAllMapValidationRules());
-	}
-	
-	/**
-	 * This TestCase is designed to check the result of {@link MapValidation#isAllContinentsAConnectedSubgraphofWorldMap(Set)} 
-	 * in {@link MapValidation} class. 
-	 */
-	@Test
-	public void isAllContinentsAConnectedSubgraphofWorldMap() {
-			MapValidation mapValidation = new MapValidation();
-			mapValidation.setWorldMap(worldMap);
-			mapValidation.setContinents(worldMap.getContinents());
-			assertTrue(mapValidation.isAllContinentsAConnectedSubgraphofWorldMap(worldMap.getContinents()));
-	}
-	
+
+    /**
+     * This TestCase is designed to check the result of
+     * {@link MapValidation#isContinentAConnectedSubGraphOfWorldMap(Continent)} method in {@link MapValidation} class.
+     */
+    @Test
+    public void isContinentAConnectedSubGraphOfWorldMapTestCase() {
+        // Check if the continent is a valid Subgraph of the Map
+        assertTrue(mapValidation.isContinentAConnectedSubGraphOfWorldMap(asia));
+    }
+
+    /**
+     * This TestCase is designed to check the result of {@link MapValidation#isMapAConnectedGraph()}
+     * method in {@link MapValidation} class
+     */
+    @Test
+    public void isMapAConnectedGraphTestCase() {
+        assertTrue(mapValidation.isMapAConnectedGraph());
+    }
+
+    /**
+     * This TestCase is designed to check the result of {@link MapValidation#isEeachCountryBelongingToOnlyOneContinent()}
+     * in {@link MapValidation} class.
+     */
+    @Test
+    public void isEeachCountryBelongingToOnlyOneContinentTestCase() {
+        assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent());
+    }
+
+    /**
+     * This TestCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules()}
+     * in {@link MapValidation} class.
+     */
+    @Test
+    public void checkAllMapValidationRulesTestCase() {
+        assertTrue(mapValidation.checkAllMapValidationRules());
+    }
+
+    /**
+     * This TestCase is designed to check the result of {@link MapValidation#isAllContinentsAConnectedSubgraphofWorldMap(Set)}
+     * in {@link MapValidation} class.
+     */
+    @Test
+    public void isAllContinentsAConnectedSubgraphofWorldMap() {
+        assertTrue(mapValidation.isAllContinentsAConnectedSubgraphofWorldMap(worldMap.getContinents()));
+    }
+
 }
