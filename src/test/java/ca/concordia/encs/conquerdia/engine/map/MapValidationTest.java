@@ -124,5 +124,15 @@ public class MapValidationTest {
 		MapValidation mapValidation = new MapValidation(model.getWorldMap());
 		assertTrue(mapValidation.isEeachCountryBelongingToOnlyOneContinent(worldMap));
 	}
+	/**
+	 * This TEsCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules(WorldMap)}
+	 * in {@link MapValidation} class.
+	 * @return
+	 */
+	@Test
+	public void checkAllMapValidationRulesTestCase() {
+		MapValidation mapValidation = new MapValidation(model.getWorldMap());
+		assertTrue(mapValidation.checkAllMapValidationRules(worldMap));
+	}
 	
 }
