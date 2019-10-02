@@ -18,7 +18,38 @@ public class MapValidation {
 	public MapValidation(WorldMap worldMap) {
 		this.worldMap = worldMap;
 		this.continents = worldMap.getContinents();
-	}	
+		this.isValidMap = false;
+	}
+	/**
+	 * 
+	 * @param worldMap the main graph of the game.
+	 * @return true if All validation rules are 
+	 */
+	public boolean  checkAllMapValidationRules(WorldMap worldMap) {
+		Set<Continent> continents = worldMap.getContinents();
+		if(!isAllContinentsAConnectedSubgraphofWorldMap(continents) || !isMapAConnectedGraph(worldMap) ||
+				!isEeachCountryBelongingToOnlyOneContinent(worldMap)) {
+			isValidMap = false;
+			return false;
+		}
+		isValidMap = true;
+		return true;
+	}
+	/**
+	 * 
+	 * @param continents all the continents that their validity as a connected subgraph of worldMap should be checked.
+	 * @return true if all the continents are a connected subgraph of worldMap; otherwise returns false;
+	 */
+	public boolean isAllContinentsAConnectedSubgraphofWorldMap(Set<Continent> continents){
+		for(Continent continent : continents) {
+			if(!isContinentAConnectedSubGraphOfWorldMap(continent)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	
 	/**
 	 * This Method verifies if the continent is a connected subGraph of the worldMap.
 	 * @return true if the continent is a valid Subgraph of the WorldMap; otherwise returns false
@@ -51,7 +82,7 @@ public class MapValidation {
 	}
 	/**
 	 * This Method verifies if the worldMap is a connected graph.
-	 * @param worldMap the main grapgh of the game.
+	 * @param worldMap the main graph of the game.
 	 * @return
 	 */
 	public boolean isMapAConnectedGraph(WorldMap worldMap) {
