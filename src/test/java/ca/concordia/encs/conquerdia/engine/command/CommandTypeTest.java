@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.engine.command;
 
+import ca.concordia.encs.conquerdia.engine.command.factory.EditContinentCommandFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
