@@ -1,6 +1,8 @@
-package ca.concordia.encs.conquerdia.engine.command;
+package ca.concordia.encs.conquerdia.engine.command.factory;
 
 import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
+import ca.concordia.encs.conquerdia.engine.command.Command;
+import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
 import ca.concordia.encs.conquerdia.engine.map.Continent;
 
 import java.util.*;
