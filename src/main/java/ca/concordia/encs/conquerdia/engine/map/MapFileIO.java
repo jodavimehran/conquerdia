@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 public class MapFileIO {
 
@@ -20,23 +17,27 @@ public class MapFileIO {
 	private String filePath;
 
 	public MapFileIO(String filePath) {
-		String root = getUsersProjectRootDirectory();
-		this.filePath = Paths.get(root, "res", "maps", filePath).toString();
+		this.filePath = filePath;
 	}
 
 	public void loadMap() throws FileNotFoundException, IOException {
+
 		final BufferedReader reader = new BufferedReader(new FileReader(filePath));
-		String line;
-		WorldMap worldMap = new WorldMap();
 
-		while ((line = reader.readLine()) != null) {
-			if (!isComment(line)) {
-				if (isBordersIdentifier(line)) {
+		try {
+			String line;
 
-				} else if (isContientsIdentifier(line)) {
+			while ((line = reader.readLine()) != null) {
+				if (isContientsIdentifier(line)) {
 					loadContinents(reader);
+				} else if (isCountriesIdentifier(line)) {
+					loadCountries(reader);
+				} else if (isBordersIdentifier(line)) {
+
 				}
 			}
+		} finally {
+			reader.close();
 		}
 	}
 
@@ -44,17 +45,16 @@ public class MapFileIO {
 	 * [continents] North-America 5 yellow
 	 * South-America 2 green
 	 * Europe 5 blue
-	 * Africa 3 orange
-	 * Asia 7 pink
-	 * Oceania 2 red
+	 * Africa 3 orange Asia 7
+	 * pink Oceania 2 red
 	 * 
 	 * @param reader
 	 * @return
 	 * @throws IOException
 	 */
-	public Set<Continent> loadContinents(BufferedReader reader) throws IOException {
+	public HashMap<String, Continent> loadContinents(BufferedReader reader) throws IOException {
 
-		Set<Continent> continents = new HashSet<Continent>();
+		HashMap<String, Continent> continents = new HashMap<String, Continent>();
 		Continent continent;
 		String line;
 		String tokens[];
@@ -64,10 +64,16 @@ public class MapFileIO {
 			continent = new Continent.Builder(tokens[0])
 					.setValue(Integer.parseInt(tokens[1]))
 					.build();
-			continents.add(continent);
+			continents.put(continent.getName(), continent);
 		}
 
 		return continents;
+	}
+
+	public HashMap<String, Country> loadCountries(BufferedReader reader) throws IOException {
+
+		// TODO
+		return null;
 	}
 
 	protected boolean isComment(String line) {
@@ -84,15 +90,5 @@ public class MapFileIO {
 
 	protected boolean isBordersIdentifier(String line) {
 		return line.equalsIgnoreCase(BORDERS_SECTION_IDENTIFIER);
-	}
-
-	public static String getUsersProjectRootDirectory() {
-		String envRootDir = System.getProperty("user.dir");
-		Path rootDir = Paths.get(".").normalize().toAbsolutePath();
-		if (rootDir.startsWith(envRootDir)) {
-			return rootDir.toString();
-		} else {
-			throw new RuntimeException("Root dir not found in user directory.");
-		}
 	}
 }
