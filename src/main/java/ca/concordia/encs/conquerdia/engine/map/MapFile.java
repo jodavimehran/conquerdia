@@ -1,12 +1,13 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+
+import ca.concordia.encs.conquerdia.engine.util.FileHelper;
 
 public class MapFile {
 
@@ -15,72 +16,52 @@ public class MapFile {
 	public static final String COUNTRIES_SECTION_IDENTIFIER = "[countries]";
 	public static final String BORDERS_SECTION_IDENTIFIER = "[borders]";
 	public static final String TOKENS_DELIMETER = " ";
+	public static final String MAPS_FOLDER = "maps";
 
-	private String filePath;
+	private ArrayList<Continent> continentList;
+	private ArrayList<Country> countryList;
 
-	public MapFile(String filePath) {
-		this.filePath = filePath;
-	}
+	public ArrayList<Continent> loadMap(String fileName) throws FileNotFoundException, IOException {
+		final String path = FileHelper.getResourcePath(FileHelper.combinePath(MAPS_FOLDER, fileName));
+		final File file = new File(path);
+		final BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line;
 
-	public void loadMap() throws FileNotFoundException, IOException {
-
-		final BufferedReader reader = new BufferedReader(new FileReader(filePath));
-		WorldMap worldMap = new WorldMap();
-		Continent[] continents = null;
-		Country[] countries = null;
 		try {
-			String line;
-
 			while ((line = reader.readLine()) != null) {
 				if (isContientsIdentifier(line)) {
-					continents = loadContinents(reader);
+					continentList = loadContinents(reader);
 				} else if (isCountriesIdentifier(line)) {
-					countries = loadCountries(reader, continents);
+					countryList = loadCountries(reader, continentList);
 				} else if (isBordersIdentifier(line)) {
-					loadBorders(reader, countries);
+					loadBorders(reader, countryList);
 				}
 			}
 		} finally {
 			reader.close();
 		}
+
+		return continentList;
 	}
 
-	/**
-	 * [continents] North-America 5 yellow
-	 * South-America 2 green
-	 * Europe 5 blue
-	 * Africa 3 orange Asia 7
-	 * pink Oceania 2 red
-	 * 
-	 * @param reader
-	 * @return
-	 * @throws IOException
-	 */
-	public Continent[] loadContinents(BufferedReader reader) throws IOException {
+	protected ArrayList<Continent> loadContinents(BufferedReader reader) throws IOException {
 
-		ArrayList<Continent> continents = new ArrayList<>();
+		ArrayList<Continent> continentList = new ArrayList<>();
 		Continent continent;
 		String line;
 		String tokens[];
 
 		while ((line = reader.readLine()) != null && line.length() > 0) {
 			tokens = line.split(TOKENS_DELIMETER);
-			continent = new Continent.Builder(tokens[0])
-					.setValue(Integer.parseInt(tokens[1]))
-					.build();
-			continents.add(continent);
+			continent = new Continent.Builder(tokens[0]).setValue(Integer.parseInt(tokens[1])).build();
+			continentList.add(continent);
 		}
 
-		return continents.toArray(new Continent[continents.size()]);
+		return continentList;
 	}
 
-	/**
-	 * 
-	 * @param reader
-	 * @return
-	 * @throws IOException
-	 */
-	public Country[] loadCountries(BufferedReader reader, Continent[] continents) throws IOException {
+	protected ArrayList<Country> loadCountries(BufferedReader reader, ArrayList<Continent> continents)
+			throws IOException {
 
 		ArrayList<Country> countries = new ArrayList<>();
 		Country country;
@@ -91,30 +72,32 @@ public class MapFile {
 		while ((line = reader.readLine()) != null && line.length() > 0) {
 			tokens = line.split(TOKENS_DELIMETER);
 			continentNumber = Integer.parseInt(tokens[2]);
-			country = new Country.Builder(tokens[1], continents[continentNumber - 1])
-					.build();
-
+			country = new Country.Builder(tokens[1], continents.get(continentNumber - 1)).build();
 			countries.add(country);
 		}
 
-		return countries.toArray(new Country[countries.size()]);
+		return countries;
 	}
 
-	public void loadBorders(BufferedReader reader, Country[] countries) throws IOException {
-		Country country;
+	protected void loadBorders(BufferedReader reader, ArrayList<Country> countries) throws IOException {
 		String line;
 		String tokens[];
-		int countryNumber;
+		Country country;
+		int countryIndex;
 
 		while ((line = reader.readLine()) != null && line.length() > 0) {
 			tokens = line.split(TOKENS_DELIMETER);
-			countryNumber = Integer.parseInt(tokens[0]);
-			country = countries[countryNumber - 1];
-			for (int i = 1; i < tokens.length; i++) {
+			countryIndex = Integer.parseInt(tokens[0]) - 1;
+			country = countries.get(countryIndex);
+			addNeighbours(country, tokens);
+		}
+	}
 
-			}
-			country = new Country.Builder(tokens[1], continents[continentNumber - 1])
-					.build();
+	private void addNeighbours(Country country, String[] countryBorders) {
+		int neighborIndex;
+		for (int i = 1; i < countryBorders.length; i++) {
+			neighborIndex = Integer.parseInt(countryBorders[i]) - 1;
+			country.addNeighbour(countryList.get(neighborIndex));
 		}
 	}
 

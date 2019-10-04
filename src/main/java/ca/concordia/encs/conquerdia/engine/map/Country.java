@@ -41,7 +41,15 @@ public class Country {
     public String addCountry() {
         return continent.addCountry(this);
     }
-
+    
+    /**
+     * Add the specified country to this country's adjacency list
+     * This implies that this country has a an edge / border to the specified country  
+     * @param adjacentCountry A country which should have a border to this country
+     */
+    public void addNeighbour(Country adjacentCountry) {
+       adjacentCountries.add(adjacentCountry);
+    }
 
     /**
      * This getter method return the name of this country
