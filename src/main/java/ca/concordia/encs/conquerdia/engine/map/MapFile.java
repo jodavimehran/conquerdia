@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
-public class MapFileIO {
+public class MapFile {
 
 	public static final String COMMENT_SYMBOL = ";";
 	public static final String CONTINENTS_SECTION_IDENTIFIER = "[continents]";
@@ -16,24 +18,26 @@ public class MapFileIO {
 
 	private String filePath;
 
-	public MapFileIO(String filePath) {
+	public MapFile(String filePath) {
 		this.filePath = filePath;
 	}
 
 	public void loadMap() throws FileNotFoundException, IOException {
 
 		final BufferedReader reader = new BufferedReader(new FileReader(filePath));
-
+		WorldMap worldMap = new WorldMap();
+		Continent[] continents = null;
+		Country[] countries = null;
 		try {
 			String line;
 
 			while ((line = reader.readLine()) != null) {
 				if (isContientsIdentifier(line)) {
-					loadContinents(reader);
+					continents = loadContinents(reader);
 				} else if (isCountriesIdentifier(line)) {
-					loadCountries(reader);
+					countries = loadCountries(reader, continents);
 				} else if (isBordersIdentifier(line)) {
-
+					loadBorders(reader, countries);
 				}
 			}
 		} finally {
@@ -52,9 +56,9 @@ public class MapFileIO {
 	 * @return
 	 * @throws IOException
 	 */
-	public HashMap<String, Continent> loadContinents(BufferedReader reader) throws IOException {
+	public Continent[] loadContinents(BufferedReader reader) throws IOException {
 
-		HashMap<String, Continent> continents = new HashMap<String, Continent>();
+		ArrayList<Continent> continents = new ArrayList<>();
 		Continent continent;
 		String line;
 		String tokens[];
@@ -64,16 +68,54 @@ public class MapFileIO {
 			continent = new Continent.Builder(tokens[0])
 					.setValue(Integer.parseInt(tokens[1]))
 					.build();
-			continents.put(continent.getName(), continent);
+			continents.add(continent);
 		}
 
-		return continents;
+		return continents.toArray(new Continent[continents.size()]);
 	}
 
-	public HashMap<String, Country> loadCountries(BufferedReader reader) throws IOException {
+	/**
+	 * 
+	 * @param reader
+	 * @return
+	 * @throws IOException
+	 */
+	public Country[] loadCountries(BufferedReader reader, Continent[] continents) throws IOException {
 
-		// TODO
-		return null;
+		ArrayList<Country> countries = new ArrayList<>();
+		Country country;
+		String line;
+		String tokens[];
+		int continentNumber;
+
+		while ((line = reader.readLine()) != null && line.length() > 0) {
+			tokens = line.split(TOKENS_DELIMETER);
+			continentNumber = Integer.parseInt(tokens[2]);
+			country = new Country.Builder(tokens[1], continents[continentNumber - 1])
+					.build();
+
+			countries.add(country);
+		}
+
+		return countries.toArray(new Country[countries.size()]);
+	}
+
+	public void loadBorders(BufferedReader reader, Country[] countries) throws IOException {
+		Country country;
+		String line;
+		String tokens[];
+		int countryNumber;
+
+		while ((line = reader.readLine()) != null && line.length() > 0) {
+			tokens = line.split(TOKENS_DELIMETER);
+			countryNumber = Integer.parseInt(tokens[0]);
+			country = countries[countryNumber - 1];
+			for (int i = 1; i < tokens.length; i++) {
+
+			}
+			country = new Country.Builder(tokens[1], continents[continentNumber - 1])
+					.build();
+		}
 	}
 
 	protected boolean isComment(String line) {
