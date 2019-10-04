@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.engine.map;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,12 +16,25 @@ public class MapFile {
 	public static final String BORDERS_SECTION_IDENTIFIER = "[borders]";
 	public static final String TOKENS_DELIMETER = " ";
 	public static final String MAPS_FOLDER = "maps";
+	public static final String MAP_FILE_EXTENSION = ".map";
 
 	private ArrayList<Continent> continentList;
 	private ArrayList<Country> countryList;
 
-	public ArrayList<Continent> loadMap(String fileName) throws FileNotFoundException, IOException {
-		final String path = FileHelper.getResourcePath(FileHelper.combinePath(MAPS_FOLDER, fileName));
+	/**
+	 * Parses the .map file and load the continents, countries and borders from it
+	 * 
+	 * @param filename Only the name of the map file with or without the extension
+	 *                 eg. uk, risk.map etc.
+	 * @return An ArrayList containing the maps and countries & their neighbors
+	 *         represented in the map. NULL if there is a parsing error for
+	 *         continents
+	 * @throws IOException
+	 */
+	public ArrayList<Continent> loadMap(String filename) throws IOException {
+		final String path = FileHelper
+				.getResourcePath(FileHelper.combinePath(MAPS_FOLDER, FileHelper.getFileNameWithoutExtension(filename)));
+
 		final File file = new File(path);
 		final BufferedReader reader = new BufferedReader(new FileReader(file));
 		String line;
@@ -101,18 +113,44 @@ public class MapFile {
 		}
 	}
 
+	/**
+	 * Checks if the line in file starts the comment symbol
+	 * 
+	 * @param line A line from the map file
+	 * @return true if line starts with {@value #COMMENT_SYMBOL} otherwise false
+	 */
 	protected boolean isComment(String line) {
 		return line.startsWith(COMMENT_SYMBOL);
 	}
 
+	/**
+	 * Checks if the line in file matches the continent tag
+	 * 
+	 * @param line A line from the map file
+	 * @return true if line is {@value #CONTINENTS_SECTION_IDENTIFIER} otherwise
+	 *         false
+	 */
 	protected boolean isContientsIdentifier(String line) {
 		return line.equalsIgnoreCase(CONTINENTS_SECTION_IDENTIFIER);
 	}
 
+	/**
+	 * Checks if the line in file matches the countries tag
+	 * 
+	 * @param line A line from the map file
+	 * @return true if line is {@value #COUNTRIES_SECTION_IDENTIFIER} otherwise
+	 *         false
+	 */
 	protected boolean isCountriesIdentifier(String line) {
 		return line.equalsIgnoreCase(COUNTRIES_SECTION_IDENTIFIER);
 	}
 
+	/**
+	 * Checks if the line in file matches the borders tag
+	 * 
+	 * @param line A line from the map file
+	 * @return true if line is {@value #BORDERS_SECTION_IDENTIFIER} otherwise false
+	 */
 	protected boolean isBordersIdentifier(String line) {
 		return line.equalsIgnoreCase(BORDERS_SECTION_IDENTIFIER);
 	}
