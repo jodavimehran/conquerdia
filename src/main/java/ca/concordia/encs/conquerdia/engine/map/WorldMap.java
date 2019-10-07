@@ -33,7 +33,7 @@ public class WorldMap {
         //TODO: Implementation
         return true;
     }
-
+    
     /**
      * @return
      */
@@ -81,7 +81,20 @@ public class WorldMap {
     public Set<String> getCountriesName() {
         return continents.entrySet().stream().map(entry -> entry.getValue()).flatMap(continent -> continent.getCountriesName().stream()).collect(Collectors.toSet());
     }
-
+    /**
+     * This method returns the name of continents and countries that are already populated in the map.
+     * @return The Result of showmap for world map.
+     */
+     @Override
+    public String toString() {
+    	 Set<Continent> continents = this.getContinents();
+    	 StringBuilder showMapResult = new StringBuilder();
+    	 for(Continent continent: continents) {
+    		 showMapResult.append(continent.toString()).append("\n");
+    	 } 
+    	 return showMapResult.toString();
+    }
+     
     public Set<Continent> getContinents() {
         return continents.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }

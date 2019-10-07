@@ -59,6 +59,15 @@ public class Country {
     public String getName() {
         return name;
     }
+    
+    /**
+     * This method returns the name of the country.
+     * @return returns the name of the country.
+     */
+    @Override
+    public String toString() {
+    	return this.getName();
+    }
 
     /**
      * This getter method return the set that contains all neighbor countries of this country
