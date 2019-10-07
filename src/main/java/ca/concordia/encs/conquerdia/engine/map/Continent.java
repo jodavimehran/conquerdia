@@ -93,7 +93,22 @@ public class Continent {
                 .append(name, continent.name)
                 .isEquals();
     }
-
+    /**
+     * This method implements the showmap result for the continent and it's including countries;
+     * @return showMap string for the continent and the countries which it include.
+     */
+    @Override
+    public String toString() {
+    	Set<Country> countries = this.getCountries();
+   	 	StringBuilder showMapConinentResult = new StringBuilder();
+   	 	showMapConinentResult.append(this.getName()).append(": includes the following countries:\n");
+   	 	for(Country country: countries) {
+   	 	showMapConinentResult.append(country.toString()).append(",");
+   		 } 
+   	 	showMapConinentResult.deleteCharAt(showMapConinentResult.length()-1);
+   	 	showMapConinentResult.append("\n");
+   	 	return showMapConinentResult.toString();
+    }
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
