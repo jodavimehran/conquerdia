@@ -100,9 +100,8 @@ public class WorldMap {
     }
 
     /**
-     * TODO: JAVADOC
-     *
-     * @return
+     * This method validates the map and checks different constraints of validity.
+     * @return A string that shows the validation result of the map.
      */
     public String validateMap() {
         return new MapValidation(this).validate();
