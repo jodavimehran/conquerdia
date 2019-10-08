@@ -18,23 +18,33 @@ class MapWriter extends MapIO implements IMapWriter {
 	protected BufferedWriter writer;
 
 	public boolean writeMap(String filename, ArrayList<Continent> continents) {
-		HashMap<String, Integer> continentNumbers = new HashMap<>();
-		HashMap<String, Country> allCountries = new HashMap<>();
+		String[] borderRows;
+		ArrayList<CountryRow> countryRows;
 
 		try {
 			final String mapName = FileHelper.getFileNameWithoutExtension(filename);
 			writer = new BufferedWriter(new FileWriter(MapIO.getMapFilePath(filename)));
 
 			writeComments(new String[] { "RISK MAP", "Conquerdia Map Editor" });
+			writer.newLine();
+			
 			writeResourceFiles(new String[] { "pic " + mapName + "_pic.png",
 					"map " + mapName + "_map.gif",
 					"crd card.cards", "prv " + mapName + ".jpg" });
+			writer.newLine();
+			
 			writeMapName(mapName.toUpperCase());
-
+			writer.newLine();
+			
 			writeContinents(continents);
-			ArrayList<CountryRow> rows = getAllCountryRows(continents);
-			writeCountries(rows);
-			//writeBorders();
+			writer.newLine();
+
+			countryRows = getAllCountryRows(continents);
+			writeCountries(countryRows);
+			writer.newLine();
+			
+			borderRows = getBorders(countryRows);
+			writeBorders(borderRows);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -45,6 +55,10 @@ class MapWriter extends MapIO implements IMapWriter {
 		return true;
 	}
 
+	private void writeBorders(String[] borderRows) throws IOException {
+		writeSection(BORDERS_SECTION_IDENTIFIER, borderRows);
+	}
+
 	private void writeCountries(ArrayList<CountryRow> countryRows) throws IOException {
 		String[] rows = countryRows.stream()
 				.map(CountryRow::toString)
@@ -52,17 +66,7 @@ class MapWriter extends MapIO implements IMapWriter {
 		writeSection(COUNTRIES_SECTION_IDENTIFIER, rows);
 	}
 
-	/*
-	 * private void writeCountries(ArrayList<CountryRow> countryRows) throws
-	 * IOException {
-	 * 
-	 * String[] rows = new String[countryRows.size()];
-	 * 
-	 * writeSection(COUNTRIES_SECTION_IDENTIFIER, rows); }
-	 */
-
-	protected void writeContinents(ArrayList<Continent> continents) throws IOException {
-
+	private void writeContinents(ArrayList<Continent> continents) throws IOException {
 		String[] rows = new String[continents.size()];
 		Continent continent;
 
@@ -74,7 +78,7 @@ class MapWriter extends MapIO implements IMapWriter {
 		writeSection(CONTINENTS_SECTION_IDENTIFIER, rows);
 	}
 
-	protected void writeResourceFiles(String[] files) throws IOException {
+	private void writeResourceFiles(String[] files) throws IOException {
 		writeSection(FILES_SECTION_IDENTIFIER, files);
 	}
 
@@ -84,11 +88,11 @@ class MapWriter extends MapIO implements IMapWriter {
 	 * @param mapName The name of the map
 	 * @throws IOException
 	 */
-	protected void writeMapName(String mapName) throws IOException {
+	private void writeMapName(String mapName) throws IOException {
 		writeLine("name " + mapName + " map");
 	}
 
-	protected void writeComments(String[] comments) throws IOException {
+	private void writeComments(String[] comments) throws IOException {
 		for (String comment : comments) {
 			writeLine(COMMENT_SYMBOL + " " + comment);
 		}
@@ -125,10 +129,10 @@ class MapWriter extends MapIO implements IMapWriter {
 	}
 
 	private String[] getBorders(ArrayList<CountryRow> countryRows) {
-
 		String[] borders = new String[countryRows.size()];
 		CountryRow countryRow;
 		HashMap<String, Integer> countryNumbers = new HashMap<>();
+		StringBuilder builder = new StringBuilder();
 
 		for (int i = 0; i < countryRows.size(); i++) {
 			countryRow = countryRows.get(i);
@@ -137,7 +141,12 @@ class MapWriter extends MapIO implements IMapWriter {
 
 		for (int i = 0; i < countryRows.size(); i++) {
 			countryRow = countryRows.get(i);
-			countryNumbers.put(countryRow.getName(), countryRow.getNumber());
+			builder.append(countryRow.getNumber());
+
+			for (String countryName : countryRow.getAdjacentCountryNames()) {
+				builder.append(TOKENS_DELIMETER + countryNumbers.get(countryName));
+			}
+			borders[i] = builder.toString();
 		}
 		return borders;
 	}
