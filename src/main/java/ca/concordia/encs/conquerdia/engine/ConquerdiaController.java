@@ -35,7 +35,7 @@ public class ConquerdiaController {
      * @param commandStr
      * @param output
      */
-    void executeCommand(String commandStr, PrintStream output) {
+    public void executeCommand(String commandStr, PrintStream output) {
         List<Command> commands = CommandFactory.getCommands(conquerdiaModel, commandStr);
         for (Command command : commands) {
             output.println(command.execute());
