@@ -101,5 +101,4 @@ class MapReader extends MapIO implements IMapReader {
 			country.addNeighbour(countryList.get(neighborIndex));
 		}
 	}
-
 }
