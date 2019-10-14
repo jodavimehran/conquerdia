@@ -21,6 +21,18 @@ public class ConquerdiaModel {
         return result;
     }
 
+    /**
+     * @param playerName
+     * @return
+     */
+    public String addPlayer(String playerName) {
+        if (StringUtils.isBlank(playerName))
+            return "Player name is not valid!";
+        if (players.contains(playerName))
+            return String.format("Player with name \"%s\" is already exist.", playerName);
+        players.add(playerName);
+        return String.format("Player with name \"%s\" is successfully added.", playerName);
+    }
 
     /**
      * This method gets the worldMap that contains all Continents and countries
