@@ -3,10 +3,8 @@ package ca.concordia.encs.conquerdia.engine.map;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 /**
  * This class is design to test all different functionality of {@link Country} and {@link Country.Builder}.
@@ -25,14 +23,14 @@ public class CountryTest {
     @Before
     public void setUp() {
         testContinent = new Continent.Builder("testContinent").build();
-        country1 = new Country.Builder("country one", testContinent).build();
-        country2 = new Country.Builder("country two", testContinent).build();
-        country3 = new Country.Builder("country tree", testContinent).build();
+        country1 = new Country.Builder("one", testContinent).build();
+        country2 = new Country.Builder("two", testContinent).build();
+        country3 = new Country.Builder("tree", testContinent).build();
 
 
         country = new Country.Builder("test", testContinent)
-                .adjacentTo(country1)
-                .adjacentTo(new HashSet<>(Arrays.asList(country2, country3)))
+//                .adjacentTo(country1)
+//                .adjacentTo(new HashSet<>(Arrays.asList(country2, country3)))
                 .build();
     }
 
@@ -55,20 +53,5 @@ public class CountryTest {
         assertSame(country.getContinent(), testContinent);
     }
 
-    /**
-     * This test case is designed to check {@link Country.Builder#adjacentTo(Country) adjacentTo} method of {@link Country.Builder builder}.
-     */
-    @Test
-    public void addAdjacentCountryTestCase() {
-        assertTrue(country.getAdjacentCountries().contains(country1));
-    }
 
-    /**
-     * This test case is designed to check {@link Country.Builder#adjacentTo(Country) adjacentTo} method of {@link Country.Builder builder}.
-     */
-    @Test
-    public void addAdjacentCountriesTestCase() {
-        assertTrue(country.getAdjacentCountries().contains(country2));
-        assertTrue(country.getAdjacentCountries().contains(country3));
-    }
 }

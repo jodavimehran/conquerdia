@@ -3,7 +3,6 @@ package ca.concordia.encs.conquerdia.engine.command.factory;
 import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
 import ca.concordia.encs.conquerdia.engine.command.Command;
 import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
-import ca.concordia.encs.conquerdia.engine.map.Continent;
 
 import java.util.*;
 
@@ -17,7 +16,6 @@ public class EditContinentCommandFactory implements CommandFactory {
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 3)
             return Arrays.asList(() -> EDIT_CONTINENT_COMMAND_ERR1);
-
         List<Command> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
         try {
@@ -26,20 +24,16 @@ public class EditContinentCommandFactory implements CommandFactory {
                     case ("-add"): {
                         String continentName = iterator.next();
                         String continentValue = iterator.next();
-                        Continent continent = new Continent.Builder(continentName)
-                                .setValue(Integer.valueOf(continentValue))
-                                .setWorldMap(model.getWorldMap())
-                                .build();
-                        commands.add(continent::addContinentToWorldMap);
+                        commands.add(() -> model.getWorldMap().addContinent(continentName, Integer.valueOf(continentValue)));
                         break;
                     }
                     case "-remove": {
                         String continentName = iterator.next();
-                        Continent continent = new Continent.Builder(continentName)
-                                .setWorldMap(model.getWorldMap())
-                                .build();
-                        commands.add(continent::removeContinentFromWorldMap);
+                        commands.add(() -> model.getWorldMap().removeContinent(continentName));
                         break;
+                    }
+                    default: {
+                        return Arrays.asList(() -> "Invalid input!");
                     }
                 }
             }

@@ -15,11 +15,9 @@ import java.util.stream.Collectors;
  * A Continent belongs to a Map
  */
 public class Continent {
-
     private final Map<String, Country> countries = new HashMap<>();
     private String name;
     private Integer value;
-    private WorldMap worldMap;
 
     private Continent() {
     }
@@ -33,27 +31,21 @@ public class Continent {
     }
 
     /**
-     * //TODO: DOCUMENTATION
+     * Add a country to this continent
      *
-     * @return
+     * @param country
      */
-    public String removeContinentFromWorldMap() {
-        return worldMap.removeContinent(this);
+    public void addCountry(Country country) {
+        countries.put(country.getName(), country);
     }
 
     /**
-     * TODO: Java Doc
+     * Remove a country from Continent
      *
-     * @param country
-     * @return
+     * @param countryName
      */
-    public String addCountry(Country country) {
-        String countryName = country.getName();
-        if (worldMap.getCountriesName().contains(countryName)) {
-            return String.format("Continent with name \"%s\" was not found.", countryName);
-        }
-        countries.put(countryName, country);
-        return String.format("Country with name \"%s\" is successfully added to World Map", countryName);
+    public void removeCountry(String countryName) {
+        countries.remove(countryName);
     }
 
     /**
@@ -63,16 +55,6 @@ public class Continent {
         return name;
     }
 
-    /**
-     * This Method add this continent to the map
-     *
-     * @return return a success message if the list of the continents in the world map does not contain this continent,
-     * this condition may happen when someone try to call this function more than one time. So, if this continent is
-     * already placed in the map a relevant message will return.
-     */
-    public String addContinentToWorldMap() {
-        return worldMap.addContinent(this);
-    }
 
     /**
      * @return return the value of the Continent
@@ -93,22 +75,25 @@ public class Continent {
                 .append(name, continent.name)
                 .isEquals();
     }
+
     /**
      * This method implements the showmap result for the continent and it's including countries;
+     *
      * @return showMap string for the continent and the countries which it include.
      */
     @Override
     public String toString() {
-    	Set<Country> countries = this.getCountries();
-   	 	StringBuilder showMapConinentResult = new StringBuilder();
-   	 	showMapConinentResult.append(this.getName()).append(": includes the following countries:\n");
-   	 	for(Country country: countries) {
-   	 	showMapConinentResult.append(country.toString()).append(",");
-   		 } 
-   	 	showMapConinentResult.deleteCharAt(showMapConinentResult.length()-1);
-   	 	showMapConinentResult.append("\n");
-   	 	return showMapConinentResult.toString();
+        Set<Country> countries = this.getCountries();
+        StringBuilder showMapConinentResult = new StringBuilder();
+        showMapConinentResult.append(this.getName()).append(": includes the following countries:\n");
+        for (Country country : countries) {
+            showMapConinentResult.append(country.toString()).append(",");
+        }
+        showMapConinentResult.deleteCharAt(showMapConinentResult.length() - 1);
+        showMapConinentResult.append("\n");
+        return showMapConinentResult.toString();
     }
+
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
@@ -129,19 +114,11 @@ public class Continent {
          */
         public Builder(String name) {
             continent.name = name;
+//            continent.worldMap = worldMap;
         }
 
         public Builder setValue(Integer value) {
             continent.value = value;
-            return this;
-        }
-
-        /**
-         * @param worldMap
-         * @return return current builder object
-         */
-        public Builder setWorldMap(WorldMap worldMap) {
-            continent.worldMap = worldMap;
             return this;
         }
 
