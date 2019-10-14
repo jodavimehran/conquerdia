@@ -30,6 +30,10 @@ public class Country {
      */
     private final Continent continent;
 
+    /**
+     * Name of the player that this county belongs to
+     */
+    private String owner;
 
     /**
      * Country class has one and only one private constructor to force the user's of this class to use the Builder {@link Country.Builder}
@@ -37,6 +41,20 @@ public class Country {
     public Country(String name, Continent continent) {
         this.name = name;
         this.continent = continent;
+    }
+
+    /**
+     * @return name of the owner
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    /**
+     * @param owner Name of the owner of this country
+     */
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     /**
