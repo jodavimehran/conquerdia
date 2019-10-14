@@ -9,6 +9,10 @@ public class ConquerdiaModel {
     private final HashSet<String> players = new HashSet<>();
     private GamePhases currentPhase;
 
+    /**
+     * @param fileName
+     * @return
+     */
     public String loadMap(String fileName) {
         String result = worldMap.loadMap(fileName);
         if (worldMap.isMapLoaded()) {
