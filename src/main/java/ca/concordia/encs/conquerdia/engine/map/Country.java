@@ -1,5 +1,7 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
+import ca.concordia.encs.conquerdia.engine.Player;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,9 +33,9 @@ public class Country {
     private final Continent continent;
 
     /**
-     * Name of the player that this county belongs to
+     * The player that this county belongs to
      */
-    private String owner;
+    private Player owner;
 
     /**
      * Country class has one and only one private constructor to force the user's of this class to use the Builder {@link Country.Builder}
@@ -44,16 +46,16 @@ public class Country {
     }
 
     /**
-     * @return name of the owner
+     * @return the owner of this country
      */
-    public String getOwner() {
+    public Player getOwner() {
         return owner;
     }
 
     /**
-     * @param owner Name of the owner of this country
+     * @param owner The owner of this country
      */
-    public void setOwner(String owner) {
+    public void setOwner(Player owner) {
         this.owner = owner;
     }
 
