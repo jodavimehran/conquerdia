@@ -7,7 +7,16 @@ import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *
+ */
 public class ValidateMapCommandFactory implements CommandFactory {
+
+    /**
+     * @param model
+     * @param inputCommandParts
+     * @return
+     */
     @Override
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
         return Arrays.asList(model.getWorldMap()::validateMap);
