@@ -15,6 +15,7 @@ public class EditMapCommandFactory implements CommandFactory {
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 2)
             return Arrays.asList(() -> EDIT_MAP_ERR1);
+        model.getWorldMap().setFileName(inputCommandParts.get(1));
         return Arrays.asList(model.getWorldMap()::editMap);
     }
 }
