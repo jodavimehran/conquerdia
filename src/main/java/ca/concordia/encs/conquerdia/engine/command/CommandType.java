@@ -15,7 +15,7 @@ public enum CommandType {
     SAVE_MAP("savemap", new SaveMapCommandFactory()),
     EDIT_MAP("editmap", new EditMapCommandFactory()),
     VALIDATE_MAP("validatemap", new ValidateMapCommandFactory()),
-
+    GAME_PLAYER("gameplayer", new GamePlayerCommandFactory())
     ;
 
     private final String name;
