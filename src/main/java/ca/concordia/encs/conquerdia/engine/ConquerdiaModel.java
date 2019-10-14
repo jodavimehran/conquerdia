@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.engine;
 
 import ca.concordia.encs.conquerdia.engine.map.WorldMap;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 
@@ -32,6 +33,14 @@ public class ConquerdiaModel {
             return String.format("Player with name \"%s\" is already exist.", playerName);
         players.add(playerName);
         return String.format("Player with name \"%s\" is successfully added.", playerName);
+    }
+
+    public String removePlayer(String playerName) {
+        if (!players.contains(playerName)) {
+            return String.format("Player with name \"%s\" is not found.", playerName);
+        }
+        players.remove(playerName);
+        return String.format("Player with name \"%s\" is successfully removed.", playerName);
     }
 
     /**
