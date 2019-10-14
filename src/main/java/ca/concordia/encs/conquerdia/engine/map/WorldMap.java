@@ -229,6 +229,41 @@ public class WorldMap {
         return continents.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }
 
+    public Set<String> getCountryNames() {
+        return countries.keySet();
+    }
+
+    /**
+     * @return All counties in map
+     */
+    public Set<Country> getCountries() {
+        return countries.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
+    }
+
+    /**
+     * Find a continent by name and return it
+     *
+     * @param continentName name of the continent
+     * @return the continent if the continent exist, return null when a continent does not exist.
+     */
+    public Continent getContinent(String continentName) {
+        if (continents.containsKey(continentName))
+            return continents.get(continentName);
+        return null;
+    }
+
+    /**
+     * Find a Country by name and return it
+     *
+     * @param countryName name of the country
+     * @return the country if the country exist, return null when a country does not exist.
+     */
+    public Country getCountry(String countryName) {
+        if (countries.containsKey(countryName))
+            return countries.get(countryName);
+        return null;
+    }
+
     /**
      * @param countryName
      * @return return true if the map contains country
