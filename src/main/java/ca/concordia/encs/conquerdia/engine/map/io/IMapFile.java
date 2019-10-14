@@ -1,10 +1,7 @@
 package ca.concordia.encs.conquerdia.engine.map.io;
 
-import java.util.ArrayList;
-
-import ca.concordia.encs.conquerdia.engine.map.Continent;
+import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 
 public interface IMapFile {
-
-	ArrayList<Continent> loadMap(String filename);
+    void loadMap(WorldMap map, String filename);
 }

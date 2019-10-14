@@ -1,11 +1,22 @@
 package ca.concordia.encs.conquerdia.engine.map.io;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 
-import ca.concordia.encs.conquerdia.engine.map.Continent;
-
+/**
+ *
+ */
 public interface IMapReader {
+    /**
+     * @param worldMap
+     * @return
+     */
+    static IMapReader createMapReader(WorldMap worldMap) {
+        return new MapReader(worldMap);
+    }
 
-	ArrayList<Continent> readMap(String filename) throws IOException;
+    /**
+     * @param filename
+     * @return
+     */
+    boolean readMap(String filename);
 }

@@ -1,9 +1,15 @@
 package ca.concordia.encs.conquerdia.engine.map.io;
 
-import java.util.ArrayList;
-
-import ca.concordia.encs.conquerdia.engine.map.Continent;
+import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 
 public interface IMapWriter {
-	boolean writeMap(String filename, ArrayList<Continent> continents);
+    /**
+     * @param worldMap
+     * @return
+     */
+    static IMapWriter createMapWriter(WorldMap worldMap) {
+        return new MapWriter(worldMap);
+    }
+
+    boolean writeMap(String filename);
 }
