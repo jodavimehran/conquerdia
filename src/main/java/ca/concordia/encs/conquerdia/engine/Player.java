@@ -5,6 +5,7 @@ package ca.concordia.encs.conquerdia.engine;
  */
 public class Player {
     private final String name;
+    private int unplacedArmies = 0;
 
     private Player(String name) {
         this.name = name;
@@ -12,6 +13,16 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public void addUnplacedArmies(int add) {
+        unplacedArmies += add;
+    }
+
+    public void minusUnplacedArmies(int minus) {
+        unplacedArmies -= minus;
+        if (unplacedArmies < 0)
+            unplacedArmies = 0;
     }
 
     /**

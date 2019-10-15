@@ -62,15 +62,17 @@ public class ConquerdiaModel {
     public String populateCountries() {
         if (!GamePhases.START_UP.equals(this.currentPhase))
             return "Invalid Command! This command is one of the startup phase commands. Currently the game is not in this phase.";
-        if (players.size() < 2)
-            return "The game need at least two players to start.";
+        int numberOfPlayers = players.size();
+        if (numberOfPlayers < 3)
+            return "The game need at least Three players to start.";
         Set<Country> countries = worldMap.getCountries();
-        if (players.size() > countries.size())
+        int numberOfCountries = countries.size();
+        if (numberOfPlayers > numberOfCountries)
             return "Too Many Players! Number of player must be equal or lower than number of countries in map!";
-        Player[] playerArray = new Player[players.size()];
+        Player[] playerArray = new Player[numberOfPlayers];
         playerArray = players.keySet().toArray(playerArray);
-        int i = 0;
         SecureRandom randomNumber = new SecureRandom();
+        int i = randomNumber.nextInt(numberOfPlayers - 1);
         while (!countries.isEmpty()) {
             Country[] countryArray = new Country[countries.size()];
             countryArray = countries.toArray(countryArray);
@@ -78,10 +80,32 @@ public class ConquerdiaModel {
             Country country = countryArray[value];
             country.setOwner(playerArray[i++]);
             countries.remove(country);
-            if (i >= players.size())
+            if (i >= numberOfPlayers)
                 i = 0;
         }
-        return "All countries are populated.";
+        currentPhase = GamePhases.COUNTRIES_ARE_POPULATED;
+        int numberOfInitialArmies = calculateNumberOfInitialArmies(numberOfPlayers);
+        players.forEach((key, value) -> value.addUnplacedArmies(numberOfInitialArmies));
+        return String.format("All %d countries are populated and each of %d players are allocated %d initial armies.", numberOfCountries, numberOfPlayers, numberOfInitialArmies);
+    }
+
+    /**
+     * Calculate number of initial armies depending on the number of players.
+     *
+     * @param numberOfPlayers the number of players
+     * @return number of initial armies
+     */
+    private int calculateNumberOfInitialArmies(int numberOfPlayers) {
+        switch (numberOfPlayers) {
+            case 3:
+                return 35;
+            case 4:
+                return 30;
+            case 5:
+                return 25;
+            default:
+                return 20;
+        }
     }
 
     /**
