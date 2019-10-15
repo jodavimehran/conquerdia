@@ -1,21 +1,13 @@
 package ca.concordia.encs.conquerdia.ui;
 
 import java.awt.Dimension;
-import java.util.Scanner;
 
-import ca.concordia.encs.conquerdia.engine.ConquerdiaController;
-import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
-import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 import ca.concordia.encs.conquerdia.ui.views.GameView;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-@SuppressWarnings({ "restriction" })
 public class ConquerdiaJavaFxUI extends Application {
 	
 	public static void start() {
