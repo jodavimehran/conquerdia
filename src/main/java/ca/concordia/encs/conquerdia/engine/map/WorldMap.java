@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
+import ca.concordia.encs.conquerdia.engine.api.IWorldMap;
 import ca.concordia.encs.conquerdia.engine.map.io.IMapReader;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Represents the world map of the game.
  */
-public class WorldMap {
+public class WorldMap implements IWorldMap{
     private final static String NO_MAP_TO_EDIT_ERROR = "There is no map to %s. Use \"editmap filename\" command to load or create a map.";
     private final Map<String, Continent> continents = new HashMap<>();
     private final Map<String, Country> countries = new HashMap<>();
