@@ -106,6 +106,16 @@ public class Country {
     }
 
     /**
+     * This method place a number of aries to this country
+     *
+     * @param numberOfArmiesToBePlaces The number of armies to be places in this country
+     */
+    public void placeArmy(int numberOfArmiesToBePlaces) {
+        if (numberOfArmiesToBePlaces > 0)
+            numberOfArmies += numberOfArmiesToBePlaces;
+    }
+
+    /**
      * This method remove armies from this country.
      *
      * @param numberOfArmiesToRemove The number of armies to remove from this county.
