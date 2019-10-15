@@ -15,32 +15,33 @@ public class ConquerdiaModel {
     private String[] playersPosition;
     private int currentPlayer;
 
-    /**
-     * @param fileName
-     * @return
-     */
-    public String loadMap(String fileName) {
-        String result = worldMap.loadMap(fileName);
-        if (worldMap.isMapLoaded()) {
-            currentPhase = GamePhases.START_UP;
-        }
-        return result;
-    }
+	/**
+	 * @param fileName
+	 * @return
+	 */
+	public String loadMap(String fileName) {
+		String result = worldMap.loadMap(fileName);
+		if (worldMap.isMapLoaded()) {
+			currentPhase = GamePhases.START_UP;
+		}
+		return result;
+	}
 
-    /**
-     * Add a new player to the game if player name will not found in current player name is
-     *
-     * @param playerName name of the plater to add
-     * @return the result message
-     */
-    public String addPlayer(String playerName) {
-        if (StringUtils.isBlank(playerName))
-            return "Player name is not valid!";
-        if (players.containsKey(playerName))
-            return String.format("Player with name \"%s\" is already exist.", playerName);
-        players.put(playerName, new Player.Builder(playerName).build());
-        return String.format("Player with name \"%s\" is successfully added.", playerName);
-    }
+	/**
+	 * Add a new player to the game if player name will not found in current player
+	 * name is
+	 *
+	 * @param playerName name of the plater to add
+	 * @return the result message
+	 */
+	public String addPlayer(String playerName) {
+		if (StringUtils.isBlank(playerName))
+			return "Player name is not valid!";
+		if (players.containsKey(playerName))
+			return String.format("Player with name \"%s\" is already exist.", playerName);
+		players.put(playerName, new Player.Builder(playerName).build());
+		return String.format("Player with name \"%s\" is successfully added.", playerName);
+	}
 
     /**
      * This Method remove a player
@@ -223,13 +224,12 @@ public class ConquerdiaModel {
         }
     }
 
-    /**
-     * This method gets the worldMap that contains all Continents and countries
-     *
-     * @return the current worldMap of the Game.
-     */
-    public WorldMap getWorldMap() {
-        return worldMap;
-    }
-
+	/**
+	 * This method gets the worldMap that contains all Continents and countries
+	 *
+	 * @return the current worldMap of the Game.
+	 */
+	public WorldMap getWorldMap() {
+		return worldMap;
+	}
 }
