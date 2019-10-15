@@ -15,33 +15,33 @@ public class ConquerdiaModel {
     private String[] playersPosition;
     private int currentPlayer;
 
-	/**
-	 * @param fileName
-	 * @return
-	 */
-	public String loadMap(String fileName) {
-		String result = worldMap.loadMap(fileName);
-		if (worldMap.isMapLoaded()) {
-			currentPhase = GamePhases.START_UP;
-		}
-		return result;
-	}
+    /**
+     * @param fileName
+     * @return
+     */
+    public String loadMap(String fileName) {
+        String result = worldMap.loadMap(fileName);
+        if (worldMap.isMapLoaded()) {
+            currentPhase = GamePhases.START_UP;
+        }
+        return result;
+    }
 
-	/**
-	 * Add a new player to the game if player name will not found in current player
-	 * name is
-	 *
-	 * @param playerName name of the plater to add
-	 * @return the result message
-	 */
-	public String addPlayer(String playerName) {
-		if (StringUtils.isBlank(playerName))
-			return "Player name is not valid!";
-		if (players.containsKey(playerName))
-			return String.format("Player with name \"%s\" is already exist.", playerName);
-		players.put(playerName, new Player.Builder(playerName).build());
-		return String.format("Player with name \"%s\" is successfully added.", playerName);
-	}
+    /**
+     * Add a new player to the game if player name will not found in current player
+     * name is
+     *
+     * @param playerName name of the plater to add
+     * @return the result message
+     */
+    public String addPlayer(String playerName) {
+        if (StringUtils.isBlank(playerName))
+            return "Player name is not valid!";
+        if (players.containsKey(playerName))
+            return String.format("Player with name \"%s\" is already exist.", playerName);
+        players.put(playerName, new Player.Builder(playerName).build());
+        return String.format("Player with name \"%s\" is successfully added.", playerName);
+    }
 
     /**
      * This Method remove a player
@@ -135,7 +135,7 @@ public class ConquerdiaModel {
         }
         player.minusUnplacedArmies(1);
         country.placeOneArmy();
-        sb.append("Player with name ").append(currentPlayer).append(" placed one army to ").append(countryName);
+        sb.append("Player with name ").append(currentPlayerName).append(" placed one army to ").append(countryName);
         for (int i = 0; i < playersPosition.length; i++) {
             giveTurnToAnotherPlayer();
             if (players.get(currentPlayerName).getUnplacedArmies() > 0) {
@@ -149,15 +149,14 @@ public class ConquerdiaModel {
         sb.append("The turn-based main play phase is began.").append(System.getProperty("line.separator"));
         currentPhase = GamePhases.REINFORCEMENTS;
         currentPlayer = 0;
-        runMainPlayPhase();
+        runMainPlayPhase(sb);
         return sb.toString();
     }
 
     /**
      * @return
      */
-    public String runMainPlayPhase() {
-        StringBuilder sb = new StringBuilder();
+    private void runMainPlayPhase(StringBuilder sb) {
         String currentPlayerName = playersPosition[currentPlayer];
         sb.append(System.getProperty("line.separator")).append(currentPlayerName).append("'s turn").append(System.getProperty("line.separator"));
         switch (currentPhase) {
@@ -169,8 +168,11 @@ public class ConquerdiaModel {
                         .append(" extra armies at this phase! You can place them wherever in your territory.")
                         .append(System.getProperty("line.separator"));
                 break;
+            case FORTIFICATION:
+                sb.append("Fortification Phase:").append(System.getProperty("line.separator"));
+                sb.append("You can move your armies.").append(System.getProperty("line.separator"));
+                break;
         }
-        return sb.toString();
     }
 
     public String reinforce(String countryName, int numberOfArmy) {
@@ -179,12 +181,25 @@ public class ConquerdiaModel {
         Country country = worldMap.getCountry(countryName);
         if (country == null)
             return String.format("Country with name \"%s\" was not found!", countryName);
+        if (numberOfArmy < 1)
+            return "Invalid number! Number of armies must be greater than 0.";
         String currentPlayerName = playersPosition[currentPlayer];
         if (country.getOwner() == null || !country.getOwner().getName().equals(currentPlayerName))
             return String.format("Country with name \"%s\" does not belong to you!", countryName);
         Player player = players.get(currentPlayerName);
-//        player.getUnplacedArmies()
-        return null;
+        StringBuilder sb = new StringBuilder();
+        int realNumberOfArmies = numberOfArmy > player.getUnplacedArmies() ? player.getUnplacedArmies() : numberOfArmy;
+        country.placeArmy(realNumberOfArmies);
+        player.minusUnplacedArmies(realNumberOfArmies);
+        sb.append("Dear ").append(currentPlayerName).append(", you placed ").append(realNumberOfArmies).append(" armies to ").append(countryName);
+        if (player.getUnplacedArmies() > 0) {
+            sb.append(" and ").append(player.getUnplacedArmies()).append(" armies are remain unplaced.");
+            return sb.toString();
+        }
+        sb.append(" and finished reinforcement phase successfully.");
+        currentPhase = GamePhases.FORTIFICATION;
+        runMainPlayPhase(sb);
+        return sb.toString();
     }
 
     /**
@@ -197,12 +212,13 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @param sb
+     * @param stringBuilder
      */
-    private void appendPlaceArmyMessage(StringBuilder sb) {
-        sb.append(System.getProperty("line.separator"));
-        sb.append("Dear ").append(playersPosition[currentPlayer]).append(", you have ").append(players.get(playersPosition[currentPlayer]).getUnplacedArmies()).append(" unplaced armies.").append(System.getProperty("line.separator"));
-        sb.append("Use \"placearmy\" to place one of them or use  \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
+    private void appendPlaceArmyMessage(StringBuilder stringBuilder) {
+        stringBuilder.append(System.getProperty("line.separator"));
+        String currentPlayerName = playersPosition[currentPlayer];
+        stringBuilder.append("Dear ").append(currentPlayerName).append(", you have ").append(players.get(currentPlayerName).getUnplacedArmies()).append(" unplaced armies.").append(System.getProperty("line.separator"));
+        stringBuilder.append("Use \"placearmy\" to place one of them or use  \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
     }
 
     /**
@@ -224,12 +240,12 @@ public class ConquerdiaModel {
         }
     }
 
-	/**
-	 * This method gets the worldMap that contains all Continents and countries
-	 *
-	 * @return the current worldMap of the Game.
-	 */
-	public WorldMap getWorldMap() {
-		return worldMap;
-	}
+    /**
+     * This method gets the worldMap that contains all Continents and countries
+     *
+     * @return the current worldMap of the Game.
+     */
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
 }
