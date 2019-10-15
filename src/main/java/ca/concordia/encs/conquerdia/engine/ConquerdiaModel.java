@@ -5,13 +5,15 @@ import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class ConquerdiaModel {
     private final WorldMap worldMap = new WorldMap();
-    private final HashMap<String, Player> players = new HashMap<>();
+    private final LinkedHashMap<String, Player> players = new LinkedHashMap<>();
     private GamePhases currentPhase;
+    private String[] playersPosition;
+    private int currentPlayer;
 
     /**
      * @param fileName
@@ -47,9 +49,8 @@ public class ConquerdiaModel {
      * @return the result message
      */
     public String removePlayer(String playerName) {
-        if (!players.containsKey(playerName)) {
+        if (!players.containsKey(playerName))
             return String.format("Player with name \"%s\" is not found.", playerName);
-        }
         players.remove(playerName);
         return String.format("Player with name \"%s\" is successfully removed.", playerName);
     }
@@ -69,24 +70,138 @@ public class ConquerdiaModel {
         int numberOfCountries = countries.size();
         if (numberOfPlayers > numberOfCountries)
             return "Too Many Players! Number of player must be equal or lower than number of countries in map!";
-        Player[] playerArray = new Player[numberOfPlayers];
-        playerArray = players.keySet().toArray(playerArray);
         SecureRandom randomNumber = new SecureRandom();
-        int i = randomNumber.nextInt(numberOfPlayers - 1);
-        while (!countries.isEmpty()) {
-            Country[] countryArray = new Country[countries.size()];
-            countryArray = countries.toArray(countryArray);
-            int value = randomNumber.nextInt(countries.size());
-            Country country = countryArray[value];
-            country.setOwner(playerArray[i++]);
-            countries.remove(country);
-            if (i >= numberOfPlayers)
-                i = 0;
+        {
+            Player[] playerArray = new Player[numberOfPlayers];
+            this.playersPosition = new String[numberOfPlayers];
+            playerArray = players.keySet().toArray(playerArray);
+
+            int firstOne = randomNumber.nextInt(numberOfPlayers - 1);
+            for (int i = 0; i < numberOfPlayers; i++) {
+                this.playersPosition[i] = playerArray[firstOne++].getName();
+                if (firstOne >= numberOfPlayers)
+                    firstOne = 0;
+            }
+        }
+        {
+            this.currentPlayer = 0;
+            int i = 0;
+            while (!countries.isEmpty()) {
+                Country[] countryArray = new Country[countries.size()];
+                countryArray = countries.toArray(countryArray);
+                int value = randomNumber.nextInt(countries.size());
+                Country country = countryArray[value];
+                Player player = players.get(this.playersPosition[i++]);
+                country.setOwner(player);
+                player.addCountry(country);
+                if (player.ownedAll(country.getContinent().getCountriesName()))
+                    player.addContinent(country.getContinent());
+
+                countries.remove(country);
+                if (i >= numberOfPlayers)
+                    i = 0;
+            }
         }
         currentPhase = GamePhases.COUNTRIES_ARE_POPULATED;
         int numberOfInitialArmies = calculateNumberOfInitialArmies(numberOfPlayers);
         players.forEach((key, value) -> value.addUnplacedArmies(numberOfInitialArmies));
-        return String.format("All %d countries are populated and each of %d players are allocated %d initial armies.", numberOfCountries, numberOfPlayers, numberOfInitialArmies);
+        StringBuilder sb = new StringBuilder();
+        sb.append("All ").append(numberOfCountries).append(" countries are populated and each of ").append(numberOfPlayers).append(" players are allocated ").append(numberOfInitialArmies).append(" initial armies.").append(System.getProperty("line.separator"));
+        appendPlaceArmyMessage(sb);
+        return sb.toString();
+    }
+
+    /**
+     * @param countryName
+     * @return
+     */
+    public String placeArmy(String countryName) {
+        if (!GamePhases.COUNTRIES_ARE_POPULATED.equals(currentPhase))
+            return "Invalid Command! This command is one of the startup phase commands and valid when all countries are populated.";
+        Country country = worldMap.getCountry(countryName);
+        if (country == null)
+            return String.format("Country with name \"%s\" was not found!", countryName);
+        String currentPlayerName = playersPosition[currentPlayer];
+        if (country.getOwner() == null || !country.getOwner().getName().equals(currentPlayerName))
+            return String.format("Country with name \"%s\" does not belong to you!", countryName);
+        Player player = players.get(currentPlayerName);
+        StringBuilder sb = new StringBuilder();
+        if (player.getUnplacedArmies() < 1) {
+            sb.append("You Dont have any unplaced army!");
+            giveTurnToAnotherPlayer();
+            appendPlaceArmyMessage(sb);
+            return sb.toString();
+        }
+        player.minusUnplacedArmies(1);
+        country.placeOneArmy();
+        sb.append("Player with name ").append(currentPlayer).append(" placed one army to ").append(countryName);
+        for (int i = 0; i < playersPosition.length; i++) {
+            giveTurnToAnotherPlayer();
+            if (players.get(currentPlayerName).getUnplacedArmies() > 0) {
+                appendPlaceArmyMessage(sb);
+                return sb.toString();
+            }
+        }
+        sb.append(System.getProperty("line.separator"));
+        sb.append("All players have placed their armies.").append(System.getProperty("line.separator"));
+        sb.append("Startup phase is finished.").append(System.getProperty("line.separator"));
+        sb.append("The turn-based main play phase is began.").append(System.getProperty("line.separator"));
+        currentPhase = GamePhases.REINFORCEMENTS;
+        currentPlayer = 0;
+        runMainPlayPhase();
+        return sb.toString();
+    }
+
+    /**
+     * @return
+     */
+    public String runMainPlayPhase() {
+        StringBuilder sb = new StringBuilder();
+        String currentPlayerName = playersPosition[currentPlayer];
+        sb.append(System.getProperty("line.separator")).append(currentPlayerName).append("'s turn").append(System.getProperty("line.separator"));
+        switch (currentPhase) {
+            case REINFORCEMENTS:
+                sb.append("Reinforcement Phase:").append(System.getProperty("line.separator"));
+                int numberOfReinforcementArmies = players.get(currentPlayerName).calculateNumberOfReinforcementArmies();
+                sb.append("Dear ").append(currentPlayerName).append(",").append(System.getProperty("line.separator"))
+                        .append("Congratulations! You've got ").append(numberOfReinforcementArmies)
+                        .append(" extra armies at this phase! You can place them wherever in your territory.")
+                        .append(System.getProperty("line.separator"));
+                break;
+        }
+        return sb.toString();
+    }
+
+    public String reinforce(String countryName, int numberOfArmy) {
+        if (!GamePhases.REINFORCEMENTS.equals(currentPhase))
+            return "Invalid Command! This command is one of the main play phase commands and valid when game is in reinforcement phase.";
+        Country country = worldMap.getCountry(countryName);
+        if (country == null)
+            return String.format("Country with name \"%s\" was not found!", countryName);
+        String currentPlayerName = playersPosition[currentPlayer];
+        if (country.getOwner() == null || !country.getOwner().getName().equals(currentPlayerName))
+            return String.format("Country with name \"%s\" does not belong to you!", countryName);
+        Player player = players.get(currentPlayerName);
+//        player.getUnplacedArmies()
+        return null;
+    }
+
+    /**
+     *
+     */
+    private void giveTurnToAnotherPlayer() {
+        currentPlayer++;
+        if (currentPlayer >= playersPosition.length)
+            currentPlayer = 0;
+    }
+
+    /**
+     * @param sb
+     */
+    private void appendPlaceArmyMessage(StringBuilder sb) {
+        sb.append(System.getProperty("line.separator"));
+        sb.append("Dear ").append(playersPosition[currentPlayer]).append(", you have ").append(players.get(playersPosition[currentPlayer]).getUnplacedArmies()).append(" unplaced armies.").append(System.getProperty("line.separator"));
+        sb.append("Use \"placearmy\" to place one of them or use  \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
     }
 
     /**

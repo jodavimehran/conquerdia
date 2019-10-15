@@ -6,6 +6,7 @@ package ca.concordia.encs.conquerdia.engine;
 public enum GamePhases {
     START_UP,
     COUNTRIES_ARE_POPULATED,
+    REINFORCEMENTS,
     ;
 }
 

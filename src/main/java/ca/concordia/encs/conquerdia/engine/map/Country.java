@@ -19,18 +19,20 @@ public class Country {
      * name of the country
      */
     private final String name;
-
     /**
      * Represents the borders of a country.
      * All neighbor countries of a country must add to this set.
      */
     private final Map<String, Country> adjacentCountries = new HashMap<>();
-
-
     /**
      * Represents the continent that this country is placed on
      */
     private final Continent continent;
+
+    /**
+     * Number of armies that are placed in this country
+     */
+    private int numberOfArmies;
 
     /**
      * The player that this county belongs to
@@ -86,6 +88,32 @@ public class Country {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return The number of armies that are placed in this country
+     */
+    public int getNumberOfArmies() {
+        return numberOfArmies;
+    }
+
+
+    /**
+     * This method place one army to this country
+     */
+    public void placeOneArmy() {
+        numberOfArmies++;
+    }
+
+    /**
+     * This method remove armies from this country.
+     *
+     * @param numberOfArmiesToRemove The number of armies to remove from this county.
+     */
+    public void removeArmy(int numberOfArmiesToRemove) {
+        this.numberOfArmies -= numberOfArmiesToRemove;
+        if (this.numberOfArmies < 0)
+            this.numberOfArmies = 0;
     }
 
     /**

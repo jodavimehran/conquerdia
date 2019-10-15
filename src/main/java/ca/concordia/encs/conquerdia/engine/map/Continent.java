@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class Continent {
     private final Map<String, Country> countries = new HashMap<>();
     private String name;
-    private Integer value;
+    private int value;
 
     private Continent() {
     }
@@ -59,7 +59,7 @@ public class Continent {
     /**
      * @return return the value of the Continent
      */
-    public Integer getValue() {
+    public int getValue() {
         return value;
     }
 
@@ -113,12 +113,12 @@ public class Continent {
          * @param name The name of continent that is required for creation of a continent
          */
         public Builder(String name) {
-            continent.name = name;
+            this.continent.name = name;
 //            continent.worldMap = worldMap;
         }
 
-        public Builder setValue(Integer value) {
-            continent.value = value;
+        public Builder setValue(int value) {
+            this.continent.value = value;
             return this;
         }
 
