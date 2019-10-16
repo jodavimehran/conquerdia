@@ -2,15 +2,11 @@ package ca.concordia.encs.conquerdia.engine.command.factory;
 
 import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
 import ca.concordia.encs.conquerdia.engine.command.Command;
-import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
 
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- */
-public class ValidateMapCommandFactory implements CommandFactory {
+public class PlaceAllCommand implements Command {
 
     /**
      * @param model             The model object of the game.
@@ -18,8 +14,8 @@ public class ValidateMapCommandFactory implements CommandFactory {
      * @return List of Command Results
      */
     @Override
-    public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
-        return Arrays.asList(model.getWorldMap()::validateMap);
+    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+        return Arrays.asList(model.placeAll());
     }
 
 }

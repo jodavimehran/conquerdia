@@ -1,6 +1,6 @@
 package ca.concordia.encs.conquerdia.engine.command;
 
-import ca.concordia.encs.conquerdia.engine.command.factory.EditContinentCommandFactory;
+import ca.concordia.encs.conquerdia.engine.command.factory.EditContinentCommand;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,6 +15,6 @@ public class CommandTypeTest {
 
     @Test
     public void getFactory() {
-        assertTrue(CommandType.EDIT_CONTINENT.getFactory() instanceof EditContinentCommandFactory);
+        assertTrue(CommandType.EDIT_CONTINENT.getCommand() instanceof EditContinentCommand);
     }
 }

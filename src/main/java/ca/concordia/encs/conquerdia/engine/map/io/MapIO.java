@@ -50,19 +50,18 @@ public abstract class MapIO {
 	 */
 	public static final String MAP_FILE_EXTENSION = ".map";
 
-	/**
-	 * Returns the absolute path to the map file residing in the
-	 * {@value #MAPS_FOLDER}
-	 *
-	 * @param filename The name of the map file with or without extension
-	 * @return The absolute path to the file
-	 */
-	protected static String getMapFilePath(String filename) {
-		String mapFileWithFolder = FileHelper.combinePath(MAPS_FOLDER,
-				FileHelper.getFileNameWithoutExtension(filename) + MAP_FILE_EXTENSION);
-		String path = FileHelper.getResourcePath(mapFileWithFolder);
-		return path;
-	}
+
+    /**
+     * Returns the absolute path to the map file residing in the
+     * {@value #MAPS_FOLDER}
+     *
+     * @param filename The name of the map file with or without extension
+     * @return The absolute path to the file
+     */
+    protected static String getMapFilePath(String filename) {
+        return FileHelper.getResourcePath(FileHelper.combinePath(MAPS_FOLDER,
+                FileHelper.getFileNameWithoutExtension(filename) + MAP_FILE_EXTENSION));
+    }
 
 	/**
 	 * Checks if the line in file starts the comment symbol

@@ -20,28 +20,28 @@ class MapReader extends MapIO implements IMapReader {
 	private ArrayList<String> countryList;
 	private final WorldMap worldMap;
 
-	public MapReader(WorldMap worldMap) {
-		this.worldMap = worldMap;
-	}
+    public MapReader(WorldMap worldMap) {
+        this.worldMap = worldMap;
+    }
 
-	/**
-	 * Parses the .map file and load the continents, countries and borders from it
-	 *
-	 * @param filename Only the name of the map file with or without the extension
-	 *                 eg. uk, risk.map etc.
-	 * @return An ArrayList containing the maps and countries & their neighbors
-	 *         represented in the map. NULL if there is a parsing error for
-	 *         continents
-	 */
-	public boolean readMap(String filename) {
-		final String path = MapIO.getMapFilePath(filename);
-		final File file = new File(path);
-		String line;
+    /**
+     * Parses the .map file and load the continents, countries and borders from it
+     *
+     * @param filename Only the name of the map file with or without the extension
+     *                 eg. uk, risk.map etc.
+     * @return An ArrayList containing the maps and countries & their neighbors
+     * represented in the map. NULL if there is a parsing error for
+     * continents
+     */
+    public boolean readMap(String filename) {
+        final String path = MapIO.getMapFilePath(filename);
+        final File file = new File(path);
+        String line;
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+
 			countryList = new ArrayList<String>();
 			continentList = new ArrayList<String>();
-
 			while ((line = reader.readLine()) != null) {
 				if (isContientsIdentifier(line)) {
 					readContinents(reader);
@@ -60,7 +60,6 @@ class MapReader extends MapIO implements IMapReader {
 	protected void readContinents(BufferedReader reader) throws IOException {
 		String line;
 		String[] tokens;
-
 		while ((line = reader.readLine()) != null && line.length() > 0) {
 			tokens = line.split(TOKENS_DELIMETER);
 			String continentName = tokens[0];
@@ -74,7 +73,6 @@ class MapReader extends MapIO implements IMapReader {
 			throws IOException {
 		String line;
 		String[] tokens;
-
 		while ((line = reader.readLine()) != null && line.length() > 0) {
 			tokens = line.split(TOKENS_DELIMETER);
 			String countryName = tokens[1];
@@ -84,24 +82,24 @@ class MapReader extends MapIO implements IMapReader {
 		}
 	}
 
-	protected void readBorders(BufferedReader reader) throws IOException {
-		String line;
-		String[] tokens;
-		int countryIndex;
+    protected void readBorders(BufferedReader reader) throws IOException {
+        String line;
+        String[] tokens;
+        int countryIndex;
 
-		while ((line = reader.readLine()) != null && line.length() > 0) {
-			tokens = line.split(TOKENS_DELIMETER);
-			countryIndex = Integer.parseInt(tokens[0]) - 1;
-			addNeighbours(countryList.get(countryIndex), tokens);
-		}
-	}
+        while ((line = reader.readLine()) != null && line.length() > 0) {
+            tokens = line.split(TOKENS_DELIMETER);
+            countryIndex = Integer.parseInt(tokens[0]) - 1;
+            addNeighbours(countryList.get(countryIndex), tokens);
+        }
+    }
 
 	private void addNeighbours(String countryName, String[] countryBorders) {
 		int neighborIndex;
-
 		for (int i = 1; i < countryBorders.length; i++) {
 			neighborIndex = Integer.parseInt(countryBorders[i]) - 1;
 			worldMap.addNeighbour(countryName, countryList.get(neighborIndex));
 		}
 	}
+
 }
