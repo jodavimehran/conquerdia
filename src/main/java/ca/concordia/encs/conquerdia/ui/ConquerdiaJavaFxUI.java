@@ -34,9 +34,9 @@ public class ConquerdiaJavaFxUI extends Application {
 		primaryStage.show();
 	}
 
-	public static void main(String[] args) {
-		start();
-	}
+//	public static void main(String[] args) {
+//		start();
+//	}
 
 	public Dimension getScreenDimension(Stage stage) {
 		return new Dimension((int) stage.getWidth(), (int) stage.getHeight());

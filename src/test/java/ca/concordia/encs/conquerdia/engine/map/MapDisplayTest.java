@@ -1,5 +1,7 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,28 +25,32 @@ public class MapDisplayTest {
 	@Before
 	public void setUp() {
 		countries = new HashMap<>();
-		testContinent = new Continent.Builder("testContinent").build();
-		country1 = new Country.Builder("one", testContinent).build();
-		country2 = new Country.Builder("two", testContinent).build();
-		country3 = new Country.Builder("tree", testContinent).build();
-		country = new Country.Builder("test", testContinent).build();
-		countries.put(country1.getName(), country2);
+		testContinent = new Continent.Builder("South-West-England").build();
+		country1 = new Country.Builder("Ross-shire", testContinent).build();
+		country2 = new Country.Builder("Ross-shire-and-Chromartyshire", testContinent).build();
+		country3 = new Country.Builder("Kincardine-shire", testContinent).build();
+		country = new Country.Builder("Northamptonshire_Northamptonshire", testContinent).build();
+
+		country1.addNeighbour(country2);
+		country1.addNeighbour(country3);
+		country1.addNeighbour(country);
+
+		countries.put(country1.getName(), country1);
 		countries.put(country2.getName(), country2);
 		countries.put(country3.getName(), country3);
+		countries.put(country.getName(), country);
 	}
 
 	@Test
 	public void testShowMapForEditing() {
-		WorldMap worldMap = new WorldMap();
-		worldMap.loadMap("uk.map");
-
-		System.out.println(worldMap.toString());
+		MapFormattor formattor = new MapFormattor(countries);
+		String str = formattor.format();
+		assertTrue(str.contains("Kincardine-shire,Ross-shire-and-Chromartyshire,Northamptonshire_Northamptonshire"));
+		//System.out.println(str);
 	}
 
 	@Test
 	public void testShowMapInGame() {
-		MapFormattor formattor = new MapFormattor(countries);
-		String str = formattor.format();
-		System.out.println(str);
+	
 	}
 }

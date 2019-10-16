@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import ca.concordia.encs.conquerdia.engine.map.Country;
 import dnl.utils.text.table.TextTable;
@@ -19,23 +20,28 @@ public class MapFormattor {
 
 	public String format() {
 		String[] columnNames = getColumnNames();
+		Object[][] data = new Object[countries.size()][columnNames.length];
+		Country country;
+		String neighborsAsCsv;
 
-		Object[][] data = {
-				{ "Kathy", "Smith", "Snowboarding", new Integer(5), new Boolean(false) },
-				{ "John", "Doe",
-						"Rowing", new Integer(3), new Boolean(true) },
-				{ "Sue", "Black",
-						"Knitting", new Integer(2), new Boolean(false) },
-				{ "Jane", "White",
-						"Speed reading", new Integer(20), new Boolean(true) },
-				{ "Joe", "Brown",
-						"Pool", new Integer(10), new Boolean(false) }
-		};
+		int count = 0;
+		for (Map.Entry<String, Country> item : countries.entrySet()) {
+			country = item.getValue();
+			data[count][0] = country.getName();
+			data[count][1] = country.getContinent().getName();
+			neighborsAsCsv = String.join(",", country.getAdjacentCountries()
+					.stream()
+					.map(Country::getName)
+					.collect(Collectors.toList()));
+			data[count][2] = neighborsAsCsv;
+			count++;
+		}
+
 		return format(columnNames, data);
 	}
 
 	private String[] getColumnNames() {
-		return new String[] { "Country", "Contijent"};
+		return new String[] { "Country", "Continent", "Adjacent Countries" };
 	}
 
 	private String format(String[] columnNames, Object[][] data) {
