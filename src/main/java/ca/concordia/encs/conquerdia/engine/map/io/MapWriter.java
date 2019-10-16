@@ -14,153 +14,154 @@ import java.util.Set;
 
 class MapWriter extends MapIO implements IMapWriter {
 
-    static final String CONTINENT_ROW_FORMAT = "%s" + TOKENS_DELIMETER + "%s" + TOKENS_DELIMETER + "%s";
-    private final WorldMap worldMap;
-    protected BufferedWriter writer;
+	static final String CONTINENT_ROW_FORMAT = "%s" + TOKENS_DELIMETER + "%s" + TOKENS_DELIMETER + "%s";
+	private final WorldMap worldMap;
+	protected BufferedWriter writer;
 
-    public MapWriter(WorldMap worldMap) {
-        this.worldMap = worldMap;
-    }
+	public MapWriter(WorldMap worldMap) {
+		this.worldMap = worldMap;
+	}
 
-    public boolean writeMap(String filename) {
-        String[] borderRows;
-        ArrayList<CountryRow> countryRows;
+	public boolean writeMap(String filename) {
+		String[] borderRows;
+		ArrayList<CountryRow> countryRows;
 
-        try {
-            final String mapName = FileHelper.getFileNameWithoutExtension(filename);
-            writer = new BufferedWriter(new FileWriter(MapIO.getMapFilePath(filename)));
+		try {
+			final String mapName = FileHelper.getFileNameWithoutExtension(filename);
+			final String path = MapIO.getMapFilePath(filename);
 
-            writeComments(new String[]{"RISK MAP", "Conquerdia Map Editor"});
-            writer.newLine();
+			writer = new BufferedWriter(new FileWriter(path));
 
-            writeResourceFiles(new String[]{"pic " + mapName + "_pic.png",
-                    "map " + mapName + "_map.gif",
-                    "crd card.cards", "prv " + mapName + ".jpg"});
-            writer.newLine();
+			writeComments(new String[] { "RISK MAP", "Conquerdia Map Editor" });
+			writer.newLine();
 
-            writeMapName(mapName.toUpperCase());
-            writer.newLine();
+			writeResourceFiles(new String[] { "pic " + mapName + "_pic.png",
+					"map " + mapName + "_map.gif",
+					"crd card.cards", "prv " + mapName + ".jpg" });
+			writer.newLine();
 
-            writeContinents();
-            writer.newLine();
+			writeMapName(mapName.toUpperCase());
+			writer.newLine();
 
-            countryRows = getAllCountryRows(new ArrayList<Continent>(worldMap.getContinents()));
-            writeCountries(countryRows);
-            writer.newLine();
+			writeContinents();
+			writer.newLine();
 
-            borderRows = getBorders(countryRows);
-            writeBorders(borderRows);
+			countryRows = getAllCountryRows(new ArrayList<Continent>(worldMap.getContinents()));
+			writeCountries(countryRows);
+			writer.newLine();
 
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
-        }
+			borderRows = getBorders(countryRows);
+			writeBorders(borderRows);
 
-        return true;
-    }
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 
-    private void writeBorders(String[] borderRows) throws IOException {
-        writeSection(BORDERS_SECTION_IDENTIFIER, borderRows);
-    }
+		return true;
+	}
 
-    private void writeCountries(ArrayList<CountryRow> countryRows) throws IOException {
-        String[] rows = countryRows.stream()
-                .map(CountryRow::toString)
-                .toArray(String[]::new);
-        writeSection(COUNTRIES_SECTION_IDENTIFIER, rows);
-    }
+	private void writeBorders(String[] borderRows) throws IOException {
+		writeSection(BORDERS_SECTION_IDENTIFIER, borderRows);
+	}
 
-    private void writeContinents() throws IOException {
-        Set<Continent> continents = worldMap.getContinents();
-        String[] rows = new String[continents.size()];
-        int i = 0;
-        for (Continent continent : continents) {
-            rows[i++] = String.format(CONTINENT_ROW_FORMAT, continent.getName(), continent.getValue());
-        }
-        writeSection(CONTINENTS_SECTION_IDENTIFIER, rows);
-    }
+	private void writeCountries(ArrayList<CountryRow> countryRows) throws IOException {
+		String[] rows = countryRows.stream()
+				.map(CountryRow::toString)
+				.toArray(String[]::new);
+		writeSection(COUNTRIES_SECTION_IDENTIFIER, rows);
+	}
 
-    private void writeResourceFiles(String[] files) throws IOException {
-        writeSection(FILES_SECTION_IDENTIFIER, files);
-    }
+	private void writeContinents() throws IOException {
+		Set<Continent> continents = worldMap.getContinents();
+		String[] rows = new String[continents.size()];
+		int i = 0;
+		for (Continent continent : continents) {
+			rows[i++] = String.format(CONTINENT_ROW_FORMAT, continent.getName(), continent.getValue());
+		}
+		writeSection(CONTINENTS_SECTION_IDENTIFIER, rows);
+	}
 
-    /**
-     * Writes the name of the map to the file in name {@code mapName} Map
-     *
-     * @param mapName The name of the map
-     * @throws IOException
-     */
-    private void writeMapName(String mapName) throws IOException {
-        writeLine("name " + mapName + " map");
-    }
+	private void writeResourceFiles(String[] files) throws IOException {
+		writeSection(FILES_SECTION_IDENTIFIER, files);
+	}
 
-    private void writeComments(String[] comments) throws IOException {
-        for (String comment : comments) {
-            writeLine(COMMENT_SYMBOL + " " + comment);
-        }
-    }
+	/**
+	 * Writes the name of the map to the file in name {@code mapName} Map
+	 *
+	 * @param mapName The name of the map
+	 * @throws IOException
+	 */
+	private void writeMapName(String mapName) throws IOException {
+		writeLine("name " + mapName + " map");
+	}
 
-    private void writeSection(String sectionIdentifier, String[] rows) throws IOException {
-        writeLine(sectionIdentifier);
-        for (String row : rows) {
-            writeLine(row);
-        }
-    }
+	private void writeComments(String[] comments) throws IOException {
+		for (String comment : comments) {
+			writeLine(COMMENT_SYMBOL + " " + comment);
+		}
+	}
 
-    private void writeLine(String line) throws IOException {
-        writer.write(line);
-        writer.newLine();
-    }
+	private void writeSection(String sectionIdentifier, String[] rows) throws IOException {
+		writeLine(sectionIdentifier);
+		for (String row : rows) {
+			writeLine(row);
+		}
+	}
 
-    private ArrayList<CountryRow> getAllCountryRows(ArrayList<Continent> continents) {
-        ArrayList<CountryRow> rows = new ArrayList<CountryRow>();
-        Set<Country> countries;
-        CountryRow countryRow;
-        int countryNumber = 0;
+	private void writeLine(String line) throws IOException {
+		writer.write(line);
+		writer.newLine();
+	}
 
-        for (int i = 0; i < continents.size(); i++) {
-            countries = continents.get(i).getCountries();
+	private ArrayList<CountryRow> getAllCountryRows(ArrayList<Continent> continents) {
+		ArrayList<CountryRow> rows = new ArrayList<CountryRow>();
+		Set<Country> countries;
+		CountryRow countryRow;
+		int countryNumber = 0;
 
-            for (Country country : countries) {
-                countryNumber++;
-                countryRow = countryRowFromCountry(country, countryNumber, i + 1);
-                rows.add(countryRow);
-            }
-        }
-        return rows;
-    }
+		for (int i = 0; i < continents.size(); i++) {
+			countries = continents.get(i).getCountries();
 
-    private String[] getBorders(ArrayList<CountryRow> countryRows) {
-        String[] borders = new String[countryRows.size()];
-        CountryRow countryRow;
-        HashMap<String, Integer> countryNumbers = new HashMap<>();
-        StringBuilder builder = new StringBuilder();
+			for (Country country : countries) {
+				countryNumber++;
+				countryRow = countryRowFromCountry(country, countryNumber, i + 1);
+				rows.add(countryRow);
+			}
+		}
+		return rows;
+	}
 
-        for (int i = 0; i < countryRows.size(); i++) {
-            countryRow = countryRows.get(i);
-            countryNumbers.put(countryRow.getName(), countryRow.getNumber());
-        }
+	private String[] getBorders(ArrayList<CountryRow> countryRows) {
+		String[] borders = new String[countryRows.size()];
+		CountryRow countryRow;
+		HashMap<String, Integer> countryNumbers = new HashMap<>();
+		StringBuilder builder = new StringBuilder();
 
-        for (int i = 0; i < countryRows.size(); i++) {
-            countryRow = countryRows.get(i);
-            builder.append(countryRow.getNumber());
+		for (int i = 0; i < countryRows.size(); i++) {
+			countryRow = countryRows.get(i);
+			countryNumbers.put(countryRow.getName(), countryRow.getNumber());
+		}
 
-            for (String countryName : countryRow.getAdjacentCountryNames()) {
-                builder.append(TOKENS_DELIMETER + countryNumbers.get(countryName));
-            }
-            borders[i] = builder.toString();
-        }
-        return borders;
-    }
+		for (int i = 0; i < countryRows.size(); i++) {
+			countryRow = countryRows.get(i);
+			builder.append(countryRow.getNumber());
 
-    private CountryRow countryRowFromCountry(Country country, int number, int continentNumber) {
-        CountryRow countryRow = new CountryRow(number, country.getName(), continentNumber);
-        countryRow.setAdjacentCountryNames(country.getAdjacentCountries()
-                .stream()
-                .map(Country::getName)
-                .toArray(String[]::new));
+			for (String countryName : countryRow.getAdjacentCountryNames()) {
+				builder.append(TOKENS_DELIMETER + countryNumbers.get(countryName));
+			}
+			borders[i] = builder.toString();
+		}
+		return borders;
+	}
 
-        return countryRow;
-    }
+	private CountryRow countryRowFromCountry(Country country, int number, int continentNumber) {
+		CountryRow countryRow = new CountryRow(number, country.getName(), continentNumber);
+		countryRow.setAdjacentCountryNames(country.getAdjacentCountries()
+				.stream()
+				.map(Country::getName)
+				.toArray(String[]::new));
+
+		return countryRow;
+	}
 }

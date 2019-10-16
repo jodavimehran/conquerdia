@@ -2,6 +2,11 @@ package ca.concordia.encs.conquerdia.engine.util;
 
 import org.apache.commons.io.FilenameUtils;
 
+/**
+ * Provides various helper method for storage system
+ * 
+ * @author Mosabbir
+ */
 public class FileHelper {
 
 	/**
@@ -39,7 +44,6 @@ public class FileHelper {
 	 *         exists
 	 */
 	public static String getFileNameWithoutExtension(String filename) {
-
 		return FilenameUtils.getBaseName(filename);
 	}
 }
