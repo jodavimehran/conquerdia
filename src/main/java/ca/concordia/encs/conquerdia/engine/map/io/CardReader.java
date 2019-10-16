@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import ca.concordia.encs.conquerdia.engine.map.Card;
 import ca.concordia.encs.conquerdia.engine.util.FileHelper;
 
+/**
+ * Provide methods to read cards
+ * 
+ * @author Mosabbir
+ *
+ */
 public class CardReader implements ICardReader {
 
 	public static final String COMMENT_SYMBOL = ";";
@@ -18,6 +24,9 @@ public class CardReader implements ICardReader {
 	public static final String CARDS_FILE_EXTENSION = ".cards";
 	public static final String SUPPORTED_TYPES = "INFANTRY,CAVALRY,CANNON";
 
+	/**
+	 * Reads cards from the card file and returns all the cards 
+	 */
 	public ArrayList<Card> loadCards(String filename) throws IOException {
 		final String path = getCardsFilePath(filename);
 
