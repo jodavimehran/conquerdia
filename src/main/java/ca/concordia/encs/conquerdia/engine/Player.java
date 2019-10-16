@@ -127,7 +127,7 @@ public class Player {
      * @return <tt>true</tt> if this player own all of the countries of the specified collection
      */
     public boolean ownedAll(Set<String> countries) {
-        return countries.containsAll(countries);
+        return this.countries.keySet().containsAll(countries);
     }
 
     /**

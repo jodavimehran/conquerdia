@@ -18,7 +18,7 @@ public class ShowMapCommand implements Command {
      */
     @Override
     public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
-        return Arrays.asList(model.getWorldMap().toString());
+        return Arrays.asList(model.getWorldMap().showMap());
     }
 
 }

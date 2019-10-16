@@ -22,6 +22,7 @@ public class GamePlayerCommand implements Command {
             return Arrays.asList(GAME_PLAYER_COMMAND_ERR1);
         List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
+        iterator.next();
         try {
             while (iterator.hasNext()) {
                 String option = iterator.next();
