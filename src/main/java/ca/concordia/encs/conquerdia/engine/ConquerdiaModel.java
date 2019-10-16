@@ -114,8 +114,8 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @param countryName
-     * @return
+     * @param countryName Name of the country that one army be placed on it
+     * @return the result
      */
     public String placeArmy(String countryName) {
         if (!GamePhases.COUNTRIES_ARE_POPULATED.equals(currentPhase))
@@ -155,23 +155,43 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @return
+     * This method automatically randomly place all remaining unplaced armies for all players
+     *
+     * @return the result
      */
-    private void runMainPlayPhase(StringBuilder sb) {
+    public String placeAll() {
+        if (!GamePhases.COUNTRIES_ARE_POPULATED.equals(currentPhase))
+            return "Invalid Command! This command is one of the startup phase commands and valid when all countries are populated.";
+        SecureRandom randomNumber = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+        while (!GamePhases.REINFORCEMENTS.equals(currentPhase)) {
+            Set<String> countryNames = players.get(playersPosition[currentPlayer]).getCountryNames();
+            String[] countriesArray = new String[countryNames.size()];
+            countriesArray = countryNames.toArray(countriesArray);
+            sb.append(placeArmy(countriesArray[randomNumber.nextInt(countryNames.size())]));
+            sb.append(System.getProperty("line.separator"));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @param stringBuilder The builder for append result
+     */
+    private void runMainPlayPhase(StringBuilder stringBuilder) {
         String currentPlayerName = playersPosition[currentPlayer];
-        sb.append(System.getProperty("line.separator")).append(currentPlayerName).append("'s turn").append(System.getProperty("line.separator"));
+        stringBuilder.append(System.getProperty("line.separator")).append(currentPlayerName).append("'s turn").append(System.getProperty("line.separator"));
         switch (currentPhase) {
             case REINFORCEMENTS:
-                sb.append("Reinforcement Phase:").append(System.getProperty("line.separator"));
+                stringBuilder.append("Reinforcement Phase:").append(System.getProperty("line.separator"));
                 int numberOfReinforcementArmies = players.get(currentPlayerName).calculateNumberOfReinforcementArmies();
-                sb.append("Dear ").append(currentPlayerName).append(",").append(System.getProperty("line.separator"))
+                stringBuilder.append("Dear ").append(currentPlayerName).append(",").append(System.getProperty("line.separator"))
                         .append("Congratulations! You've got ").append(numberOfReinforcementArmies)
                         .append(" extra armies at this phase! You can place them wherever in your territory.")
                         .append(System.getProperty("line.separator"));
                 break;
             case FORTIFICATION:
-                sb.append("Fortification Phase:").append(System.getProperty("line.separator"));
-                sb.append("You can move your armies.").append(System.getProperty("line.separator"));
+                stringBuilder.append("Fortification Phase:").append(System.getProperty("line.separator"));
+                stringBuilder.append("You can move your armies.").append(System.getProperty("line.separator"));
                 break;
         }
     }

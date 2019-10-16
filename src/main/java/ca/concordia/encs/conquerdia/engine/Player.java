@@ -72,6 +72,15 @@ public class Player {
     }
 
     /**
+     * Remove a country from the list of the countries that owned by this player
+     *
+     * @param countryName
+     */
+    public void removeCountry(String countryName) {
+        countries.remove(countryName);
+    }
+
+    /**
      * @return the number of countries this player owns
      */
     public int getNumberOfCountries() {
@@ -79,19 +88,17 @@ public class Player {
     }
 
     /**
+     * @return name of the countries this player owns
+     */
+    public Set<String> getCountryNames() {
+        return countries.keySet();
+    }
+
+    /**
      * @return the number of continents this player owns
      */
     public int getNumberOfContinent() {
         return continents.size();
-    }
-
-    /**
-     * Remove a country from the list of the countries that owned by this player
-     *
-     * @param countryName
-     */
-    public void removeCountry(String countryName) {
-        countries.remove(countryName);
     }
 
     /**

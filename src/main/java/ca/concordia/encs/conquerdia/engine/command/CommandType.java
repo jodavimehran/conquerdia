@@ -18,7 +18,8 @@ public enum CommandType {
     LOAD_MAP("loadmap", new LoadMapCommandFactory()),
     GAME_PLAYER("gameplayer", new GamePlayerCommandFactory()),
     POPULATE_COUNTRIES("populatecountries", new PopulateCountriesCommandFactory()),
-    PLACE_ARMY("placearmy", new PlaceArmyCommandFactory());
+    PLACE_ARMY("placearmy", new PlaceArmyCommandFactory()),
+    PLACE_ALL("placeall", new PlaceAllCommandFactory());
 
     private final String name;
     private final CommandFactory factory;
