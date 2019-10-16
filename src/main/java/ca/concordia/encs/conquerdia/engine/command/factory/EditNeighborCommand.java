@@ -22,11 +22,12 @@ public class EditNeighborCommand implements Command {
             return Arrays.asList(ERR1);
         List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
+        iterator.next();
         try {
             while (iterator.hasNext()) {
                 String option = iterator.next();
-                String firstCountryName = iterator.next().toLowerCase();
-                String secondCountryName = iterator.next().toLowerCase();
+                String firstCountryName = iterator.next();
+                String secondCountryName = iterator.next();
                 switch (option) {
                     case ("-add"): {
                         commands.add(model.getWorldMap().addNeighbour(firstCountryName, secondCountryName));

@@ -20,17 +20,18 @@ public class EditCountryCommand implements Command {
 
         List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
+        iterator.next();
         try {
             while (iterator.hasNext()) {
                 switch (iterator.next()) {
                     case ("-add"): {
-                        String countryName = iterator.next().toLowerCase();
-                        String continentName = iterator.next().toLowerCase();
+                        String countryName = iterator.next();
+                        String continentName = iterator.next();
                         commands.add(model.getWorldMap().addCountry(countryName, continentName));
                         break;
                     }
                     case "-remove": {
-                        String countryName = iterator.next().toLowerCase();
+                        String countryName = iterator.next();
                         commands.add(model.getWorldMap().removeCountry(countryName));
                         break;
                     }

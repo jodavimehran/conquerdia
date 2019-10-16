@@ -21,6 +21,8 @@ public class ConquerdiaModel {
      * @return
      */
     public String loadMap(String fileName) {
+        if (currentPhase != null)
+            return "The game was started! You can not load another map during the game.";
         String result = worldMap.loadMap(fileName);
         if (worldMap.isMapLoaded()) {
             currentPhase = GamePhases.START_UP;
@@ -36,6 +38,8 @@ public class ConquerdiaModel {
      * @return the result message
      */
     public String addPlayer(String playerName) {
+        if (!GamePhases.START_UP.equals(this.currentPhase))
+            return "Invalid Command! This command is one of the startup phase commands. Currently the game is not in this phase.";
         if (StringUtils.isBlank(playerName))
             return "Player name is not valid!";
         if (players.containsKey(playerName))
@@ -51,6 +55,8 @@ public class ConquerdiaModel {
      * @return the result message
      */
     public String removePlayer(String playerName) {
+        if (!GamePhases.START_UP.equals(this.currentPhase))
+            return "Invalid Command! This command is one of the startup phase commands. Currently the game is not in this phase.";
         if (!players.containsKey(playerName))
             return String.format("Player with name \"%s\" is not found.", playerName);
         players.remove(playerName);
@@ -76,7 +82,7 @@ public class ConquerdiaModel {
         {
             Player[] playerArray = new Player[numberOfPlayers];
             this.playersPosition = new String[numberOfPlayers];
-            playerArray = players.keySet().toArray(playerArray);
+            playerArray = players.values().toArray(playerArray);
 
             int firstOne = randomNumber.nextInt(numberOfPlayers - 1);
             for (int i = 0; i < numberOfPlayers; i++) {
@@ -95,6 +101,7 @@ public class ConquerdiaModel {
                 Country country = countryArray[value];
                 Player player = players.get(this.playersPosition[i++]);
                 country.setOwner(player);
+                country.placeOneArmy();
                 player.addCountry(country);
                 if (player.ownedAll(country.getContinent().getCountriesName()))
                     player.addContinent(country.getContinent());
@@ -106,7 +113,7 @@ public class ConquerdiaModel {
         }
         currentPhase = GamePhases.COUNTRIES_ARE_POPULATED;
         int numberOfInitialArmies = calculateNumberOfInitialArmies(numberOfPlayers);
-        players.forEach((key, value) -> value.addUnplacedArmies(numberOfInitialArmies));
+        players.forEach((key, value) -> value.addUnplacedArmies(numberOfInitialArmies - 1));
         StringBuilder sb = new StringBuilder();
         sb.append("All ").append(numberOfCountries).append(" countries are populated and each of ").append(numberOfPlayers).append(" players are allocated ").append(numberOfInitialArmies).append(" initial armies.").append(System.getProperty("line.separator"));
         appendPlaceArmyMessage(sb);
@@ -125,7 +132,7 @@ public class ConquerdiaModel {
             return String.format("Country with name \"%s\" was not found!", countryName);
         String currentPlayerName = playersPosition[currentPlayer];
         if (country.getOwner() == null || !country.getOwner().getName().equals(currentPlayerName))
-            return String.format("Country with name \"%s\" does not belong to you!", countryName);
+            return String.format("Dear %s, Country with name \"%s\" does not belong to you!", currentPlayerName, countryName);
         Player player = players.get(currentPlayerName);
         StringBuilder sb = new StringBuilder();
         if (player.getUnplacedArmies() < 1) {
@@ -136,7 +143,7 @@ public class ConquerdiaModel {
         }
         player.minusUnplacedArmies(1);
         country.placeOneArmy();
-        sb.append("Player with name ").append(currentPlayerName).append(" placed one army to ").append(countryName);
+        sb.append(currentPlayerName).append(" placed one army to ").append(countryName);
         for (int i = 0; i < playersPosition.length; i++) {
             giveTurnToAnotherPlayer();
             if (players.get(currentPlayerName).getUnplacedArmies() > 0) {
@@ -309,9 +316,10 @@ public class ConquerdiaModel {
      */
     private void appendPlaceArmyMessage(StringBuilder stringBuilder) {
         stringBuilder.append(System.getProperty("line.separator"));
+        stringBuilder.append("===========================================").append(System.getProperty("line.separator"));
         String currentPlayerName = playersPosition[currentPlayer];
         stringBuilder.append("Dear ").append(currentPlayerName).append(", you have ").append(players.get(currentPlayerName).getUnplacedArmies()).append(" unplaced armies.").append(System.getProperty("line.separator"));
-        stringBuilder.append("Use \"placearmy\" to place one of them or use  \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
+        stringBuilder.append("Use \"placearmy\" to place one of them or use \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
     }
 
     /**

@@ -41,11 +41,15 @@ public class ConquerdiaController implements IGameEngine {
     @Override
     public void executeCommand(String commandStr, PrintStream output) {
         String[] inputCommandParts = commandStr.trim().split(" ");
-        if (inputCommandParts.length <= 0)
+        if (inputCommandParts.length <= 0) {
             output.println("Invalid Command! A valid command must have at least one part.");
+            return;
+        }
         CommandType commandType = Command.createCommand(inputCommandParts);
-        if (commandType == null)
+        if (commandType == null) {
             output.println("Command not found.");
+            return;
+        }
         List<String> commands = commandType.getCommand().getCommands(conquerdiaModel, Arrays.asList(inputCommandParts));
         for (String result : commands) {
             output.println(result);

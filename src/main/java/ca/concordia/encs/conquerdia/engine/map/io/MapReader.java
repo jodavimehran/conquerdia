@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * This class provides a set of methods to read a risk map file. It also
  * implements the {@link IMapReader} interface to expose the map reading method
- * 
+ *
  * @author Mosabbir
  *
  */
@@ -24,7 +24,7 @@ class MapReader extends MapIO implements IMapReader {
 
 	/**
 	 * Constructor takes a worldMap instance to populate it from the file
-	 * 
+	 *
 	 * @param worldMap
 	 */
 	public MapReader(WorldMap worldMap) {
@@ -120,7 +120,7 @@ class MapReader extends MapIO implements IMapReader {
 
 	/**
 	 * Add the neighbor countries to the specified country
-	 * 
+	 *
 	 * @param countryName    The name of the country which neighbor has to added
 	 * @param countryBorders The name of the neighbors of the country which to be
 	 *                       added

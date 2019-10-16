@@ -32,9 +32,8 @@ public class WorldMap implements IWorldMap {
      */
     public String editMap(String fileName) {
         this.fileName = fileName;
+        readyForEdit = true;
         newMapFromScratch = !openMapFile();
-        if (!(readyForEdit = validateMapFileName()))
-            return String.format("File name \"%s\" is not a valid name.", fileName);
         return String.format("Map with file name \"%s\" is ready to edit", fileName);
     }
 
@@ -44,7 +43,10 @@ public class WorldMap implements IWorldMap {
      */
     public String loadMap(String fileName) {
         this.fileName = fileName;
-        if (!openMapFile())
+        this.readyForEdit = true;
+        boolean mapIsLoaded = openMapFile();
+        this.readyForEdit = false;
+        if (!mapIsLoaded)
             return String.format("Map with file name \"%s\" is not found!", fileName);
         if (!mapValidation.checkAllMapValidationRules())
             return mapValidation.validate();
@@ -218,23 +220,6 @@ public class WorldMap implements IWorldMap {
         secondCountry.removeNeighbour(firstCountry.getName());
     }
 
-    /**
-     * This method returns the name of continents and countries that are already populated in the map.
-     *
-     * @return The Result of showmap for world map.
-     */
-    @Override
-    public String toString() {
-        return new MapFormattor(countries).format();
-//
-//        Set<Continent> continents = this.getContinents();
-//        StringBuilder showMapResult = new StringBuilder();
-//        for (Continent continent : continents) {
-//            showMapResult.append(continent.toString()).append("\n");
-//        }
-//        return showMapResult.toString();
-    }
-
 
     /**
      * @return return all continents in map
@@ -301,4 +286,12 @@ public class WorldMap implements IWorldMap {
     public boolean isMapLoaded() {
         return mapLoaded;
     }
+
+    /**
+     * @return the map
+     */
+    public String showMap() {
+        return new MapFormattor(countries).format(mapLoaded ? MapFormattor.FormatType.Detail : MapFormattor.FormatType.Default);
+    }
+
 }
