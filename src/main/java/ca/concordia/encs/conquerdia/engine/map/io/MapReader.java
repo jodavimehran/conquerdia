@@ -63,7 +63,8 @@ class MapReader extends MapIO implements IMapReader {
 			return false;
 		} finally {
 			try {
-				reader.close();
+				if (reader != null)
+					reader.close();
 			} catch (IOException e) {
 			}
 		}
