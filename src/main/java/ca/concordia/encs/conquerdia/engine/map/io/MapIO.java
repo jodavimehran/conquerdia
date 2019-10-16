@@ -14,8 +14,8 @@ public abstract class MapIO {
     public static final String MAPS_FOLDER = "maps";
     public static final String MAP_FILE_EXTENSION = ".map";
 
-    protected ArrayList<String> continentList;
-    protected ArrayList<String> countryList;
+    protected ArrayList<String> continentList = new ArrayList<>();
+    protected ArrayList<String> countryList = new ArrayList<>();
 
     /**
      * Returns the absolute path to the map file residing in the

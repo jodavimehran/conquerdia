@@ -1,12 +1,24 @@
 package ca.concordia.encs.conquerdia.engine.command;
 
+import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
+
+import java.util.List;
+
 /**
  *
  */
 public interface Command {
+    static CommandType createCommand(String[] inputCommandParts) {
+        CommandType commandType = CommandType.findCommandTypeByName(inputCommandParts[0]);
+        return commandType;
+    }
+
 
     /**
-     * @return
+     * @param model             The model object of the game.
+     * @param inputCommandParts the command line parameters.
+     * @return List of Command Results
      */
-    String execute();
+    List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts);
+
 }

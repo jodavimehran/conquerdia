@@ -2,14 +2,13 @@ package ca.concordia.encs.conquerdia.engine.command.factory;
 
 import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
 import ca.concordia.encs.conquerdia.engine.command.Command;
-import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
 
 import java.util.*;
 
 /**
  *
  */
-public class EditContinentCommandFactory implements CommandFactory {
+public class EditContinentCommand implements Command {
     public final static String EDIT_CONTINENT_COMMAND_ERR1 = "Invalid input! The \"editcontinent\" command must has at least one option like \"-add\" or \"-remove\".";
 
     /**
@@ -18,37 +17,39 @@ public class EditContinentCommandFactory implements CommandFactory {
      * @return List of Command Results
      */
     @Override
-    public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 3)
-            return Arrays.asList(() -> EDIT_CONTINENT_COMMAND_ERR1);
-        List<Command> commands = new ArrayList<>();
+            return Arrays.asList(EDIT_CONTINENT_COMMAND_ERR1);
+        List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
+        iterator.next();
         try {
             while (iterator.hasNext()) {
-                switch (iterator.next()) {
+                String option = iterator.next();
+                switch (option) {
                     case ("-add"): {
                         String continentName = iterator.next();
                         String continentValue = iterator.next();
                         try {
-                            commands.add(() -> model.getWorldMap().addContinent(continentName, Integer.valueOf(continentValue)));
+                            commands.add(model.getWorldMap().addContinent(continentName, Integer.valueOf(continentValue)));
                         } catch (NumberFormatException ex) {
-                            commands.add(() -> "Continent value must be an integer number.");
+                            commands.add("Continent value must be an integer number.");
                         }
                         break;
                     }
                     case "-remove": {
                         String continentName = iterator.next();
-                        commands.add(() -> model.getWorldMap().removeContinent(continentName));
+                        commands.add(model.getWorldMap().removeContinent(continentName));
                         break;
                     }
                     default: {
-                        return Arrays.asList(() -> "Invalid input!");
+                        return Arrays.asList("Invalid input!");
                     }
                 }
             }
             return commands;
         } catch (NoSuchElementException ex) {
-            return Arrays.asList(() -> "Invalid input!");
+            return Arrays.asList("Invalid input!");
         }
     }
 }

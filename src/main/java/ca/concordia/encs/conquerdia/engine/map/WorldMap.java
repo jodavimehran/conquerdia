@@ -2,6 +2,7 @@ package ca.concordia.encs.conquerdia.engine.map;
 
 import ca.concordia.encs.conquerdia.engine.api.IWorldMap;
 import ca.concordia.encs.conquerdia.engine.map.io.IMapReader;
+import ca.concordia.encs.conquerdia.engine.util.MapFormattor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Represents the world map of the game.
  */
-public class WorldMap implements IWorldMap{
+public class WorldMap implements IWorldMap {
     private final static String NO_MAP_TO_EDIT_ERROR = "There is no map to %s. Use \"editmap filename\" command to load or create a map.";
     private final Map<String, Continent> continents = new HashMap<>();
     private final Map<String, Country> countries = new HashMap<>();
@@ -83,6 +84,8 @@ public class WorldMap implements IWorldMap{
      * @return return the result
      */
     public String addContinent(String continentName, Integer continentValue) {
+        if (!readyForEdit)
+            return String.format(NO_MAP_TO_EDIT_ERROR, "add a continent to it");
         if (StringUtils.isBlank(continentName))
             return "Continent name is not valid!";
         if (continentValue == null || continentValue <= 0)
@@ -102,6 +105,8 @@ public class WorldMap implements IWorldMap{
      * @return
      */
     public String removeContinent(String continentName) {
+        if (!readyForEdit)
+            return String.format(NO_MAP_TO_EDIT_ERROR, "remove a continent from it");
         if (StringUtils.isBlank(continentName))
             return "Continent name is not valid!";
         if (!continents.containsKey(continentName)) {
@@ -122,6 +127,8 @@ public class WorldMap implements IWorldMap{
      * @return
      */
     public String addCountry(String countryName, String continentName) {
+        if (!readyForEdit)
+            return String.format(NO_MAP_TO_EDIT_ERROR, "add a country to it");
         if (StringUtils.isBlank(countryName))
             return "Country name is not valid!";
         if (StringUtils.isBlank(continentName))
@@ -144,6 +151,8 @@ public class WorldMap implements IWorldMap{
      * @return return message result
      */
     public String removeCountry(String countryName) {
+        if (!readyForEdit)
+            return String.format(NO_MAP_TO_EDIT_ERROR, "remove a country from it");
         if (!countries.containsKey(countryName)) {
             return String.format("Country with name \"%s\" is not found.", countryName);
         }
@@ -161,6 +170,8 @@ public class WorldMap implements IWorldMap{
      * @return
      */
     public String addNeighbour(String firstCountryName, String secondCountryName) {
+        if (!readyForEdit)
+            return String.format(NO_MAP_TO_EDIT_ERROR, "modify");
         if (!countries.containsKey(firstCountryName))
             return String.format("Country with name \"%s\" is not found.", firstCountryName);
         if (!countries.containsKey(secondCountryName))
@@ -214,12 +225,14 @@ public class WorldMap implements IWorldMap{
      */
     @Override
     public String toString() {
-        Set<Continent> continents = this.getContinents();
-        StringBuilder showMapResult = new StringBuilder();
-        for (Continent continent : continents) {
-            showMapResult.append(continent.toString()).append("\n");
-        }
-        return showMapResult.toString();
+        return new MapFormattor(countries).format();
+//
+//        Set<Continent> continents = this.getContinents();
+//        StringBuilder showMapResult = new StringBuilder();
+//        for (Continent continent : continents) {
+//            showMapResult.append(continent.toString()).append("\n");
+//        }
+//        return showMapResult.toString();
     }
 
 
@@ -282,6 +295,9 @@ public class WorldMap implements IWorldMap{
         return new MapValidation(this).validate();
     }
 
+    /**
+     * @return return true if the map was loaded
+     */
     public boolean isMapLoaded() {
         return mapLoaded;
     }
