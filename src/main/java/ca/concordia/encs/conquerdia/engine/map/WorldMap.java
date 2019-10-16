@@ -2,6 +2,7 @@ package ca.concordia.encs.conquerdia.engine.map;
 
 import ca.concordia.encs.conquerdia.engine.api.IWorldMap;
 import ca.concordia.encs.conquerdia.engine.map.io.IMapReader;
+import ca.concordia.encs.conquerdia.engine.map.io.IMapWriter;
 import ca.concordia.encs.conquerdia.engine.util.MapFormattor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -65,9 +66,10 @@ public class WorldMap implements IWorldMap {
      * @return return true if a map file was successfully saved.
      * return false if a map file was successfully saved
      */
-    public String saveMapFile() {
+    public String saveMap(String fileName) {
         if (!readyForEdit)
             return String.format(NO_MAP_TO_EDIT_ERROR, "save");
+        IMapWriter.createMapWriter(this).writeMap(fileName);
         return String.format("Map with file name \"%s\" has been saved successfully", fileName);
     }
 

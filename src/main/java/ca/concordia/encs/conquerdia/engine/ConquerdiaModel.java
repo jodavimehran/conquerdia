@@ -17,8 +17,8 @@ public class ConquerdiaModel {
     private int currentPlayer;
 
     /**
-     * @param fileName
-     * @return
+     * @param fileName name of the file
+     * @return the result
      */
     public String loadMap(String fileName) {
         if (currentPhase != null)
@@ -28,6 +28,16 @@ public class ConquerdiaModel {
             currentPhase = GamePhases.START_UP;
         }
         return result;
+    }
+
+    /**
+     * @param fileName name of the file
+     * @return the result
+     */
+    public String saveMap(String fileName) {
+        if (currentPhase != null)
+            return "The game was started! You can not load another map during the game.";
+        return worldMap.saveMap(fileName);
     }
 
     /**
@@ -268,6 +278,13 @@ public class ConquerdiaModel {
         return sb.toString();
     }
 
+    /**
+     * Check there is some path between two countries or not
+     *
+     * @param fromCountry
+     * @param toCountry
+     * @return
+     */
     private boolean isTherePath(Country fromCountry, Country toCountry) {
         if (fromCountry.getAdjacentCountries().isEmpty())
             return false;
@@ -290,7 +307,7 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @return
+     * @return result of the command
      */
     public String fortify() {
         if (!GamePhases.FORTIFICATION.equals(currentPhase))
@@ -303,7 +320,7 @@ public class ConquerdiaModel {
     }
 
     /**
-     *
+     * give turn to another player based on player positions
      */
     private void giveTurnToAnotherPlayer() {
         currentPlayer++;
