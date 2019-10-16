@@ -54,6 +54,4 @@ public class MapValidationTest {
     public void checkAllMapValidationRulesTestCase() {
         assertTrue(mapValidation.checkAllMapValidationRules());
     }
-
-
 }
