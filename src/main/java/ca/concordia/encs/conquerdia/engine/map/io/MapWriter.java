@@ -44,7 +44,7 @@ class MapWriter extends MapIO implements IMapWriter {
             writeContinents();
             writer.newLine();
 
-            countryRows = getAllCountryRows(new ArrayList(worldMap.getContinents()));
+            countryRows = getAllCountryRows(new ArrayList<Continent>(worldMap.getContinents()));
             writeCountries(countryRows);
             writer.newLine();
 
