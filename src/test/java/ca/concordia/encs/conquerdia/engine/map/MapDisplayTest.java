@@ -8,6 +8,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import ca.concordia.encs.conquerdia.engine.Player;
 import ca.concordia.encs.conquerdia.engine.util.MapFormattor;
 
 public class MapDisplayTest {
@@ -25,7 +26,7 @@ public class MapDisplayTest {
 	@Before
 	public void setUp() {
 		countries = new HashMap<>();
-		testContinent = new Continent.Builder("South-West-England").build();
+		testContinent = new Continent.Builder("South-West-England").setValue(5).build();
 		country1 = new Country.Builder("Ross-shire", testContinent).build();
 		country2 = new Country.Builder("Ross-shire-and-Chromartyshire", testContinent).build();
 		country3 = new Country.Builder("Kincardine-shire", testContinent).build();
@@ -39,18 +40,30 @@ public class MapDisplayTest {
 		countries.put(country2.getName(), country2);
 		countries.put(country3.getName(), country3);
 		countries.put(country.getName(), country);
+
+		country1.placeArmy(5);
+		country2.placeArmy(1);
+		country3.placeArmy(4);
+		country.placeArmy(15);
+
+		Player p1 = new Player.Builder("John").build();
+		country1.setOwner(p1);
+		country.setOwner(p1);
+		country3.setOwner(new Player.Builder("Robert").build());
+		country2.setOwner(new Player.Builder("Doe").build());
 	}
 
 	@Test
-	public void testShowMapForEditing() {
+	public void testDefaultMapFormattor() {
 		MapFormattor formattor = new MapFormattor(countries);
-		String str = formattor.format();
-		assertTrue(str.contains("Kincardine-shire,Ross-shire-and-Chromartyshire,Northamptonshire_Northamptonshire"));
-		//System.out.println(str);
+		String res = formattor.format();
+		assertTrue(res.contains("Northamptonshire_Northamptonshire"));
 	}
 
 	@Test
-	public void testShowMapInGame() {
-	
+	public void testDetailMapFormattor() {
+		MapFormattor formattor = new MapFormattor(countries);
+		String res = formattor.format(MapFormattor.FormatType.Detail);
+		assertTrue(res.contains("Northamptonshire_Northamptonshire| 15    | John"));
 	}
 }
