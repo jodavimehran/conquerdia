@@ -20,7 +20,8 @@ public enum CommandType {
     POPULATE_COUNTRIES("populatecountries", new PopulateCountriesCommandFactory()),
     PLACE_ARMY("placearmy", new PlaceArmyCommandFactory()),
     PLACE_ALL("placeall", new PlaceAllCommandFactory()),
-    REINFORCE("reinforce", new ReinforceCommandFactory());
+    REINFORCE("reinforce", new ReinforceCommandFactory()),
+    FORTIFY("fortify", new FortifyCommandFactory());
 
     private final String name;
     private final CommandFactory factory;
