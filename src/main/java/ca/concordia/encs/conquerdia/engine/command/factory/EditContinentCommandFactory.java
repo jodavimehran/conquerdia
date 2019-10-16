@@ -29,7 +29,11 @@ public class EditContinentCommandFactory implements CommandFactory {
                     case ("-add"): {
                         String continentName = iterator.next();
                         String continentValue = iterator.next();
-                        commands.add(() -> model.getWorldMap().addContinent(continentName, Integer.valueOf(continentValue)));
+                        try {
+                            commands.add(() -> model.getWorldMap().addContinent(continentName, Integer.valueOf(continentValue)));
+                        } catch (NumberFormatException ex) {
+                            commands.add(() -> "Continent value must be an integer number.");
+                        }
                         break;
                     }
                     case "-remove": {
