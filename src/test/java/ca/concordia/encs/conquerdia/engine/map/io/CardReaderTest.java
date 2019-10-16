@@ -20,17 +20,11 @@ public class CardReaderTest {
 	}
 
 	@Test
-	public void testLoadCard() {
+	public void testLoadCard() throws IOException {
 		String path = "lotr.cards";
 
 		ArrayList<Card> cardList = null;
-
-		try {
-			cardList = reader.loadCards(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		cardList = reader.loadCards(path);
 
 		Card lastValidCard = cardList.get(63);
 		assertTrue(lastValidCard.isTypeOf("Infantry"));
