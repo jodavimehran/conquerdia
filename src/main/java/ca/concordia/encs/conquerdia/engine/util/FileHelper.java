@@ -45,7 +45,6 @@ public class FileHelper {
      * exists
      */
     public static String getFileNameWithoutExtension(String filename) {
-
         return FilenameUtils.getBaseName(filename);
     }
 }
