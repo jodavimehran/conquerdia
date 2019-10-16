@@ -5,6 +5,7 @@ import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -128,7 +129,7 @@ public class ConquerdiaModel {
         Player player = players.get(currentPlayerName);
         StringBuilder sb = new StringBuilder();
         if (player.getUnplacedArmies() < 1) {
-            sb.append("You Dont have any unplaced army!");
+            sb.append("You Don't have any unplaced army!");
             giveTurnToAnotherPlayer();
             appendPlaceArmyMessage(sb);
             return sb.toString();
@@ -175,6 +176,11 @@ public class ConquerdiaModel {
         }
     }
 
+    /**
+     * @param countryName
+     * @param numberOfArmy
+     * @return
+     */
     public String reinforce(String countryName, int numberOfArmy) {
         if (!GamePhases.REINFORCEMENTS.equals(currentPhase))
             return "Invalid Command! This command is one of the main play phase commands and valid when game is in reinforcement phase.";
@@ -198,6 +204,73 @@ public class ConquerdiaModel {
         }
         sb.append(" and finished reinforcement phase successfully.");
         currentPhase = GamePhases.FORTIFICATION;
+        runMainPlayPhase(sb);
+        return sb.toString();
+    }
+
+    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) {
+        if (!GamePhases.FORTIFICATION.equals(currentPhase))
+            return "Invalid Command! This command is one of the main play phase commands and valid when game is in fortification phase.";
+        Country fromCountry = worldMap.getCountry(fromCountryName);
+        if (fromCountry == null)
+            return String.format("Country with name \"%s\" was not found!", fromCountryName);
+        Country toCountry = worldMap.getCountry(toCountryName);
+        if (toCountry == null)
+            return String.format("Country with name \"%s\" was not found!", toCountryName);
+        if (numberOfArmy < 1)
+            return "Invalid number! Number of armies must be greater than 0.";
+        String currentPlayerName = playersPosition[currentPlayer];
+
+        if (fromCountry.getOwner() == null || !fromCountry.getOwner().getName().equals(currentPlayerName))
+            return String.format("Country with name \"%s\" does not belong to you!", fromCountryName);
+
+        if (toCountry.getOwner() == null || !toCountry.getOwner().getName().equals(currentPlayerName))
+            return String.format("Country with name \"%s\" does not belong to you!", toCountryName);
+
+        if (!isTherePath(fromCountry, toCountry))
+            return "There is no path between these two countries that is composed of countries that you owns.";
+        int realNumberOfArmies = numberOfArmy > fromCountry.getNumberOfArmies() - 1 ? fromCountry.getNumberOfArmies() - 1 : numberOfArmy;
+        fromCountry.removeArmy(realNumberOfArmies);
+        toCountry.placeArmy(realNumberOfArmies);
+
+        currentPhase = GamePhases.REINFORCEMENTS;
+        StringBuilder sb = new StringBuilder();
+        sb.append(realNumberOfArmies).append(" army/armies was/were moved from ").append(fromCountryName).append(" to ").append(toCountryName);
+        giveTurnToAnotherPlayer();
+        runMainPlayPhase(sb);
+        return sb.toString();
+    }
+
+    private boolean isTherePath(Country fromCountry, Country toCountry) {
+        if (fromCountry.getAdjacentCountries().isEmpty())
+            return false;
+        HashSet<String> reachableCountries = new HashSet<>();
+        traversCountry(fromCountry, reachableCountries);
+        return reachableCountries.contains(toCountry.getName());
+    }
+
+    /**
+     * @param country
+     * @param countries
+     */
+    private void traversCountry(Country country, HashSet<String> countries) {
+        countries.add(country.getName());
+        for (Country adjacent : country.getAdjacentCountries()) {
+            if (!countries.contains(adjacent.getName()) && adjacent.getOwner().getName().equals(playersPosition[currentPlayer])) {
+                traversCountry(adjacent, countries);
+            }
+        }
+    }
+
+    /**
+     * @return
+     */
+    public String fortify() {
+        if (!GamePhases.FORTIFICATION.equals(currentPhase))
+            return "Invalid Command! This command is one of the main play phase commands and valid when game is in fortification phase.";
+        currentPhase = GamePhases.REINFORCEMENTS;
+        StringBuilder sb = new StringBuilder();
+        giveTurnToAnotherPlayer();
         runMainPlayPhase(sb);
         return sb.toString();
     }

@@ -67,6 +67,10 @@ public class MapValidation {
         return connectedGraph && connectedSubGraph;
     }
 
+    /**
+     * @param country
+     * @param countries
+     */
     private void traversCountry(Country country, HashSet<String> countries) {
         countries.add(country.getName());
         for (Country adjacent : country.getAdjacentCountries()) {

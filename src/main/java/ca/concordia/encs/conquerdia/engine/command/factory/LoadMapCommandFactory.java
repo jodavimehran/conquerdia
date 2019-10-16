@@ -15,9 +15,9 @@ public class LoadMapCommandFactory implements CommandFactory {
     private static final String EDIT_MAP_ERR1 = "Invalid loadmap command. a valid loadmap command is something like \"loadmap filename\".";
 
     /**
-     * @param model
-     * @param inputCommandParts
-     * @return
+     * @param model             The model object of the game.
+     * @param inputCommandParts the command line parameters.
+     * @return List of Command Results
      */
     @Override
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {

@@ -13,9 +13,9 @@ public class GamePlayerCommandFactory implements CommandFactory {
     public final static String GAME_PLAYER_COMMAND_ERR1 = "Invalid input! The \"gameplayer\" command must has at least one option like \"-add\" or \"-remove\".";
 
     /**
-     * @param model
-     * @param inputCommandParts
-     * @return
+     * @param model             The model object of the game.
+     * @param inputCommandParts the command line parameters.
+     * @return List of Command Results
      */
     @Override
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {

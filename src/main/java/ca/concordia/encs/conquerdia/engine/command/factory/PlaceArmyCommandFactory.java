@@ -7,9 +7,8 @@ import ca.concordia.encs.conquerdia.engine.command.CommandFactory;
 import java.util.Arrays;
 import java.util.List;
 
-public class SaveMapCommandFactory implements CommandFactory {
-
-    private static final String ERR1 = "Invalid \"savemap\" command. a valid \"savemap\" command is something like \"savemap filename\".";
+public class PlaceArmyCommandFactory implements CommandFactory {
+    private static final String PLACE_ARMY_ERR1 = "Invalid loadmap command. A valid \"placearmy\" command is something like \"placearmy countryname\".";
 
     /**
      * @param model             The model object of the game.
@@ -19,7 +18,7 @@ public class SaveMapCommandFactory implements CommandFactory {
     @Override
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 2)
-            return Arrays.asList(() -> ERR1);
-        return Arrays.asList(model.getWorldMap()::saveMapFile);
+            return Arrays.asList(() -> PLACE_ARMY_ERR1);
+        return Arrays.asList(() -> model.placeArmy(inputCommandParts.get(1)));
     }
 }

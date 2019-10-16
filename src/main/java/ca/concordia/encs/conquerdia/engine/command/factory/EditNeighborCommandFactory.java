@@ -13,9 +13,9 @@ public class EditNeighborCommandFactory implements CommandFactory {
     public final static String ERR1 = "Invalid input! The \"editneighbor\" command must has at least one option like \"-add\" or \"-remove\".";
 
     /**
-     * @param model
-     * @param inputCommandParts
-     * @return
+     * @param model             The model object of the game.
+     * @param inputCommandParts the command line parameters.
+     * @return List of Command Results
      */
     @Override
     public List<Command> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
