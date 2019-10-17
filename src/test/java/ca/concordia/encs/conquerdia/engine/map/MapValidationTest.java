@@ -22,7 +22,7 @@ public class MapValidationTest {
     @Before
     public void setUp() {
         worldMap = new WorldMap();
-        worldMap.editMap("test");
+        worldMap.editMap("test2");
         //CONTINENTS
         worldMap.addContinent("Asia", 1);
         worldMap.addContinent("Europe", 3);
