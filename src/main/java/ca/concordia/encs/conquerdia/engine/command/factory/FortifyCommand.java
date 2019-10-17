@@ -16,7 +16,7 @@ public class FortifyCommand implements Command {
      * @return List of Command Results
      */
     @Override
-    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> execute(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 2)
             return Arrays.asList(ERR1);
         if ("none".equals(inputCommandParts.get(1))) {

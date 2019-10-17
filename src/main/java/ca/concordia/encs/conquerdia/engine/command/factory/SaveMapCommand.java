@@ -16,7 +16,7 @@ public class SaveMapCommand implements Command {
      * @return List of Command Results
      */
     @Override
-    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> execute(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 2)
             return Arrays.asList(ERR1);
         return Arrays.asList(model.saveMap(inputCommandParts.get(1)));

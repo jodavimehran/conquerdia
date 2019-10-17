@@ -14,7 +14,7 @@ public class EditCountryCommand implements Command {
      * @return List of Command Results
      */
     @Override
-    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> execute(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 3)
             return Arrays.asList(EDIT_COUNTRY_COMMAND_ERR1);
 

@@ -16,7 +16,7 @@ public class EditMapCommand implements Command {
      * @return List of Command Results
      */
     @Override
-    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> execute(ConquerdiaModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 2)
             return Arrays.asList(EDIT_MAP_ERR1);
         return Arrays.asList(model.getWorldMap().editMap(inputCommandParts.get(1)));

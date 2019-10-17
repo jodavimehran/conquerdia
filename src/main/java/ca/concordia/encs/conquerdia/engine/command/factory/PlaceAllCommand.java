@@ -14,7 +14,7 @@ public class PlaceAllCommand implements Command {
      * @return List of Command Results
      */
     @Override
-    public List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> execute(ConquerdiaModel model, List<String> inputCommandParts) {
         return Arrays.asList(model.placeAll());
     }
 

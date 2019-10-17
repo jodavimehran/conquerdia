@@ -25,6 +25,6 @@ public interface Command {
      * @param inputCommandParts the command line parameters.
      * @return List of Command Results
      */
-    List<String> getCommands(ConquerdiaModel model, List<String> inputCommandParts);
+    List<String> execute(ConquerdiaModel model, List<String> inputCommandParts);
 
 }

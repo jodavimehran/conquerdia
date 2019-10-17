@@ -47,7 +47,7 @@ public class ConquerdiaController {
             output.println("Command not found.");
             return;
         }
-        List<String> commands = commandType.getCommand().getCommands(conquerdiaModel, Arrays.asList(inputCommandParts));
+        List<String> commands = commandType.getCommand().execute(conquerdiaModel, Arrays.asList(inputCommandParts));
         for (String result : commands) {
             output.println(result);
         }
