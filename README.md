@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/jodavimehran/conquerdia.svg?branch=master)](https://travis-ci.org/jodavimehran/conquerdia) [![CodeFactor](https://www.codefactor.io/repository/github/jodavimehran/conquerdia/badge)](https://www.codefactor.io/repository/github/jodavimehran/conquerdia)
  ![GitHub issues](https://img.shields.io/github/issues-raw/jodavimehran/conquerdia)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/jodavimehran/conquerdia)
 
 ### Concordia University
 #### Department of Computer Science and Software Engineering
