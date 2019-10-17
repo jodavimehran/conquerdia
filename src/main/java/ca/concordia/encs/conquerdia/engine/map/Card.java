@@ -11,27 +11,40 @@ package ca.concordia.encs.conquerdia.engine.map;
  * player that conquers the last country owned by another player receives all
  * the cards held by that player. If a player holds five cards during his
  * reinforcement phase, he must exchange three of them for armies.
- * 
- * @author Mosabbir
  *
+ * @author Mosabbir
  */
 public class Card {
 
-	private String cardType;
+    private String cardType;
 
-	public Card(String cardType) {
-		this.cardType = cardType.toUpperCase();
-	}
+    /**
+     * @param cardType type of cards
+     */
+    public Card(String cardType) {
+        this.cardType = cardType.toUpperCase();
+    }
 
-	public String getCardType() {
-		return cardType;
-	}
+    /**
+     * @return card type
+     */
+    public String getCardType() {
+        return cardType;
+    }
 
-	public boolean equals(Card card) {
-		return card.getCardType().equals(cardType);
-	}
-	
-	public boolean isTypeOf(String type) {
-		return type.toUpperCase().equals(cardType);
-	}
+    /**
+     * @param card
+     * @return
+     */
+    public boolean equals(Card card) {
+        return card.getCardType().equals(cardType);
+    }
+
+    /**
+     * @param type
+     * @return
+     */
+    public boolean isTypeOf(String type) {
+        return type.toUpperCase().equals(cardType);
+    }
 }

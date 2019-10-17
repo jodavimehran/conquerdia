@@ -19,13 +19,22 @@ public class Continent {
     private String name;
     private int value;
 
+    /**
+     * private constructor to force developer to use the builder
+     */
     private Continent() {
     }
 
+    /**
+     * @return all Countries Name
+     */
     public final Set<String> getCountriesName() {
         return countries.keySet();
     }
 
+    /**
+     * @return all Countries
+     */
     public final Set<Country> getCountries() {
         return countries.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }
@@ -63,6 +72,10 @@ public class Continent {
         return value;
     }
 
+    /**
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,6 +130,10 @@ public class Continent {
 //            continent.worldMap = worldMap;
         }
 
+        /**
+         * @param value continent value
+         * @return current builder object
+         */
         public Builder setValue(int value) {
             this.continent.value = value;
             return this;
