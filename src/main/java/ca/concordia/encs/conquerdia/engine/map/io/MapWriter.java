@@ -56,6 +56,14 @@ class MapWriter extends MapIO implements IMapWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			if (writer != null) {
+				try {
+					writer.flush();
+					writer.close();
+				} catch (IOException e) {
+				}
+			}
 		}
 
 		return true;
@@ -77,7 +85,7 @@ class MapWriter extends MapIO implements IMapWriter {
 		String[] rows = new String[continents.size()];
 		int i = 0;
 		for (Continent continent : continents) {
-			rows[i++] = String.format(CONTINENT_ROW_FORMAT, continent.getName(), continent.getValue());
+			rows[i++] = String.format(CONTINENT_ROW_FORMAT, continent.getName(), continent.getValue(), "Black");
 		}
 		writeSection(CONTINENTS_SECTION_IDENTIFIER, rows);
 	}
@@ -136,7 +144,7 @@ class MapWriter extends MapIO implements IMapWriter {
 		String[] borders = new String[countryRows.size()];
 		CountryRow countryRow;
 		HashMap<String, Integer> countryNumbers = new HashMap<>();
-		StringBuilder builder = new StringBuilder();
+		StringBuilder builder;
 
 		for (int i = 0; i < countryRows.size(); i++) {
 			countryRow = countryRows.get(i);
@@ -144,6 +152,7 @@ class MapWriter extends MapIO implements IMapWriter {
 		}
 
 		for (int i = 0; i < countryRows.size(); i++) {
+			builder = new StringBuilder();
 			countryRow = countryRows.get(i);
 			builder.append(countryRow.getNumber());
 
