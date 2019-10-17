@@ -72,11 +72,15 @@ public class FileHelper {
 
 	/**
 	 * Creates a directory if not exists
+	 * 
 	 * @param directoryPath The path to the directory
 	 */
 	public static void CreateDirectoryIfNotExists(String directoryPath) {
-		File dir = new File(directoryPath);
-		if (!dir.exists())
-			dir.mkdirs();
+		try {
+			File dir = new File(directoryPath);
+			if (!dir.exists())
+				dir.mkdirs();
+		} catch (Exception ex) {
+		}
 	}
 }
