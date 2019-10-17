@@ -10,7 +10,7 @@ Advanced Programming Practices, SOEN 6441 --- Fall 2019
 
 **Implemented Functionalities:**
 
-- All the commands defined in the build 1 requirements
+- All the commands defined in the [build 1 requirements](https://users.encs.concordia.ca/~paquet/wiki/images/7/75/Build1Grading.SOEN6441.2019.2.pdf "project build 1 requirements/grading scheme (handout)")
 
 
 **Tools & Technologies**
