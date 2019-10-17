@@ -1,15 +1,23 @@
 package ca.concordia.encs.conquerdia.engine;
 
-import java.util.Scanner;
-
 import ca.concordia.encs.conquerdia.engine.map.io.MapIO;
 import ca.concordia.encs.conquerdia.engine.util.FileHelper;
 
-public class Starter {
-	private final ConquerdiaController conquerdia = new ConquerdiaController();
+import java.util.Scanner;
 
-	public static void main(String[] args) {
-		FileHelper.CreateDirectoryIfNotExists(MapIO.MAPS_FOLDER_PATH);
-		new Starter().conquerdia.start(new Scanner(System.in), System.out);
-	}
+/**
+ * Project Starter
+ */
+public class Starter {
+    private final ConquerdiaController conquerdia = new ConquerdiaController();
+
+    /**
+     * Project main method
+     *
+     * @param args input arguments
+     */
+    public static void main(String[] args) {
+        FileHelper.CreateDirectoryIfNotExists(MapIO.MAPS_FOLDER_PATH);
+        new Starter().conquerdia.start(new Scanner(System.in), System.out);
+    }
 }

@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -28,10 +29,7 @@ public class CountryTest {
         country3 = new Country.Builder("tree", testContinent).build();
 
 
-        country = new Country.Builder("test", testContinent)
-//                .adjacentTo(country1)
-//                .adjacentTo(new HashSet<>(Arrays.asList(country2, country3)))
-                .build();
+        country = new Country.Builder("test", testContinent).build();
     }
 
 

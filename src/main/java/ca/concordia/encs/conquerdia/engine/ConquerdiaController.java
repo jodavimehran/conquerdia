@@ -1,7 +1,5 @@
 package ca.concordia.encs.conquerdia.engine;
 
-import ca.concordia.encs.conquerdia.engine.api.IGameEngine;
-import ca.concordia.encs.conquerdia.engine.api.IWorldMap;
 import ca.concordia.encs.conquerdia.engine.command.Command;
 import ca.concordia.encs.conquerdia.engine.command.CommandType;
 
@@ -13,7 +11,7 @@ import java.util.Scanner;
 /**
  *
  */
-public class ConquerdiaController implements IGameEngine {
+public class ConquerdiaController {
 
     private final ConquerdiaModel conquerdiaModel = new ConquerdiaModel();
 
@@ -38,7 +36,6 @@ public class ConquerdiaController implements IGameEngine {
      * @param commandStr
      * @param output
      */
-    @Override
     public void executeCommand(String commandStr, PrintStream output) {
         String[] inputCommandParts = commandStr.trim().split(" ");
         if (inputCommandParts.length <= 0) {
@@ -56,8 +53,4 @@ public class ConquerdiaController implements IGameEngine {
         }
     }
 
-    @Override
-    public IWorldMap getWorldMap() {
-        return conquerdiaModel.getWorldMap();
-    }
 }

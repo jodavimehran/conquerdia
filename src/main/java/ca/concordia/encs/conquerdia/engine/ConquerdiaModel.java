@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+/**
+ * The game model
+ */
 public class ConquerdiaModel {
     private final WorldMap worldMap = new WorldMap();
     private final LinkedHashMap<String, Player> players = new LinkedHashMap<>();
