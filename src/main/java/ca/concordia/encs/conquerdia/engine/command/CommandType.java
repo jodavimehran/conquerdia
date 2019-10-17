@@ -24,15 +24,15 @@ public enum CommandType {
     FORTIFY("fortify", new FortifyCommand());
 
     private final String name;
-    private final Command factory;
+    private final Command command;
 
     /**
      * @param name    The name of the command which is the exact command that user must pass to the game.
-     * @param factory The implementation of the factory for the command
+     * @param command The implementation of the factory for the command
      */
-    CommandType(String name, Command factory) {
+    CommandType(String name, Command command) {
         this.name = name;
-        this.factory = factory;
+        this.command = command;
     }
 
     /**
@@ -52,6 +52,6 @@ public enum CommandType {
      * @return return the Implementation of the factory
      */
     public Command getCommand() {
-        return factory;
+        return command;
     }
 }
