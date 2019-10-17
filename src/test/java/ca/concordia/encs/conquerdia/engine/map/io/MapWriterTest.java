@@ -35,11 +35,11 @@ public class MapWriterTest {
 		worldMap.addNeighbour("Greece", "Turkey");
 
 		writer = new MapWriter(worldMap);
-		isWriteSuccessful = writer.writeMap("test");
+		// isWriteSuccessful = writer.writeMap("test");
 	}
 
 	@Test
 	public void testWriteMap() {
-		//assertTrue(isWriteSuccessful);
+		// assertTrue(isWriteSuccessful);
 	}
 }
