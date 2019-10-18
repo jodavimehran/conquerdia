@@ -74,7 +74,7 @@ public class Player {
     /**
      * Remove a country from the list of the countries that owned by this player
      *
-     * @param countryName
+     * @param countryName countryName
      */
     public void removeCountry(String countryName) {
         countries.remove(countryName);

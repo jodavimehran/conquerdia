@@ -6,7 +6,7 @@ import ca.concordia.encs.conquerdia.engine.command.Command;
 import java.util.*;
 
 /**
- * Implementation of the <i></>gameplayer</i> command
+ * Implementation of the <i>gameplayer</i> command
  */
 public class GamePlayerCommand implements Command {
     public final static String GAME_PLAYER_COMMAND_ERR1 = "Invalid input! The \"gameplayer\" command must has at least one option like \"-add\" or \"-remove\".";

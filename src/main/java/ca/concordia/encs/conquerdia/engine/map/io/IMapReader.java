@@ -15,8 +15,8 @@ public interface IMapReader {
     }
 
     /**
-     * @param filename
-     * @return
+     * @param filename filename
+     * @return result
      */
     boolean readMap(String filename);
 }

@@ -8,7 +8,7 @@ import ca.concordia.encs.conquerdia.engine.map.WorldMap;
 public interface IMapWriter {
     /**
      * @param worldMap map model to be written
-     * @return
+     * @return result
      */
     static IMapWriter createMapWriter(WorldMap worldMap) {
         return new MapWriter(worldMap);

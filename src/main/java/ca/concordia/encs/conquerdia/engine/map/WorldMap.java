@@ -62,6 +62,8 @@ public class WorldMap {
     }
 
     /**
+     *
+     * @param fileName file name
      * @return return true if a map file was successfully saved.
      * return false if a map file was successfully saved
      */
@@ -104,8 +106,8 @@ public class WorldMap {
     }
 
     /**
-     * @param continentName
-     * @return
+     * @param continentName continent name
+     * @return result
      */
     public String removeContinent(String continentName) {
         if (!readyForEdit)
@@ -125,9 +127,9 @@ public class WorldMap {
 
 
     /**
-     * @param countryName
-     * @param continentName
-     * @return
+     * @param countryName   name of the country
+     * @param continentName continent name
+     * @return result
      */
     public String addCountry(String countryName, String continentName) {
         if (!readyForEdit)
@@ -151,6 +153,7 @@ public class WorldMap {
     /**
      * This Method add this country to the map
      *
+     * @param countryName country name
      * @return return message result
      */
     public String removeCountry(String countryName) {
@@ -168,9 +171,9 @@ public class WorldMap {
     }
 
     /**
-     * @param firstCountryName
-     * @param secondCountryName
-     * @return
+     * @param firstCountryName  first country
+     * @param secondCountryName second country
+     * @return result
      */
     public String addNeighbour(String firstCountryName, String secondCountryName) {
         if (!readyForEdit)
@@ -192,9 +195,9 @@ public class WorldMap {
     }
 
     /**
-     * @param firstCountryName
-     * @param secondCountryName
-     * @return
+     * @param firstCountryName  first country
+     * @param secondCountryName second country
+     * @return result
      */
     public String removeNeighbour(String firstCountryName, String secondCountryName) {
         if (!countries.containsKey(firstCountryName))
@@ -213,8 +216,8 @@ public class WorldMap {
     }
 
     /**
-     * @param firstCountry
-     * @param secondCountry
+     * @param firstCountry  first country
+     * @param secondCountry second country
      */
     private void removeNeighbour(Country firstCountry, Country secondCountry) {
         firstCountry.removeNeighbour(secondCountry.getName());
@@ -229,6 +232,9 @@ public class WorldMap {
         return continents.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }
 
+    /**
+     * @return the name of countries
+     */
     public Set<String> getCountryNames() {
         return countries.keySet();
     }
@@ -265,7 +271,7 @@ public class WorldMap {
     }
 
     /**
-     * @param countryName
+     * @param countryName country name
      * @return return true if the map contains country
      */
     public boolean isMapContainsCountry(String countryName) {

@@ -41,6 +41,9 @@ public class Country {
 
     /**
      * Country class has one and only one private constructor to force the user's of this class to use the Builder {@link Country.Builder}
+     *
+     * @param name      name
+     * @param continent continent
      */
     public Country(String name, Continent continent) {
         this.name = name;
@@ -74,7 +77,7 @@ public class Country {
     /**
      * remove an adjacent country
      *
-     * @param adjacentCountryName
+     * @param adjacentCountryName adjacent
      * @return <tt>true</tt> if the adjacent country was successfully removed, else return <tt>false</tt>
      */
     public boolean removeNeighbour(String adjacentCountryName) {
@@ -154,8 +157,8 @@ public class Country {
     }
 
     /**
-     * @param countryName
-     * @return
+     * @param countryName countryName
+     * @return true they are adjacent
      */
     public boolean isAdjacentTo(String countryName) {
         return adjacentCountries.containsKey(countryName);
@@ -170,7 +173,8 @@ public class Country {
         /**
          * Country-Builder's constructor has two parameter because name and continent for a country is required.
          *
-         * @param name The name of a country
+         * @param name      The name of a country
+         * @param continent continent
          */
         public Builder(String name, Continent continent) {
             country = new Country(name, continent);

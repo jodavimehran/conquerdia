@@ -42,7 +42,7 @@ public class Continent {
     /**
      * Add a country to this continent
      *
-     * @param country
+     * @param country country
      */
     public void addCountry(Country country) {
         countries.put(country.getName(), country);
@@ -51,7 +51,7 @@ public class Continent {
     /**
      * Remove a country from Continent
      *
-     * @param countryName
+     * @param countryName countryName
      */
     public void removeCountry(String countryName) {
         countries.remove(countryName);
@@ -72,10 +72,6 @@ public class Continent {
         return value;
     }
 
-    /**
-     * @param o
-     * @return
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

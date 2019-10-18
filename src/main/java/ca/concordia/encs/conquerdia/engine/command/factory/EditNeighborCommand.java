@@ -6,7 +6,7 @@ import ca.concordia.encs.conquerdia.engine.command.Command;
 import java.util.*;
 
 /**
- * Implementation of the <i></>editneighbor</i> command
+ * Implementation of the <i>editneighbor</i> command
  */
 public class EditNeighborCommand implements Command {
     public final static String ERR1 = "Invalid input! The \"editneighbor\" command must has at least one option like \"-add\" or \"-remove\".";

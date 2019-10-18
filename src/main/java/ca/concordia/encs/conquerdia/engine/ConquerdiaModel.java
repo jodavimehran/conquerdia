@@ -217,9 +217,9 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @param countryName
-     * @param numberOfArmy
-     * @return
+     * @param countryName  name of the country
+     * @param numberOfArmy number of army
+     * @return the result
      */
     public String reinforce(String countryName, int numberOfArmy) {
         if (!GamePhases.REINFORCEMENTS.equals(currentPhase))
@@ -248,6 +248,12 @@ public class ConquerdiaModel {
         return sb.toString();
     }
 
+    /**
+     * @param fromCountryName source country
+     * @param toCountryName   destination country
+     * @param numberOfArmy    number of army
+     * @return the result
+     */
     public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) {
         if (!GamePhases.FORTIFICATION.equals(currentPhase))
             return "Invalid Command! This command is one of the main play phase commands and valid when game is in fortification phase.";
@@ -284,9 +290,9 @@ public class ConquerdiaModel {
     /**
      * Check there is some path between two countries or not
      *
-     * @param fromCountry
-     * @param toCountry
-     * @return
+     * @param fromCountry source country
+     * @param toCountry   dest country
+     * @return the result
      */
     private boolean isTherePath(Country fromCountry, Country toCountry) {
         if (fromCountry.getAdjacentCountries().isEmpty())
@@ -297,8 +303,8 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @param country
-     * @param countries
+     * @param country   country
+     * @param countries list of visited countries
      */
     private void traversCountry(Country country, HashSet<String> countries) {
         countries.add(country.getName());
@@ -332,7 +338,7 @@ public class ConquerdiaModel {
     }
 
     /**
-     * @param stringBuilder
+     * @param stringBuilder string builder
      */
     private void appendPlaceArmyMessage(StringBuilder stringBuilder) {
         stringBuilder.append(System.getProperty("line.separator"));

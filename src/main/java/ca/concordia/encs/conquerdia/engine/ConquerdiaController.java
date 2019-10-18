@@ -16,8 +16,8 @@ public class ConquerdiaController {
     private final ConquerdiaModel conquerdiaModel = new ConquerdiaModel();
 
     /**
-     * @param scanner
-     * @param output
+     * @param scanner the scanner
+     * @param output the output stream
      */
     public void start(Scanner scanner, PrintStream output) {
         output.println("Welcome to Conquerdia Game");
@@ -33,8 +33,8 @@ public class ConquerdiaController {
     }
 
     /**
-     * @param commandStr
-     * @param output
+     * @param commandStr user command
+     * @param output output stream
      */
     public void executeCommand(String commandStr, PrintStream output) {
         String[] inputCommandParts = commandStr.trim().split(" ");
