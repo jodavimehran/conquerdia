@@ -1,7 +1,8 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
+import ca.concordia.encs.conquerdia.model.map.Continent;
+import ca.concordia.encs.conquerdia.model.map.Country;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;

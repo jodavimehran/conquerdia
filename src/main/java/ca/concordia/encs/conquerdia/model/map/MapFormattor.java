@@ -1,6 +1,6 @@
-package ca.concordia.encs.conquerdia.engine.util;
+package ca.concordia.encs.conquerdia.util;
 
-import ca.concordia.encs.conquerdia.engine.map.Country;
+import ca.concordia.encs.conquerdia.model.map.Country;
 import dnl.utils.text.table.TextTable;
 
 import java.io.ByteArrayOutputStream;

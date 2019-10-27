@@ -5,10 +5,12 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ca.concordia.encs.conquerdia.model.map.io.CardReader;
+import ca.concordia.encs.conquerdia.model.map.io.ICardReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.concordia.encs.conquerdia.engine.map.Card;
+import ca.concordia.encs.conquerdia.model.map.Card;
 
 public class CardReaderTest {
 

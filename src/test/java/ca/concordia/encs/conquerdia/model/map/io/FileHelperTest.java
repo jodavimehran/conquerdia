@@ -2,6 +2,7 @@ package ca.concordia.encs.conquerdia.engine.util;
 
 import static org.junit.Assert.assertEquals;
 
+import ca.concordia.encs.conquerdia.model.map.io.FileHelper;
 import org.junit.Test;
 
 /**

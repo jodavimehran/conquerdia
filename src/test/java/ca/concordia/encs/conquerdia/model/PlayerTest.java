@@ -1,7 +1,8 @@
-package ca.concordia.encs.conquerdia.engine;
+package ca.concordia.encs.conquerdia.model;
 
-import ca.concordia.encs.conquerdia.engine.map.Continent;
-import ca.concordia.encs.conquerdia.engine.map.Country;
+import ca.concordia.encs.conquerdia.model.map.Continent;
+import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.Player;
 import org.junit.Before;
 import org.junit.Test;
 

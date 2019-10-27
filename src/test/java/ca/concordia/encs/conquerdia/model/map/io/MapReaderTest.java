@@ -4,13 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import ca.concordia.encs.conquerdia.model.map.io.IMapReader;
+import ca.concordia.encs.conquerdia.model.map.io.MapReader;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import ca.concordia.encs.conquerdia.engine.map.Continent;
-import ca.concordia.encs.conquerdia.engine.map.Country;
-import ca.concordia.encs.conquerdia.engine.map.WorldMap;
+import ca.concordia.encs.conquerdia.model.map.Continent;
+import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 /**
  * This class contains junit tests to test the map loading validity of

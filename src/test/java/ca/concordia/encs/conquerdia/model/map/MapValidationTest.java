@@ -1,5 +1,7 @@
 package ca.concordia.encs.conquerdia.engine.map;
 
+import ca.concordia.encs.conquerdia.model.map.MapValidation;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  * This class provides a set of methods to read a risk map file. It also
- * implements the {@link IMapReader} interface to expose the map reading method
+ * implements the {@link IMapReader nan} interface to expose the map reading method
  *
  * @author Mosabbir
  *

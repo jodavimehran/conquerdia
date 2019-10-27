@@ -2,11 +2,13 @@ package ca.concordia.encs.conquerdia.engine.map.io;
 
 import static org.junit.Assert.assertTrue;
 
+import ca.concordia.encs.conquerdia.model.map.io.IMapWriter;
+import ca.concordia.encs.conquerdia.model.map.io.MapWriter;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import ca.concordia.encs.conquerdia.engine.map.WorldMap;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 /**
  * This class is temporarily disabled due to file path issues which are still

@@ -5,11 +5,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.concordia.encs.conquerdia.model.map.Continent;
+import ca.concordia.encs.conquerdia.model.map.Country;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.concordia.encs.conquerdia.engine.Player;
-import ca.concordia.encs.conquerdia.engine.util.MapFormattor;
+import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.map.MapFormattor;
 
 public class MapDisplayTest {
 

@@ -5,7 +5,7 @@
     <groupId>ca.concordia.encs.conquerdia</groupId>
     <artifactId>conquerdia</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <name>Conquerdia Project</name>
     <description></description>
     <url>https://github.com/jodavimehran/conquerdia</url>
@@ -54,7 +54,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ca.concordia.encs.conquerdia.engine.Starter</mainClass>
+                                    <mainClass>ca.concordia.encs.conquerdia.Starter</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

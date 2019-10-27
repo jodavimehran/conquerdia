@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.util;
+package ca.concordia.encs.conquerdia.util;
 
 import org.apache.commons.io.FilenameUtils;
 
