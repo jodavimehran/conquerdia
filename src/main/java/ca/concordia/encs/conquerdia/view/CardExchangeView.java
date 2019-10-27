@@ -1,7 +1,7 @@
 package ca.concordia.encs.conquerdia.view;
 
-import java.util.Observable;
-import java.util.Observer;
+import ca.concordia.encs.conquerdia.util.Observable;
+import ca.concordia.encs.conquerdia.util.Observer;
 
 /**
  * The card exchange view is created only during the reinforcement phase. It display all the cards owned by the current

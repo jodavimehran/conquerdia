@@ -1,7 +1,8 @@
 package ca.concordia.encs.conquerdia.view;
 
-import java.util.Observable;
-import java.util.Observer;
+
+import ca.concordia.encs.conquerdia.util.Observable;
+import ca.concordia.encs.conquerdia.util.Observer;
 
 public class PhaseView implements Observer {
 

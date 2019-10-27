@@ -1,7 +1,6 @@
-package ca.concordia.encs.conquerdia.engine.command.factory;
+package ca.concordia.encs.conquerdia.controller.command;
 
-import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
-import ca.concordia.encs.conquerdia.engine.command.Command;
+import ca.concordia.encs.conquerdia.model.GameModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +18,7 @@ public class LoadMapCommand implements Command {
      * @return List of Command Results
      */
     @Override
-    public List<String> execute(ConquerdiaModel model, List<String> inputCommandParts) {
+    public List<String> execute(GameModel model, List<String> inputCommandParts) {
         if (inputCommandParts.size() < 2)
             return Arrays.asList(EDIT_MAP_ERR1);
         return Arrays.asList(model.loadMap(inputCommandParts.get(1)));

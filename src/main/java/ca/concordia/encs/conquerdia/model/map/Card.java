@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.map;
+package ca.concordia.encs.conquerdia.model.map;
 
 /**
  * A player receives a card at the end of his turn if he successfully conquered

@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.util;
+package ca.concordia.encs.conquerdia.model.map;
 
 import ca.concordia.encs.conquerdia.model.map.Country;
 import dnl.utils.text.table.TextTable;

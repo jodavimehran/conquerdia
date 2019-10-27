@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
+package ca.concordia.encs.conquerdia.model.map.io;
 
 /**
  * A helper class to read and write to the map file

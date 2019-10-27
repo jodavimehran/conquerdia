@@ -1,10 +1,10 @@
 package ca.concordia.encs.conquerdia.view;
 
 import ca.concordia.encs.conquerdia.model.CommandResultModel;
+import ca.concordia.encs.conquerdia.util.Observable;
+import ca.concordia.encs.conquerdia.util.Observer;
 
 import java.io.PrintStream;
-import java.util.Observable;
-import java.util.Observer;
 
 public class CommandResultView implements Observer {
     private final PrintStream output;

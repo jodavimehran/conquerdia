@@ -1,7 +1,7 @@
-package ca.concordia.encs.conquerdia.engine;
+package ca.concordia.encs.conquerdia.model;
 
-import ca.concordia.encs.conquerdia.engine.map.Country;
-import ca.concordia.encs.conquerdia.engine.map.WorldMap;
+import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;
@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * The game model
  */
-public class ConquerdiaModel {
+public class GameModel {
     private final WorldMap worldMap = new WorldMap();
     private final LinkedHashMap<String, Player> players = new LinkedHashMap<>();
     private GamePhases currentPhase;

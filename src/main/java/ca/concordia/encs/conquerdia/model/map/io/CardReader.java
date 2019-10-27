@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
+package ca.concordia.encs.conquerdia.model.map.io;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,8 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ca.concordia.encs.conquerdia.engine.map.Card;
-import ca.concordia.encs.conquerdia.engine.util.FileHelper;
+import ca.concordia.encs.conquerdia.model.map.Card;
 
 /**
  * Provide methods to read cards

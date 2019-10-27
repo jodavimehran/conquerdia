@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
+package ca.concordia.encs.conquerdia.model.map.io;
 
 import static org.junit.Assert.assertTrue;
 

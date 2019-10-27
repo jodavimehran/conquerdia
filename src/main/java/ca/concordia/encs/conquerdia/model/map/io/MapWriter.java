@@ -1,9 +1,8 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
+package ca.concordia.encs.conquerdia.model.map.io;
 
-import ca.concordia.encs.conquerdia.engine.map.Continent;
-import ca.concordia.encs.conquerdia.engine.map.Country;
-import ca.concordia.encs.conquerdia.engine.map.WorldMap;
-import ca.concordia.encs.conquerdia.engine.util.FileHelper;
+import ca.concordia.encs.conquerdia.model.map.Continent;
+import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

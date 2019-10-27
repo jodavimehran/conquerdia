@@ -1,6 +1,6 @@
-package ca.concordia.encs.conquerdia.engine.command;
+package ca.concordia.encs.conquerdia.controller.command;
 
-import ca.concordia.encs.conquerdia.engine.ConquerdiaModel;
+import ca.concordia.encs.conquerdia.model.GameModel;
 
 import java.util.List;
 
@@ -25,6 +25,6 @@ public interface Command {
      * @param inputCommandParts the command line parameters.
      * @return List of Command Results
      */
-    List<String> execute(ConquerdiaModel model, List<String> inputCommandParts);
+    List<String> execute(GameModel model, List<String> inputCommandParts);
 
 }

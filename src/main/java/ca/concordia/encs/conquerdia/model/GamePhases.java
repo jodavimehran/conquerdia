@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.engine;
+package ca.concordia.encs.conquerdia.model;
 
 /**
  * All game phases

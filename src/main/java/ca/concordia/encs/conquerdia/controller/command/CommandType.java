@@ -1,6 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.command;
-
-import ca.concordia.encs.conquerdia.engine.command.factory.*;
+package ca.concordia.encs.conquerdia.controller.command;
 
 
 /**

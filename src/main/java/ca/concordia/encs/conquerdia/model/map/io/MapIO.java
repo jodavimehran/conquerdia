@@ -1,6 +1,4 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
-
-import ca.concordia.encs.conquerdia.engine.util.FileHelper;
+package ca.concordia.encs.conquerdia.model.map.io;
 
 /**
  * Represents the common properties and functionalities of map files

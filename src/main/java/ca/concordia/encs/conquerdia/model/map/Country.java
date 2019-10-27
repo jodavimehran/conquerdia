@@ -1,6 +1,6 @@
-package ca.concordia.encs.conquerdia.engine.map;
+package ca.concordia.encs.conquerdia.model.map;
 
-import ca.concordia.encs.conquerdia.engine.Player;
+import ca.concordia.encs.conquerdia.model.Player;
 
 import java.util.HashMap;
 import java.util.Map;

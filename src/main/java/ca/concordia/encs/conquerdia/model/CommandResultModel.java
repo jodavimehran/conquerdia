@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.model;
 
-import java.util.Observable;
+
+import ca.concordia.encs.conquerdia.util.Observable;
 
 public class CommandResultModel extends Observable {
     private static CommandResultModel instance;

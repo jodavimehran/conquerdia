@@ -1,8 +1,7 @@
-package ca.concordia.encs.conquerdia.engine.map;
+package ca.concordia.encs.conquerdia.model.map;
 
-import ca.concordia.encs.conquerdia.engine.map.io.IMapReader;
-import ca.concordia.encs.conquerdia.engine.map.io.IMapWriter;
-import ca.concordia.encs.conquerdia.engine.util.MapFormattor;
+import ca.concordia.encs.conquerdia.model.map.io.IMapReader;
+import ca.concordia.encs.conquerdia.model.map.io.IMapWriter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

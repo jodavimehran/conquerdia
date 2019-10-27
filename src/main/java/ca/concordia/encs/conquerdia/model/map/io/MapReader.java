@@ -1,6 +1,6 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
+package ca.concordia.encs.conquerdia.model.map.io;
 
-import ca.concordia.encs.conquerdia.engine.map.WorldMap;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,7 +41,7 @@ class MapReader extends MapIO implements IMapReader {
 	 */
 	public boolean readMap(String filename) {
 		try {
-			final String path = MapIO.getMapFilePath(filename);
+			final String path = getMapFilePath(filename);
 			final File file = new File(path);
 			String line;
 

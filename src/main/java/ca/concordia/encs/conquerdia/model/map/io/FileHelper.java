@@ -1,4 +1,4 @@
-package ca.concordia.encs.conquerdia.util;
+package ca.concordia.encs.conquerdia.model.map.io;
 
 import org.apache.commons.io.FilenameUtils;
 

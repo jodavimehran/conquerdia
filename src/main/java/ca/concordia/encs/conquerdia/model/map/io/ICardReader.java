@@ -1,6 +1,6 @@
-package ca.concordia.encs.conquerdia.engine.map.io;
+package ca.concordia.encs.conquerdia.model.map.io;
 
-import ca.concordia.encs.conquerdia.engine.map.Card;
+import ca.concordia.encs.conquerdia.model.map.Card;
 
 import java.io.IOException;
 import java.util.ArrayList;
