@@ -1,19 +1,15 @@
 package ca.concordia.encs.conquerdia.controller;
 
-import ca.concordia.encs.conquerdia.model.GameModel;
 import ca.concordia.encs.conquerdia.controller.command.Command;
 import ca.concordia.encs.conquerdia.controller.command.CommandType;
 import ca.concordia.encs.conquerdia.model.CommandResultModel;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  *
  */
 public class CommandController {
-
-    private final GameModel gameModel = new GameModel();
 
     /**
      * @param commandStr user command
@@ -29,10 +25,8 @@ public class CommandController {
             CommandResultModel.getInstance().setResult("Command not found.");
             return;
         }
-        List<String> commands = commandType.getCommand().execute(gameModel, Arrays.asList(inputCommandParts));
-        for (String result : commands) {
-            CommandResultModel.getInstance().setResult(result);
-        }
+        commandType.getCommand().execute(Arrays.asList(inputCommandParts));
+
     }
 
 }

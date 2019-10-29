@@ -1,7 +1,5 @@
 package ca.concordia.encs.conquerdia.model.map;
 
-import ca.concordia.encs.conquerdia.model.map.MapValidation;
-import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +21,7 @@ public class MapValidationTest {
      */
     @Before
     public void setUp() {
-        worldMap = new WorldMap();
+        worldMap = WorldMap.getInstance();
         worldMap.editMap("someMapName");
         //CONTINENTS
         worldMap.addContinent("Asia", 1);

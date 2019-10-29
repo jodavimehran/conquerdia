@@ -1,23 +1,30 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import ca.concordia.encs.conquerdia.model.GameModel;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SaveMapCommand implements Command {
+public class SaveMapCommand extends AbstractCommand {
 
-    private static final String ERR1 = "Invalid \"savemap\" command. a valid \"savemap\" command is something like \"savemap filename\".";
+    private static final String COMMAND_HELP_MSG = "Invalid \"savemap\" command. a valid \"savemap\" command is something like \"savemap filename\".";
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.SAVE_MAP;
+    }
+
+    @Override
+    protected String getCommandHelpMessage() {
+        return COMMAND_HELP_MSG;
+    }
 
     /**
-     * @param model             The model object of the game.
      * @param inputCommandParts the command line parameters.
      * @return List of Command Results
      */
     @Override
-    public List<String> execute(GameModel model, List<String> inputCommandParts) {
-        if (inputCommandParts.size() < 2)
-            return Arrays.asList(ERR1);
-        return Arrays.asList(model.saveMap(inputCommandParts.get(1)));
+    public List<String> runCommand(List<String> inputCommandParts) {
+        return Arrays.asList(WorldMap.getInstance().saveMap(inputCommandParts.get(1)));
     }
 }

@@ -2,6 +2,9 @@ package ca.concordia.encs.conquerdia.model;
 
 import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +53,8 @@ public class Player {
      * @param add The number of armies that you want to add to unplaced armies of this player
      */
     public void addUnplacedArmies(int add) {
-        unplacedArmies += add;
+        if (add > 0)
+            unplacedArmies += add;
     }
 
     /**
@@ -146,11 +150,93 @@ public class Player {
 
     }
 
+
     /**
      * @return The number of armies that belong to this player and are not placed on any country.
      */
     public int getUnplacedArmies() {
         return unplacedArmies;
+    }
+
+
+    /**
+     * @param fromCountryName source country
+     * @param toCountryName   destination country
+     * @param numberOfArmy    number of army
+     * @return the result
+     */
+    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) {
+        Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
+        if (fromCountry == null)
+            return String.format("Country with name \"%s\" was not found!", fromCountryName);
+        Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
+        if (toCountry == null)
+            return String.format("Country with name \"%s\" was not found!", toCountryName);
+        if (numberOfArmy < 1)
+            return "Invalid number! Number of armies must be greater than 0.";
+
+        if (fromCountry.getOwner() == null || !fromCountry.getOwner().getName().equals(name))
+            return String.format("Country with name \"%s\" does not belong to you!", fromCountryName);
+
+        if (toCountry.getOwner() == null || !toCountry.getOwner().getName().equals(name))
+            return String.format("Country with name \"%s\" does not belong to you!", toCountryName);
+
+        if (!WorldMap.isTherePath(fromCountry, toCountry))
+            return "There is no path between these two countries that is composed of countries that you owns.";
+        int realNumberOfArmies = numberOfArmy > fromCountry.getNumberOfArmies() - 1 ? fromCountry.getNumberOfArmies() - 1 : numberOfArmy;
+        fromCountry.removeArmy(realNumberOfArmies);
+        toCountry.placeArmy(realNumberOfArmies);
+
+        return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName, toCountryName);
+    }
+
+
+    /**
+     * @param countryName  name of the country
+     * @param numberOfArmy number of army
+     * @return the result
+     */
+    public String reinforce(String countryName, int numberOfArmy) {
+        Country country = WorldMap.getInstance().getCountry(countryName);
+        if (country == null)
+            return String.format("Country with name \"%s\" was not found!", countryName);
+        if (numberOfArmy < 1)
+            return "Invalid number! Number of armies must be greater than 0.";
+        if (country.getOwner() == null || !country.getOwner().getName().equals(name))
+            return String.format("Country with name \"%s\" does not belong to you!", countryName);
+        StringBuilder sb = new StringBuilder();
+        int realNumberOfArmies = numberOfArmy > unplacedArmies ? unplacedArmies : numberOfArmy;
+        country.placeArmy(realNumberOfArmies);
+        minusUnplacedArmies(realNumberOfArmies);
+        sb.append("Dear ").append(name).append(", you placed ").append(realNumberOfArmies).append(" armies to ").append(countryName);
+        if (unplacedArmies > 0) {
+            sb.append(" and ").append(unplacedArmies).append(" armies are remain unplaced.");
+            return sb.toString();
+        }
+        sb.append(" and finished reinforcement phase successfully.");
+
+        PhaseModel.getInstance().changePhase();
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Player)) return false;
+
+        Player player = (Player) o;
+
+        return new EqualsBuilder()
+                .append(getName(), player.getName())
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(getName())
+                .toHashCode();
     }
 
     /**

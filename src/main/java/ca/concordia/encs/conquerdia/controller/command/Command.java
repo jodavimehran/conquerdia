@@ -1,7 +1,5 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import ca.concordia.encs.conquerdia.model.GameModel;
-
 import java.util.List;
 
 /**
@@ -21,10 +19,8 @@ public interface Command {
 
 
     /**
-     * @param model             The model object of the game.
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
-    List<String> execute(GameModel model, List<String> inputCommandParts);
+    void execute(List<String> inputCommandParts);
 
 }

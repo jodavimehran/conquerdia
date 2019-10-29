@@ -1,47 +1,54 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import ca.concordia.encs.conquerdia.model.GameModel;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
-public class EditCountryCommand implements Command {
-    public final static String EDIT_COUNTRY_COMMAND_ERR1 = "Invalid input! The \"editcountry\" command must has at least one option like \"-add\" or \"-remove\".";
+public class EditCountryCommand extends AbstractCommand {
+    public final static String COMMAND_HELP_MSG = "Invalid input! The \"editcountry\" command must has at least one option like \"-add\" or \"-remove\".";
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.EDIT_COUNTRY;
+    }
+
+    @Override
+    protected String getCommandHelpMessage() {
+        return COMMAND_HELP_MSG;
+    }
 
     /**
-     * @param model             The model object of the game.
      * @param inputCommandParts the command line parameters.
      * @return List of Command Results
      */
     @Override
-    public List<String> execute(GameModel model, List<String> inputCommandParts) {
-        if (inputCommandParts.size() < 3)
-            return Arrays.asList(EDIT_COUNTRY_COMMAND_ERR1);
-
+    public List<String> runCommand(List<String> inputCommandParts) {
         List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
         iterator.next();
-        try {
-            while (iterator.hasNext()) {
-                switch (iterator.next()) {
-                    case ("-add"): {
-                        String countryName = iterator.next();
-                        String continentName = iterator.next();
-                        commands.add(model.getWorldMap().addCountry(countryName, continentName));
-                        break;
-                    }
-                    case "-remove": {
-                        String countryName = iterator.next();
-                        commands.add(model.getWorldMap().removeCountry(countryName));
-                        break;
-                    }
-                    default: {
-                        return Arrays.asList("Invalid input!");
-                    }
+
+        while (iterator.hasNext()) {
+            switch (iterator.next()) {
+                case ("-add"): {
+                    String countryName = iterator.next();
+                    String continentName = iterator.next();
+                    commands.add(WorldMap.getInstance().addCountry(countryName, continentName));
+                    break;
+                }
+                case "-remove": {
+                    String countryName = iterator.next();
+                    commands.add(WorldMap.getInstance().removeCountry(countryName));
+                    break;
+                }
+                default: {
+                    return Arrays.asList("Invalid input! " + getCommandHelpMessage());
                 }
             }
-            return commands;
-        } catch (NoSuchElementException ex) {
-            return Arrays.asList("Invalid input!");
         }
+        return commands;
+
     }
 }

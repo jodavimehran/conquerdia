@@ -1,10 +1,12 @@
 package ca.concordia.encs.conquerdia.model.map;
 
+import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.map.io.IMapReader;
 import ca.concordia.encs.conquerdia.model.map.io.IMapWriter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
  */
 public class WorldMap {
     private final static String NO_MAP_TO_EDIT_ERROR = "There is no map to %s. Use \"editmap filename\" command to load or create a map.";
+    private static WorldMap instance;
     private final Map<String, Continent> continents = new HashMap<>();
     private final Map<String, Country> countries = new HashMap<>();
     private final MapValidation mapValidation = new MapValidation(this);
@@ -21,6 +24,54 @@ public class WorldMap {
     private boolean newMapFromScratch;
     private boolean readyForEdit;
     private boolean mapLoaded;
+
+
+    private WorldMap() {
+    }
+
+    /**
+     * This method is used for getting a single instance of the {@link WorldMap}
+     *
+     * @return single instance of the {@link WorldMap map}
+     */
+    public static WorldMap getInstance() {
+        if (instance == null) {
+            synchronized (WorldMap.class) {
+                if (instance == null) {
+                    instance = new WorldMap();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Check there is some path between two countries or not
+     *
+     * @param fromCountry source country
+     * @param toCountry   dest country
+     * @return the result
+     */
+    public static boolean isTherePath(Country fromCountry, Country toCountry) {
+        if (fromCountry.getAdjacentCountries().isEmpty())
+            return false;
+        HashSet<String> reachableCountries = new HashSet<>();
+        traversCountry(fromCountry, reachableCountries);
+        return reachableCountries.contains(toCountry.getName());
+    }
+
+    /**
+     * @param country   country
+     * @param countries list of visited countries
+     */
+    private static void traversCountry(Country country, HashSet<String> countries) {
+        countries.add(country.getName());
+        for (Country adjacent : country.getAdjacentCountries()) {
+            if (!countries.contains(adjacent.getName()) && adjacent.getOwner().equals(PhaseModel.getInstance().getCurrentPlayer())) {
+                traversCountry(adjacent, countries);
+            }
+        }
+    }
 
     /**
      * Loading a map from an existing “domination” map file to edit or create a new map from scratch if the file does not
@@ -61,7 +112,6 @@ public class WorldMap {
     }
 
     /**
-     *
      * @param fileName file name
      * @return return true if a map file was successfully saved.
      * return false if a map file was successfully saved
@@ -123,7 +173,6 @@ public class WorldMap {
         continents.remove(continentName);
         return String.format("Continent with name \"%s\" is successfully removed from World Map", continentName);
     }
-
 
     /**
      * @param countryName   name of the country
@@ -222,7 +271,6 @@ public class WorldMap {
         firstCountry.removeNeighbour(secondCountry.getName());
         secondCountry.removeNeighbour(firstCountry.getName());
     }
-
 
     /**
      * @return return all continents in map

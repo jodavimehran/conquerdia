@@ -5,16 +5,25 @@ import ca.concordia.encs.conquerdia.model.GameModel;
 import java.util.Arrays;
 import java.util.List;
 
-public class PlaceAllCommand implements Command {
+public class PlaceAllCommand extends AbstractCommand {
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.PLACE_ALL;
+    }
+
+    @Override
+    protected String getCommandHelpMessage() {
+        return "";
+    }
 
     /**
-     * @param model             The model object of the game.
      * @param inputCommandParts the command line parameters.
      * @return List of Command Results
      */
     @Override
-    public List<String> execute(GameModel model, List<String> inputCommandParts) {
-        return Arrays.asList(model.placeAll());
+    public List<String> runCommand(List<String> inputCommandParts) {
+        return Arrays.asList(GameModel.getInstance().placeAll());
     }
 
 }
