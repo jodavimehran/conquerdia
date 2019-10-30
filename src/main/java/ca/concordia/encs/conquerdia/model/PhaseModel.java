@@ -4,6 +4,7 @@ import ca.concordia.encs.conquerdia.controller.command.CommandType;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,10 +13,10 @@ import java.util.stream.Collectors;
  */
 public class PhaseModel extends Observable {
     private static PhaseModel instance;
+    private final List<String> phaseLog = new ArrayList<>();
     private PhaseTypes currentPhase = PhaseTypes.NONE;
     private Queue<Player> players = new LinkedList<>();
     private Player currentPlayer;
-
 
     /**
      * private Constructor to implementation of the Singleton Pattern
@@ -61,12 +62,19 @@ public class PhaseModel extends Observable {
                 }
                 break;
             }
-            case FORTIFICATION:
+            case EDIT_MAP: {
+                if (WorldMap.getInstance().isMapLoaded()) {
+                    changePhase(PhaseTypes.START_UP);
+                }
+                break;
+            }
+            case FORTIFICATION: {
                 changePhase(PhaseTypes.REINFORCEMENT);
                 giveTurnToAnotherPlayer();
                 currentPlayer.calculateNumberOfReinforcementArmies();
                 CommandResultModel.getInstance().setResult(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
                 break;
+            }
         }
     }
 
@@ -74,9 +82,8 @@ public class PhaseModel extends Observable {
      * @param phaseTypes
      */
     private void changePhase(PhaseTypes phaseTypes) {
+        phaseLog.clear();
         currentPhase = phaseTypes;
-        setChanged();
-        notifyObservers(this);
     }
 
     /**
@@ -100,7 +107,26 @@ public class PhaseModel extends Observable {
         sb.append("Phase: ").append(currentPhase.getName());
         if (currentPlayer != null)
             sb.append(",Player: ").append(currentPlayer.getName());
+        if (!phaseLog.isEmpty()) {
+            sb.append(System.getProperty("line.separator"));
+            for (String log : phaseLog) {
+                sb.append(log).append(System.getProperty("line.separator"));
+            }
+        }
         return sb.toString();
+    }
+
+    public void addPhaseLogs(List<String> logs) {
+        if (logs != null) {
+            LocalTime now = LocalTime.now();
+            logs.stream().forEach(log -> phaseLog.add(now + ", " + log));
+        }
+    }
+
+    public void addPhaseLog(String log) {
+        phaseLog.add(java.time.LocalTime.now() + ", " + log);
+        setChanged();
+        notifyObservers(this);
     }
 
     /**

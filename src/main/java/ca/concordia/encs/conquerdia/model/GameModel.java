@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.model;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import org.apache.commons.lang3.StringUtils;
@@ -40,28 +41,26 @@ public class GameModel {
      * name is
      *
      * @param playerName name of the plater to add
-     * @return the result message
      */
-    public String addPlayer(String playerName) {
+    public void addPlayer(String playerName) throws ValidationException {
         if (StringUtils.isBlank(playerName))
-            return "Player name is not valid!";
+            throw new ValidationException("Player name is not valid!");
         if (players.containsKey(playerName))
-            return String.format("Player with name \"%s\" is already exist.", playerName);
+            throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
         players.put(playerName, new Player.Builder(playerName).build());
-        return String.format("Player with name \"%s\" is successfully added.", playerName);
+        PhaseModel.getInstance().addPhaseLog(String.format("Player with name \"%s\" was added", playerName));
     }
 
     /**
      * This Method remove a player
      *
      * @param playerName name of the player to remove
-     * @return the result message
      */
-    public String removePlayer(String playerName) {
+    public void removePlayer(String playerName) throws ValidationException {
         if (!players.containsKey(playerName))
-            return String.format("Player with name \"%s\" is not found.", playerName);
+            throw new ValidationException(String.format("Player with name \"%s\" is not found.", playerName));
         players.remove(playerName);
-        return String.format("Player with name \"%s\" is successfully removed.", playerName);
+        PhaseModel.getInstance().addPhaseLog(String.format("Player with name \"%s\" was removed.", playerName));
     }
 
     /**
