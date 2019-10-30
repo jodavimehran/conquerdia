@@ -17,6 +17,8 @@ public class PhaseView implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        output.println("****    Phase View      ************************************************************************");
         output.println(((PhaseModel) o).getPhaseStatus());
+        output.println("****____________________________________________________________________________________________");
     }
 }

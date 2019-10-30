@@ -22,8 +22,9 @@ public abstract class AbstractCommand implements Command {
             return;
         } else {
             try {
-                showResult(runCommand(inputCommandParts));
+                List<String> results = runCommand(inputCommandParts);
                 PhaseModel.getInstance().changePhase();
+                showResult(results);
             } catch (Exception ex) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Invalid Command! ").append(getCommandHelpMessage()).append(System.getProperty("line.separator"));
@@ -36,6 +37,7 @@ public abstract class AbstractCommand implements Command {
     protected abstract List<String> runCommand(List<String> inputCommandParts);
 
     protected abstract String getCommandHelpMessage();
+
     protected abstract CommandType getCommandType();
 
     private final void showResult(List<String> result) {

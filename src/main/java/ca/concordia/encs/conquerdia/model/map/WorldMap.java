@@ -19,7 +19,6 @@ public class WorldMap {
     private static WorldMap instance;
     private final Map<String, Continent> continents = new HashMap<>();
     private final Map<String, Country> countries = new HashMap<>();
-    private final MapValidation mapValidation = new MapValidation(this);
     private String fileName;
     private boolean newMapFromScratch;
     private boolean readyForEdit;
@@ -98,8 +97,8 @@ public class WorldMap {
         this.readyForEdit = false;
         if (!mapIsLoaded)
             return String.format("Map with file name \"%s\" is not found!", fileName);
-        if (!mapValidation.checkAllMapValidationRules())
-            return mapValidation.validate();
+        if (!checkAllMapValidationRules())
+            return validateMap();
         mapLoaded = true;
         return String.format("Map with file name \"%s\" is loaded successfully.", fileName);
     }
@@ -138,8 +137,6 @@ public class WorldMap {
      * @return return the result
      */
     public String addContinent(String continentName, Integer continentValue) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "add a continent to it");
         if (StringUtils.isBlank(continentName))
             return "Continent name is not valid!";
         if (continentValue == null || continentValue <= 0)
@@ -159,8 +156,6 @@ public class WorldMap {
      * @return result
      */
     public String removeContinent(String continentName) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "remove a continent from it");
         if (StringUtils.isBlank(continentName))
             return "Continent name is not valid!";
         if (!continents.containsKey(continentName)) {
@@ -180,8 +175,6 @@ public class WorldMap {
      * @return result
      */
     public String addCountry(String countryName, String continentName) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "add a country to it");
         if (StringUtils.isBlank(countryName))
             return "Country name is not valid!";
         if (StringUtils.isBlank(continentName))
@@ -205,8 +198,6 @@ public class WorldMap {
      * @return return message result
      */
     public String removeCountry(String countryName) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "remove a country from it");
         if (!countries.containsKey(countryName)) {
             return String.format("Country with name \"%s\" is not found.", countryName);
         }
@@ -224,8 +215,6 @@ public class WorldMap {
      * @return result
      */
     public String addNeighbour(String firstCountryName, String secondCountryName) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "modify");
         if (!countries.containsKey(firstCountryName))
             return String.format("Country with name \"%s\" is not found.", firstCountryName);
         if (!countries.containsKey(secondCountryName))
@@ -279,12 +268,6 @@ public class WorldMap {
         return continents.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }
 
-    /**
-     * @return the name of countries
-     */
-    public Set<String> getCountryNames() {
-        return countries.keySet();
-    }
 
     /**
      * @return All counties in map
@@ -325,14 +308,6 @@ public class WorldMap {
         return countries.containsKey(countryName);
     }
 
-    /**
-     * This method validates the map and checks different constraints of validity.
-     *
-     * @return A string that shows the validation result of the map.
-     */
-    public String validateMap() {
-        return new MapValidation(this).validate();
-    }
 
     /**
      * @return return true if the map was loaded
@@ -348,4 +323,87 @@ public class WorldMap {
         return new MapFormattor(countries).format(mapLoaded ? MapFormattor.FormatType.Detail : MapFormattor.FormatType.Default);
     }
 
+    public boolean isReadyForEdit() {
+        return readyForEdit;
+    }
+
+    private boolean connectedGraph;
+    private boolean connectedSubGraph;
+
+    /**
+     * Validate the map
+     *
+     * @return validation result
+     */
+    public String validateMap() {
+        boolean result = checkAllMapValidationRules();
+        StringBuilder validationResult = new StringBuilder();
+        if (result) {
+            validationResult.append("Map is Valid:").append(System.getProperty("line.separator"));
+            validationResult.append("1.Map is a connected Graph").append(System.getProperty("line.separator"));
+            validationResult.append("2.Every continent is a connected subgraph in the Map")
+                    .append(System.getProperty("line.separator"));
+        } else {
+            validationResult.append("Map is not Valid:").append(System.getProperty("line.separator"));
+            if (!connectedGraph) {
+                validationResult.append("worldMap is not a connected graph.")
+                        .append(System.getProperty("line.separator"));
+            }
+            if (!connectedSubGraph) {
+                validationResult.append("All the continents in the worldMap are not connected subgraphs of worldMap.")
+                        .append(System.getProperty("line.separator"));
+            }
+        }
+        return validationResult.toString();
+    }
+
+    /**
+     * @return true if All validation rules are
+     */
+    public boolean checkAllMapValidationRules() {
+        {
+            Set<String> countryNames = countries.keySet();
+            connectedGraph = isMapConnected(getCountry(countryNames.iterator().next()), countryNames);
+        }
+        {
+            connectedSubGraph = true;
+            for (Continent continent : getContinents()) {
+                Set<String> countryNames = continent.getCountriesName();
+                if (countryNames.isEmpty())
+                    continue;
+                connectedSubGraph &= isMapConnected(continent.getCountries().iterator().next(), countryNames);
+            }
+
+        }
+        return connectedGraph && connectedSubGraph;
+    }
+
+    /**
+     * @param country   coumtry
+     * @param countries countries
+     */
+    private void traversCountry2(Country country, HashSet<String> countries) {
+        countries.add(country.getName());
+        for (Country adjacent : country.getAdjacentCountries()) {
+            if (!countries.contains(adjacent.getName())) {
+                traversCountry2(adjacent, countries);
+            }
+        }
+    }
+
+    /**
+     * This Method verifies if the worldMap is a connected graph.
+     *
+     * @param firstCountry firstCountry
+     * @param countryNames countryNames
+     * @return result
+     */
+    public boolean isMapConnected(Country firstCountry, Set<String> countryNames) {
+        HashSet<String> countries = new HashSet<>();
+        if (countryNames.isEmpty())
+            return true;
+        traversCountry2(firstCountry, countries);
+        boolean result = countries.containsAll(countryNames);
+        return result;
+    }
 }

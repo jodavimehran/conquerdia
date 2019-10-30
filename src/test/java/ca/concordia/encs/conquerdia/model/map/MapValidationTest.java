@@ -6,14 +6,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This class Tests the behavior of {@link MapValidation} class.
- *
- * @author Sadegh Aalizadeh
+ * This class Tests the behavior of class.
  */
 public class MapValidationTest {
 
     //Build The World
-    private MapValidation mapValidation;
     private WorldMap worldMap;
 
     /**
@@ -42,16 +39,15 @@ public class MapValidationTest {
         worldMap.addNeighbour("SaudiArabia", "Turkey");
         worldMap.addNeighbour("Greece", "Turkey");
 
-        mapValidation = new MapValidation(worldMap);
     }
 
 
     /**
-     * This TestCase is designed to check the result of {@link MapValidation#checkAllMapValidationRules()}
-     * in {@link MapValidation} class.
+     * This TestCase is designed to check the result of {@link WorldMap#checkAllMapValidationRules()}
+     * in {@link WorldMap} class.
      */
     @Test
     public void checkAllMapValidationRulesTestCase() {
-        assertTrue(mapValidation.checkAllMapValidationRules());
+        assertTrue(worldMap.checkAllMapValidationRules());
     }
 }

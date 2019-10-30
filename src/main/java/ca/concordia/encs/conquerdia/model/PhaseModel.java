@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.model;
 
 import ca.concordia.encs.conquerdia.controller.command.CommandType;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
 
 import java.util.*;
@@ -52,15 +53,30 @@ public class PhaseModel extends Observable {
 
     public void changePhase() {
         switch (currentPhase) {
+            case NONE: {
+                if (WorldMap.getInstance().isMapLoaded()) {
+                    changePhase(PhaseTypes.START_UP);
+                } else if (WorldMap.getInstance().isReadyForEdit()) {
+                    changePhase(PhaseTypes.EDIT_MAP);
+                }
+                break;
+            }
             case FORTIFICATION:
-                currentPhase = PhaseTypes.REINFORCEMENT;
+                changePhase(PhaseTypes.REINFORCEMENT);
                 giveTurnToAnotherPlayer();
-                setChanged();
-                notifyObservers(this);
                 currentPlayer.calculateNumberOfReinforcementArmies();
                 CommandResultModel.getInstance().setResult(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
                 break;
         }
+    }
+
+    /**
+     * @param phaseTypes
+     */
+    private void changePhase(PhaseTypes phaseTypes) {
+        currentPhase = phaseTypes;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -80,7 +96,11 @@ public class PhaseModel extends Observable {
     }
 
     public String getPhaseStatus() {
-        return String.format("Phase: %s, Player: %s", currentPhase.getName(), currentPlayer.getName());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Phase: ").append(currentPhase.getName());
+        if (currentPlayer != null)
+            sb.append(",Player: ").append(currentPlayer.getName());
+        return sb.toString();
     }
 
     /**
@@ -88,7 +108,7 @@ public class PhaseModel extends Observable {
      */
     public enum PhaseTypes {
         NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
-        EDIT_MAP("Edit Map", new HashSet<>(Arrays.asList(CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY, CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP, CommandType.VALIDATE_MAP))),
+        EDIT_MAP("Edit Map", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY, CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP, CommandType.VALIDATE_MAP))),
         START_UP("Startup", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER, CommandType.POPULATE_COUNTRIES))),
         REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP))),
         FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP))),
