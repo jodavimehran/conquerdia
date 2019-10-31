@@ -406,4 +406,12 @@ public class WorldMap {
         boolean result = countries.containsAll(countryNames);
         return result;
     }
+    
+    /**
+     * Clears the data of the map and resets it
+     */
+    public void clear() {
+        continents.clear();
+        countries.clear();
+    }
 }

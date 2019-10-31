@@ -2,6 +2,7 @@ package ca.concordia.encs.conquerdia.model.map;
 
 import static org.junit.Assert.assertTrue;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -61,4 +62,10 @@ public class MapFormattorTest {
 		String res = formattor.format(MapFormattor.FormatType.Detail);
 		assertTrue(res.contains("Antarctica"));
 	}
+	
+	@AfterClass
+	public static void cleanup() {
+		WorldMap.getInstance().clear();
+	}
 }
+
