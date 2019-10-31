@@ -48,7 +48,6 @@ public class GameModel {
         if (players.containsKey(playerName))
             throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
         players.put(playerName, new Player.Builder(playerName).build());
-        PhaseModel.getInstance().addPhaseLog(String.format("Player with name \"%s\" was added", playerName));
     }
 
     /**
@@ -60,7 +59,6 @@ public class GameModel {
         if (!players.containsKey(playerName))
             throw new ValidationException(String.format("Player with name \"%s\" is not found.", playerName));
         players.remove(playerName);
-        PhaseModel.getInstance().addPhaseLog(String.format("Player with name \"%s\" was removed.", playerName));
     }
 
     /**

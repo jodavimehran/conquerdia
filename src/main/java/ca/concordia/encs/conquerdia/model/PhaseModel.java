@@ -108,9 +108,8 @@ public class PhaseModel extends Observable {
         if (currentPlayer != null)
             sb.append(",Player: ").append(currentPlayer.getName());
         if (!phaseLog.isEmpty()) {
-            sb.append(System.getProperty("line.separator"));
             for (String log : phaseLog) {
-                sb.append(log).append(System.getProperty("line.separator"));
+                sb.append(System.getProperty("line.separator")).append(log);
             }
         }
         return sb.toString();
@@ -119,12 +118,14 @@ public class PhaseModel extends Observable {
     public void addPhaseLogs(List<String> logs) {
         if (logs != null) {
             LocalTime now = LocalTime.now();
-            logs.stream().forEach(log -> phaseLog.add(now + ", " + log));
+            logs.stream().forEach(log -> phaseLog.add(now + "-" + log));
         }
+        setChanged();
+        notifyObservers(this);
     }
 
     public void addPhaseLog(String log) {
-        phaseLog.add(java.time.LocalTime.now() + ", " + log);
+        phaseLog.add(java.time.LocalTime.now() + "-" + log);
         setChanged();
         notifyObservers(this);
     }

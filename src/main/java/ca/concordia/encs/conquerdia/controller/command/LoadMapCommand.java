@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ public class LoadMapCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
-        return Arrays.asList(WorldMap.getInstance().loadMap(inputCommandParts.get(1)));
+    public void runCommand(List<String> inputCommandParts) {
+        resultList.add(WorldMap.getInstance().loadMap(inputCommandParts.get(1)));
     }
 }

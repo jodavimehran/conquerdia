@@ -24,7 +24,7 @@ public class SaveMapCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
-        return Arrays.asList(WorldMap.getInstance().saveMap(inputCommandParts.get(1)));
+    public void runCommand(List<String> inputCommandParts) {
+        resultList.add(WorldMap.getInstance().saveMap(inputCommandParts.get(1)));
     }
 }
