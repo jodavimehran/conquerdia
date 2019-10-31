@@ -9,13 +9,15 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MapFormattor {
-    private Map<String, Country> countries;
-
-    public MapFormattor(Map<String, Country> countries) {
-        this.countries = countries;
+    
+	private WorldMap worldMap;
+    
+    public MapFormattor(WorldMap worldMap) {
+        this.worldMap = worldMap;
     }
 
     public String format() {
@@ -23,21 +25,21 @@ public class MapFormattor {
     }
 
     public String format(FormatType type) {
+    	Set<Country> countries = worldMap.getCountries();
+    	
         String[] columnNames = getColumnNames(type);
         Object[][] data = new Object[countries.size()][columnNames.length];
-        Country country;
-
+       
         int count = 0;
-        for (Map.Entry<String, Country> item : countries.entrySet()) {
-            country = item.getValue();
-            data[count] = populateRow(country, type);
+        for (Country country : countries) {
+            data[count] = formatCountry(country, type);
             count++;
         }
 
         return format(columnNames, data);
     }
-
-    private String[] populateRow(Country country, FormatType type) {
+    
+    private String[] formatCountry(Country country, FormatType type) {
         ArrayList<String> values = new ArrayList<>();
 
         String neighborsAsCsv = String.join(",", country.getAdjacentCountries()
