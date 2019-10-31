@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.GameModel;
 
 import java.util.ArrayList;
@@ -37,11 +38,19 @@ public class GamePlayerCommand extends AbstractCommand {
             String playerName = iterator.next();
             switch (option) {
                 case ("-add"): {
-                    commands.add(GameModel.getInstance().addPlayer(playerName));
+                    try {
+                        GameModel.getInstance().addPlayer(playerName);
+                    } catch (ValidationException ex) {
+                        commands.addAll(ex.getValidationErrors());
+                    }
                     break;
                 }
                 case "-remove": {
-                    commands.add(GameModel.getInstance().removePlayer(playerName));
+                    try {
+                        GameModel.getInstance().removePlayer(playerName);
+                    } catch (ValidationException ex) {
+                        commands.addAll(ex.getValidationErrors());
+                    }
                     break;
                 }
                 default: {
