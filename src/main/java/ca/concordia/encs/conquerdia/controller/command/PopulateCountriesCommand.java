@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.model.GameModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ public class PopulateCountriesCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
-        return Arrays.asList(GameModel.getInstance().populateCountries());
+    public void runCommand(List<String> inputCommandParts) {
+        resultList.add(GameModel.getInstance().populateCountries());
     }
 }

@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.model.GameModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class PlaceAllCommand extends AbstractCommand {
@@ -22,8 +21,8 @@ public class PlaceAllCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
-        return Arrays.asList(GameModel.getInstance().placeAll());
+    public void runCommand(List<String> inputCommandParts) {
+        resultList.add(GameModel.getInstance().placeAll());
     }
 
 }

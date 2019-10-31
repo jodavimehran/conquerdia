@@ -1,8 +1,8 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class FortifyCommand extends AbstractCommand {
@@ -24,16 +24,16 @@ public class FortifyCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
+    public void runCommand(List<String> inputCommandParts) throws ValidationException {
         if ("none".equals(inputCommandParts.get(1))) {
-            return null;
+            return;
         }
         if (inputCommandParts.size() < 4)
-            return Arrays.asList("Invalid input! " + getCommandHelpMessage());
+            throw new ValidationException("Invalid input! " + getCommandHelpMessage());
         try {
-            return Arrays.asList(PhaseModel.getInstance().getCurrentPlayer().fortify(inputCommandParts.get(1), inputCommandParts.get(2), Integer.valueOf(inputCommandParts.get(3))));
+            resultList.add(PhaseModel.getInstance().getCurrentPlayer().fortify(inputCommandParts.get(1), inputCommandParts.get(2), Integer.valueOf(inputCommandParts.get(3))));
         } catch (NumberFormatException ex) {
-            return Arrays.asList("Number of armies(latest parameter) must be an integer number.");
+            throw new ValidationException("Number of armies(latest parameter) must be an integer number.");
         }
 
     }

@@ -1,9 +1,8 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,11 +21,9 @@ public class EditCountryCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
-        List<String> commands = new ArrayList<>();
+    public void runCommand(List<String> inputCommandParts) throws ValidationException {
         Iterator<String> iterator = inputCommandParts.iterator();
         iterator.next();
 
@@ -35,20 +32,18 @@ public class EditCountryCommand extends AbstractCommand {
                 case ("-add"): {
                     String countryName = iterator.next();
                     String continentName = iterator.next();
-                    commands.add(WorldMap.getInstance().addCountry(countryName, continentName));
+                    resultList.add(WorldMap.getInstance().addCountry(countryName, continentName));
                     break;
                 }
                 case "-remove": {
                     String countryName = iterator.next();
-                    commands.add(WorldMap.getInstance().removeCountry(countryName));
+                    resultList.add(WorldMap.getInstance().removeCountry(countryName));
                     break;
                 }
                 default: {
-                    return Arrays.asList("Invalid input! " + getCommandHelpMessage());
+                    throw new ValidationException(COMMAND_HELP_MSG);
                 }
             }
         }
-        return commands;
-
     }
 }

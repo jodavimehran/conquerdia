@@ -4,7 +4,6 @@ import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.GameModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class GamePlayerCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public List<String> runCommand(List<String> inputCommandParts) {
+    public void runCommand(List<String> inputCommandParts) throws ValidationException {
         List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
         iterator.next();
@@ -40,24 +39,25 @@ public class GamePlayerCommand extends AbstractCommand {
                 case ("-add"): {
                     try {
                         GameModel.getInstance().addPlayer(playerName);
+                        resultList.add(String.format("Player with name \"%s\" was added", playerName));
                     } catch (ValidationException ex) {
-                        commands.addAll(ex.getValidationErrors());
+                        errorList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }
                 case "-remove": {
                     try {
                         GameModel.getInstance().removePlayer(playerName);
+                        resultList.add(String.format("Player with name \"%s\" was removed.", playerName));
                     } catch (ValidationException ex) {
-                        commands.addAll(ex.getValidationErrors());
+                        errorList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }
                 default: {
-                    return Arrays.asList("Invalid input! " + getCommandHelpMessage());
+                    throw new ValidationException(COMMAND_HELP_MSG);
                 }
             }
         }
-        return commands;
     }
 }

@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.CommandResultModel;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 
@@ -32,7 +33,9 @@ public abstract class AbstractCommand implements Command {
                 runCommand(inputCommandParts);
                 PhaseModel.getInstance().changePhase();
                 PhaseModel.getInstance().addPhaseLogs(resultList);
-                showError(errorList.stream().collect(Collectors.joining(System.getProperty("line.separator"))));
+                if (!errorList.isEmpty()) {
+                    showError(errorList.stream().collect(Collectors.joining(System.getProperty("line.separator"))));
+                }
             } catch (Exception ex) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Invalid Command! ").append(getCommandHelpMessage()).append(System.getProperty("line.separator"));
@@ -42,7 +45,7 @@ public abstract class AbstractCommand implements Command {
         }
     }
 
-    protected abstract List<String> runCommand(List<String> inputCommandParts);
+    protected abstract void runCommand(List<String> inputCommandParts) throws ValidationException;
 
     protected abstract String getCommandHelpMessage();
 
