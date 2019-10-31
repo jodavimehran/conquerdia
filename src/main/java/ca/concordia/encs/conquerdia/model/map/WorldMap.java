@@ -320,7 +320,7 @@ public class WorldMap {
      * @return the map
      */
     public String showMap() {
-        return new MapFormattor(countries).format(mapLoaded ? MapFormattor.FormatType.Detail : MapFormattor.FormatType.Default);
+        return new MapFormattor(this).format(mapLoaded ? MapFormattor.FormatType.Detail : MapFormattor.FormatType.Default);
     }
 
     public boolean isReadyForEdit() {
@@ -405,5 +405,13 @@ public class WorldMap {
         traversCountry2(firstCountry, countries);
         boolean result = countries.containsAll(countryNames);
         return result;
+    }
+    
+    /**
+     * Clears the data of the map and resets it
+     */
+    public void clear() {
+        continents.clear();
+        countries.clear();
     }
 }
