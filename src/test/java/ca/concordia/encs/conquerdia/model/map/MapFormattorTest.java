@@ -44,7 +44,6 @@ public class MapFormattorTest {
 	public void testDefaultMapFormattor() {
 		MapFormattor formattor = new MapFormattor(map);
 		String res = formattor.format();
-		System.out.println(res);
 		assertTrue(res.contains("Northamptonshire_Northamptonshire"));
 	}
 
@@ -52,7 +51,14 @@ public class MapFormattorTest {
 	public void testDetailMapFormattor() {
 		MapFormattor formattor = new MapFormattor(map);
 		String res = formattor.format(MapFormattor.FormatType.Detail);
-		System.out.println(res);
 		assertTrue(res.contains("Northamptonshire_Northamptonshire| 15    | John"));
+	}
+
+	@Test
+	public void testPresenseOfEmptyContinents() {
+		map.addContinent("Antarctica", 8);
+		MapFormattor formattor = new MapFormattor(map);
+		String res = formattor.format(MapFormattor.FormatType.Detail);
+		assertTrue(res.contains("Antarctica"));
 	}
 }
