@@ -9,11 +9,11 @@ public class ValidationException extends Exception {
 
     public ValidationException(String message) {
         super(message);
-        validationErrors.add(message);
+        validationErrors.add("Validation Error! " + message);
     }
 
     public void addValidationError(String error) {
-        validationErrors.add(error);
+        validationErrors.add("Validation Error! " + error);
     }
 
     public List<String> getValidationErrors() {

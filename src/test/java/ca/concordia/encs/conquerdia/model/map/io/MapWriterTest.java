@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -25,7 +26,7 @@ public class MapWriterTest {
      * Runs before every tests
      */
     @Before
-    public void beforeTests() {
+    public void beforeTests() throws ValidationException {
         worldMap = WorldMap.getInstance();
 
         // CONTINENTS

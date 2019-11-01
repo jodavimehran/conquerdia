@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class MapValidationTest {
      * All common activities are placed here
      */
     @Before
-    public void setUp() {
+    public void setUp() throws ValidationException {
         worldMap = WorldMap.getInstance();
 
         //CONTINENTS
