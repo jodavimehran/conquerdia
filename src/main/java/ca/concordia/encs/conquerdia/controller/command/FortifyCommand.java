@@ -31,7 +31,7 @@ public class FortifyCommand extends AbstractCommand {
         if (inputCommandParts.size() < 4)
             throw new ValidationException("Invalid input! " + getCommandHelpMessage());
         try {
-            resultList.add(PhaseModel.getInstance().getCurrentPlayer().fortify(inputCommandParts.get(1), inputCommandParts.get(2), Integer.valueOf(inputCommandParts.get(3))));
+            phaseLogList.add(PhaseModel.getInstance().getCurrentPlayer().fortify(inputCommandParts.get(1), inputCommandParts.get(2), Integer.valueOf(inputCommandParts.get(3))));
         } catch (NumberFormatException ex) {
             throw new ValidationException("Number of armies(latest parameter) must be an integer number.");
         }

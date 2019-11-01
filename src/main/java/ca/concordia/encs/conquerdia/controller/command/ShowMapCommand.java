@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

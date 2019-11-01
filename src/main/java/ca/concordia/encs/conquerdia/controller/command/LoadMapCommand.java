@@ -33,6 +33,6 @@ public class LoadMapCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
-        resultList.add(WorldMap.getInstance().loadMap(inputCommandParts.get(1)));
+        phaseLogList.add(WorldMap.getInstance().loadMap(inputCommandParts.get(1)));
     }
 }

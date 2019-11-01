@@ -36,7 +36,7 @@ public class EditContinentCommand extends AbstractCommand {
                     String continentName = iterator.next();
                     String continentValue = iterator.next();
                     try {
-                        resultList.add(WorldMap.getInstance().addContinent(continentName, Integer.valueOf(continentValue)));
+                        phaseLogList.add(WorldMap.getInstance().addContinent(continentName, Integer.valueOf(continentValue)));
                     } catch (NumberFormatException ex) {
                         errorList.add("Continent value must be an integer number.");
                     }
@@ -44,7 +44,7 @@ public class EditContinentCommand extends AbstractCommand {
                 }
                 case "-remove": {
                     String continentName = iterator.next();
-                    resultList.add(WorldMap.getInstance().removeContinent(continentName));
+                    phaseLogList.add(WorldMap.getInstance().removeContinent(continentName));
                     break;
                 }
                 default: {

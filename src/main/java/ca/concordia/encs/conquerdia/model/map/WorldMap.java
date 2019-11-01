@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.map.io.IMapReader;
 import ca.concordia.encs.conquerdia.model.map.io.IMapWriter;
@@ -23,7 +24,8 @@ public class WorldMap {
     private boolean newMapFromScratch;
     private boolean readyForEdit;
     private boolean mapLoaded;
-
+    private boolean connectedGraph;
+    private boolean connectedSubGraph;
 
     private WorldMap() {
     }
@@ -77,13 +79,14 @@ public class WorldMap {
      * exist.
      *
      * @param fileName name of the map file file to edit
-     * @return the result message
      */
-    public String editMap(String fileName) {
+    public void editMap(String fileName) throws ValidationException {
+        if (StringUtils.isBlank(fileName)) {
+            throw new ValidationException("File name must not be blank!");
+        }
         this.fileName = fileName;
         readyForEdit = true;
         newMapFromScratch = !openMapFile();
-        return String.format("Map with file name \"%s\" is ready to edit", fileName);
     }
 
     /**
@@ -268,7 +271,6 @@ public class WorldMap {
         return continents.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }
 
-
     /**
      * @return All counties in map
      */
@@ -308,7 +310,6 @@ public class WorldMap {
         return countries.containsKey(countryName);
     }
 
-
     /**
      * @return return true if the map was loaded
      */
@@ -326,9 +327,6 @@ public class WorldMap {
     public boolean isReadyForEdit() {
         return readyForEdit;
     }
-
-    private boolean connectedGraph;
-    private boolean connectedSubGraph;
 
     /**
      * Validate the map
@@ -406,12 +404,16 @@ public class WorldMap {
         boolean result = countries.containsAll(countryNames);
         return result;
     }
-    
+
     /**
      * Clears the data of the map and resets it
      */
     public void clear() {
         continents.clear();
         countries.clear();
+    }
+
+    public boolean isNewMapFromScratch() {
+        return newMapFromScratch;
     }
 }

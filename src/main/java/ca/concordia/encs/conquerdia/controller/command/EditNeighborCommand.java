@@ -36,11 +36,11 @@ public class EditNeighborCommand extends AbstractCommand {
             String secondCountryName = iterator.next();
             switch (option) {
                 case ("-add"): {
-                    resultList.add(WorldMap.getInstance().addNeighbour(firstCountryName, secondCountryName));
+                    phaseLogList.add(WorldMap.getInstance().addNeighbour(firstCountryName, secondCountryName));
                     break;
                 }
                 case "-remove": {
-                    resultList.add(WorldMap.getInstance().removeNeighbour(firstCountryName, secondCountryName));
+                    phaseLogList.add(WorldMap.getInstance().removeNeighbour(firstCountryName, secondCountryName));
                     break;
                 }
                 default: {

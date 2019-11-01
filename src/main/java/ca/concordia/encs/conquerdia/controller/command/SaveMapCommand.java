@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SaveMapCommand extends AbstractCommand {
@@ -25,6 +24,6 @@ public class SaveMapCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
-        resultList.add(WorldMap.getInstance().saveMap(inputCommandParts.get(1)));
+        phaseLogList.add(WorldMap.getInstance().saveMap(inputCommandParts.get(1)));
     }
 }

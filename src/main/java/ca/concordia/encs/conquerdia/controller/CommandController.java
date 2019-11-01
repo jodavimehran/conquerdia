@@ -17,12 +17,12 @@ public class CommandController {
     public void executeCommand(String commandStr) {
         String[] inputCommandParts = commandStr.trim().split(" ");
         if (inputCommandParts.length <= 0) {
-            CommandResultModel.getInstance().setResult("Invalid Command! A valid command must have at least one part.");
+            CommandResultModel.getInstance().addResult("Invalid Command! A valid command must have at least one part.");
             return;
         }
         CommandType commandType = Command.createCommand(inputCommandParts);
         if (commandType == null) {
-            CommandResultModel.getInstance().setResult("Command not found.");
+            CommandResultModel.getInstance().addResult("Command not found.");
             return;
         }
         commandType.getCommand().execute(Arrays.asList(inputCommandParts));

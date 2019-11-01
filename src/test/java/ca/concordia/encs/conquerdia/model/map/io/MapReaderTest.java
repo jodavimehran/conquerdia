@@ -33,7 +33,6 @@ public class MapReaderTest {
     @Before
     public void beforeTests() {
         worldMap = WorldMap.getInstance();
-        worldMap.editMap("uk.map");
         reader = new MapReader(worldMap);
         isReadSuccessful = reader.readMap("uk.map");
     }

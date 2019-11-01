@@ -27,7 +27,7 @@ public class ValidateMapCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
-        resultList.add(WorldMap.getInstance().validateMap());
+        phaseLogList.add(WorldMap.getInstance().validateMap());
     }
 
 }

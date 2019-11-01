@@ -39,7 +39,7 @@ public class GamePlayerCommand extends AbstractCommand {
                 case ("-add"): {
                     try {
                         GameModel.getInstance().addPlayer(playerName);
-                        resultList.add(String.format("Player with name \"%s\" was added", playerName));
+                        phaseLogList.add(String.format("Player with name \"%s\" was added", playerName));
                     } catch (ValidationException ex) {
                         errorList.addAll(ex.getValidationErrors());
                     }
@@ -48,7 +48,7 @@ public class GamePlayerCommand extends AbstractCommand {
                 case "-remove": {
                     try {
                         GameModel.getInstance().removePlayer(playerName);
-                        resultList.add(String.format("Player with name \"%s\" was removed.", playerName));
+                        phaseLogList.add(String.format("Player with name \"%s\" was removed.", playerName));
                     } catch (ValidationException ex) {
                         errorList.addAll(ex.getValidationErrors());
                     }

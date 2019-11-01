@@ -3,6 +3,7 @@ package ca.concordia.encs.conquerdia.model;
 import ca.concordia.encs.conquerdia.controller.command.CommandType;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -72,7 +73,7 @@ public class PhaseModel extends Observable {
                 changePhase(PhaseTypes.REINFORCEMENT);
                 giveTurnToAnotherPlayer();
                 currentPlayer.calculateNumberOfReinforcementArmies();
-                CommandResultModel.getInstance().setResult(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
+                CommandResultModel.getInstance().addResult(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
                 break;
             }
         }
@@ -116,18 +117,20 @@ public class PhaseModel extends Observable {
     }
 
     public void addPhaseLogs(List<String> logs) {
-        if (logs != null) {
+        if (logs != null && !logs.isEmpty()) {
             LocalTime now = LocalTime.now();
             logs.stream().forEach(log -> phaseLog.add(now + "-" + log));
+            setChanged();
+            notifyObservers(this);
         }
-        setChanged();
-        notifyObservers(this);
     }
 
     public void addPhaseLog(String log) {
-        phaseLog.add(java.time.LocalTime.now() + "-" + log);
-        setChanged();
-        notifyObservers(this);
+        if (StringUtils.isNotBlank(log)) {
+            phaseLog.add(java.time.LocalTime.now() + "-" + log);
+            setChanged();
+            notifyObservers(this);
+        }
     }
 
     /**

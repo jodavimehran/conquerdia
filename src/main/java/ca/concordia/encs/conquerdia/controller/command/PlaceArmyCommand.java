@@ -23,6 +23,6 @@ public class PlaceArmyCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
-        resultList.add(GameModel.getInstance().placeArmy(inputCommandParts.get(1)));
+        phaseLogList.add(GameModel.getInstance().placeArmy(inputCommandParts.get(1)));
     }
 }

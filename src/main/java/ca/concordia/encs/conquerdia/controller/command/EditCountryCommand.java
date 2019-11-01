@@ -32,12 +32,12 @@ public class EditCountryCommand extends AbstractCommand {
                 case ("-add"): {
                     String countryName = iterator.next();
                     String continentName = iterator.next();
-                    resultList.add(WorldMap.getInstance().addCountry(countryName, continentName));
+                    phaseLogList.add(WorldMap.getInstance().addCountry(countryName, continentName));
                     break;
                 }
                 case "-remove": {
                     String countryName = iterator.next();
-                    resultList.add(WorldMap.getInstance().removeCountry(countryName));
+                    phaseLogList.add(WorldMap.getInstance().removeCountry(countryName));
                     break;
                 }
                 default: {

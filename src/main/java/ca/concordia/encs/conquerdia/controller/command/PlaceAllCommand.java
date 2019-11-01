@@ -22,7 +22,7 @@ public class PlaceAllCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
-        resultList.add(GameModel.getInstance().placeAll());
+        phaseLogList.add(GameModel.getInstance().placeAll());
     }
 
 }

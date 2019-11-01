@@ -27,7 +27,6 @@ public class MapWriterTest {
     @Before
     public void beforeTests() {
         worldMap = WorldMap.getInstance();
-        worldMap.editMap("test");
 
         // CONTINENTS
         worldMap.addContinent("Asia", 1);

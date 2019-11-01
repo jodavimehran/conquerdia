@@ -19,7 +19,7 @@ public class MapValidationTest {
     @Before
     public void setUp() {
         worldMap = WorldMap.getInstance();
-        worldMap.editMap("someMapName");
+
         //CONTINENTS
         worldMap.addContinent("Asia", 1);
         worldMap.addContinent("Europe", 3);

@@ -25,7 +25,7 @@ public class ReinforceCommand extends AbstractCommand {
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
         try {
-            resultList.add(PhaseModel.getInstance().getCurrentPlayer().reinforce(inputCommandParts.get(1), Integer.valueOf(inputCommandParts.get(2))));
+            phaseLogList.add(PhaseModel.getInstance().getCurrentPlayer().reinforce(inputCommandParts.get(1), Integer.valueOf(inputCommandParts.get(2))));
         } catch (NumberFormatException ex) {
             throw new ValidationException("Number of armies(latest parameter) must be an integer number.");
         }

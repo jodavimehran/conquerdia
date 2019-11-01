@@ -16,8 +16,9 @@ public class CommandResultView implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         output.println("****    Command Result View     ****************************************************************");
-        output.println(((CommandResultModel) o).getResult());
+        for (String result : ((CommandResultModel) o).getResultList()) {
+            output.println(result);
+        }
         output.println("****____________________________________________________________________________________________");
-
     }
 }

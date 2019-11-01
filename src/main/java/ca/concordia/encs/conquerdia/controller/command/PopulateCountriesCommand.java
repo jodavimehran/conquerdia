@@ -26,6 +26,6 @@ public class PopulateCountriesCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
-        resultList.add(GameModel.getInstance().populateCountries());
+        phaseLogList.add(GameModel.getInstance().populateCountries());
     }
 }

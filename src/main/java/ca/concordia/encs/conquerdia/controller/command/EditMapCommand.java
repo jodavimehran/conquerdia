@@ -7,7 +7,7 @@ import java.util.List;
 
 public class EditMapCommand extends AbstractCommand {
 
-    private static final String COMMAND_HELP_MSG = "Invalid \"editmap\" command. A valid \"editmap\" command is something like \"editmap filename\".";
+    private static final String COMMAND_HELP_MSG = "A valid \"editmap\" command is something like \"editmap filename\".";
 
     @Override
     protected CommandType getCommandType() {
@@ -24,6 +24,15 @@ public class EditMapCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
-        resultList.add(WorldMap.getInstance().editMap(inputCommandParts.get(1)));
+        String fileName = inputCommandParts.get(1);
+        WorldMap.getInstance().editMap(fileName);
+        if (!WorldMap.getInstance().isReadyForEdit()) {
+            throw new ValidationException("Map is not loaded successfully!");
+        }
+        if (WorldMap.getInstance().isNewMapFromScratch()) {
+            phaseLogList.add("A new map from scratch is loaded to edit.");
+        } else {
+            phaseLogList.add(String.format("Map with file name \"%s\" is loaded to edit", fileName));
+        }
     }
 }
