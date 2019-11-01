@@ -1,19 +1,12 @@
 package ca.concordia.encs.conquerdia.model;
 
-import ca.concordia.encs.conquerdia.model.map.Country;
-import ca.concordia.encs.conquerdia.model.map.WorldMap;
-
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * The game model
  */
 public class GameModel {
     private static GameModel instance;
-    private final Map<String, Player> players = new HashMap<>();
 
     private GameModel() {
     }
@@ -36,92 +29,46 @@ public class GameModel {
 
 
     /**
-     * This method randomly assign a country to a player
-     *
-     * @return the result message
-     */
-    public String populateCountries() {
-        int numberOfPlayers = players.size();
-        if (numberOfPlayers < 3)
-            return "The game need at least Three players to start.";
-        Set<Country> countries = WorldMap.getInstance().getCountries();
-        int numberOfCountries = countries.size();
-        if (numberOfPlayers > numberOfCountries)
-            return "Too Many Players! Number of player must be equal or lower than number of countries in map!";
-        SecureRandom randomNumber = new SecureRandom();
-        {
-            Player[] playerArray = new Player[numberOfPlayers];
-            playerArray = players.values().toArray(playerArray);
-
-            int firstOne = randomNumber.nextInt(numberOfPlayers - 1);
-            for (int i = 0; i < numberOfPlayers; i++) {
-                // PhaseModel.getInstance().addPlayer(playerArray[firstOne++]);
-                if (firstOne >= numberOfPlayers)
-                    firstOne = 0;
-            }
-        }
-        {
-            while (!countries.isEmpty()) {
-                Country[] countryArray = new Country[countries.size()];
-                countryArray = countries.toArray(countryArray);
-                int value = randomNumber.nextInt(countries.size());
-                Country country = countryArray[value];
-                Player player = PhaseModel.getInstance().getCurrentPlayer();
-                country.setOwner(player);
-                country.placeOneArmy();
-                player.addCountry(country);
-                if (player.ownedAll(country.getContinent().getCountriesName()))
-                    player.addContinent(country.getContinent());
-                countries.remove(country);
-                PhaseModel.getInstance().giveTurnToAnotherPlayer();
-            }
-        }
-        int numberOfInitialArmies = calculateNumberOfInitialArmies(numberOfPlayers);
-        players.forEach((key, value) -> value.addUnplacedArmies(numberOfInitialArmies - value.getNumberOfCountries()));
-        StringBuilder sb = new StringBuilder();
-        sb.append("All ").append(numberOfCountries).append(" countries are populated and each of ").append(numberOfPlayers).append(" players are allocated ").append(numberOfInitialArmies).append(" initial armies.").append(System.getProperty("line.separator"));
-        appendPlaceArmyMessage(sb);
-        return sb.toString();
-    }
-
-    /**
      * @param countryName Name of the country that one army be placed on it
      * @return the result
      */
     public String placeArmy(String countryName) {
-        Country country = WorldMap.getInstance().getCountry(countryName);
-        if (country == null)
-            return String.format("Country with name \"%s\" was not found!", countryName);
-        String currentPlayerName = PhaseModel.getInstance().getCurrentPlayer().getName();
-        if (country.getOwner() == null || !country.getOwner().getName().equals(currentPlayerName))
-            return String.format("Dear %s, Country with name \"%s\" does not belong to you!", currentPlayerName, countryName);
-        Player player = players.get(currentPlayerName);
-        StringBuilder sb = new StringBuilder();
-        if (player.getUnplacedArmies() < 1) {
-            sb.append("You Don't have any unplaced army!");
-//            giveTurnToAnotherPlayer();
-            appendPlaceArmyMessage(sb);
-            return sb.toString();
-        }
-        player.minusUnplacedArmies(1);
-        country.placeOneArmy();
-        sb.append(currentPlayerName).append(" placed one army to ").append(countryName);
-//        for (int i = 0; i < playersPosition.length; i++) {
-//            giveTurnToAnotherPlayer();
-//            if (players.get(currentPlayerName).getUnplacedArmies() > 0) {
-//                appendPlaceArmyMessage(sb);
-//                return sb.toString();
-//            }
+        //TODO: change and move
+//        Country country = WorldMap.getInstance().getCountry(countryName);
+//        if (country == null)
+//            return String.format("Country with name \"%s\" was not found!", countryName);
+//        String currentPlayerName = PhaseModel.getInstance().getCurrentPlayer().getName();
+//        if (country.getOwner() == null || !country.getOwner().getName().equals(currentPlayerName))
+//            return String.format("Dear %s, Country with name \"%s\" does not belong to you!", currentPlayerName, countryName);
+//        Player player = players.get(currentPlayerName);
+//        StringBuilder sb = new StringBuilder();
+//        if (player.getUnplacedArmies() < 1) {
+//            sb.append("You Don't have any unplaced army!");
+////            giveTurnToAnotherPlayer();
+//            appendPlaceArmyMessage(sb);
+//            return sb.toString();
 //        }
-        sb.append(System.getProperty("line.separator"));
-        sb.append("All players have placed their armies.").append(System.getProperty("line.separator"));
-        sb.append("Startup phase is finished.").append(System.getProperty("line.separator"));
-        sb.append("The turn-based main play phase is began.").append(System.getProperty("line.separator"));
+//        player.minusUnplacedArmies(1);
+//        country.placeOneArmy();
+//        sb.append(currentPlayerName).append(" placed one army to ").append(countryName);
+////        for (int i = 0; i < playersPosition.length; i++) {
+////            giveTurnToAnotherPlayer();
+////            if (players.get(currentPlayerName).getUnplacedArmies() > 0) {
+////                appendPlaceArmyMessage(sb);
+////                return sb.toString();
+////            }
+////        }
+//        sb.append(System.getProperty("line.separator"));
+//        sb.append("All players have placed their armies.").append(System.getProperty("line.separator"));
+//        sb.append("Startup phase is finished.").append(System.getProperty("line.separator"));
+//        sb.append("The turn-based main play phase is began.").append(System.getProperty("line.separator"));
 //        currentPhase = GamePhases.REINFORCEMENTS;
 //        currentPlayer = 0;
 //        runMainPlayPhase(sb);
-        return sb.toString();
+//        return sb.toString();
+        return null;
     }
+
 
     /**
      * This method automatically randomly place all remaining unplaced armies for all players
@@ -164,36 +111,6 @@ public class GameModel {
 //                break;
 //        }
 //    }
-
-
-    /**
-     * @param stringBuilder string builder
-     */
-    private void appendPlaceArmyMessage(StringBuilder stringBuilder) {
-        stringBuilder.append(System.getProperty("line.separator"));
-        stringBuilder.append("===========================================").append(System.getProperty("line.separator"));
-//        stringBuilder.append("Dear ").append(currentPlayerName).append(", you have ").append(players.get(currentPlayerName).getUnplacedArmies()).append(" unplaced armies.").append(System.getProperty("line.separator"));
-        stringBuilder.append("Use \"placearmy\" to place one of them or use \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
-    }
-
-    /**
-     * Calculate number of initial armies depending on the number of players.
-     *
-     * @param numberOfPlayers the number of players
-     * @return number of initial armies
-     */
-    private int calculateNumberOfInitialArmies(int numberOfPlayers) {
-        switch (numberOfPlayers) {
-            case 3:
-                return 35;
-            case 4:
-                return 30;
-            case 5:
-                return 25;
-            default:
-                return 20;
-        }
-    }
 
 
 }

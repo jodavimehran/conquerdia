@@ -2,10 +2,12 @@ package ca.concordia.encs.conquerdia.model;
 
 import ca.concordia.encs.conquerdia.controller.command.CommandType;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
 import org.apache.commons.lang3.StringUtils;
 
+import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +21,9 @@ public class PhaseModel extends Observable {
     private final Set<String> playerNames = new HashSet<>();
     private final Queue<Player> players = new LinkedList<>();
     private PhaseTypes currentPhase = PhaseTypes.NONE;
-    private Player currentPlayer;
+    private int numberOfInitialArmies = -1;
+    private boolean allCountriesArePopulated;
+    private Player firstPlayer;
 
     /**
      * private Constructor to implementation of the Singleton Pattern
@@ -44,6 +48,20 @@ public class PhaseModel extends Observable {
     }
 
     /**
+     * @return number of initial armies
+     */
+    public int getNumberOfInitialArmies() {
+        return numberOfInitialArmies;
+    }
+
+    /**
+     * @return number of players
+     */
+    public int getNumberOfPlayers() {
+        return playerNames.size();
+    }
+
+    /**
      * Add a new player to the game if player name will not found in current player
      * name is
      *
@@ -56,11 +74,7 @@ public class PhaseModel extends Observable {
             throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
         playerNames.add(playerName);
         Player player = new Player.Builder(playerName).build();
-        if (currentPlayer == null) {
-            currentPlayer = player;
-        } else {
-            players.add(player);
-        }
+        players.add(player);
     }
 
     /**
@@ -72,16 +86,11 @@ public class PhaseModel extends Observable {
         if (!playerNames.contains(playerName))
             throw new ValidationException(String.format("Player with name \"%s\" is not found.", playerName));
         playerNames.remove(playerName);
-        if (currentPlayer.getName().equals(playerName)) {
-            currentPlayer = players.poll();
-        } else {
-            players.removeIf(player -> player.getName().equals(playerName));
-        }
+        players.removeIf(player -> player.getName().equals(playerName));
     }
 
-
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return players.peek();
     }
 
     public void changePhase() {
@@ -100,11 +109,27 @@ public class PhaseModel extends Observable {
                 }
                 break;
             }
+            case START_UP: {
+                if (allCountriesArePopulated) {
+                    if (isThereAnyUnplacedArmy()) {
+                        while (getCurrentPlayer().getUnplacedArmies() <= 0) {
+                            giveTurnToAnotherPlayer();
+                        }
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append("Dear ").append(getCurrentPlayer().getName()).append(", you have ").append(getCurrentPlayer().getUnplacedArmies()).append(" unplaced armies.").append(System.getProperty("line.separator"));
+                        stringBuilder.append("Use \"placearmy\" to place one of them or use \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
+                        CommandResultModel.getInstance().addResult(stringBuilder.toString());
+                    } else {
+                        changePhase(PhaseTypes.REINFORCEMENT);
+                    }
+                }
+
+            }
             case FORTIFICATION: {
                 changePhase(PhaseTypes.REINFORCEMENT);
                 giveTurnToAnotherPlayer();
-                currentPlayer.calculateNumberOfReinforcementArmies();
-                CommandResultModel.getInstance().addResult(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
+                getCurrentPlayer().calculateNumberOfReinforcementArmies();
+                CommandResultModel.getInstance().addResult(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
                 break;
             }
         }
@@ -122,8 +147,7 @@ public class PhaseModel extends Observable {
      * give turn to another player based on player positions
      */
     public void giveTurnToAnotherPlayer() {
-        players.add(currentPlayer);
-        currentPlayer = players.poll();
+        players.add(players.poll());
     }
 
     public boolean isValidCommand(CommandType commandType) {
@@ -137,8 +161,8 @@ public class PhaseModel extends Observable {
     public String getPhaseStatus() {
         StringBuilder sb = new StringBuilder();
         sb.append("Phase: ").append(currentPhase.getName());
-        if (currentPlayer != null)
-            sb.append(",Player: ").append(currentPlayer.getName());
+        if (getCurrentPlayer() != null && (currentPhase.equals(PhaseTypes.REINFORCEMENT) || currentPhase.equals(PhaseTypes.FORTIFICATION) || currentPhase.equals(PhaseTypes.ATTACK)))
+            sb.append(",Player: ").append(getCurrentPlayer().getName());
         if (!phaseLog.isEmpty()) {
             for (String log : phaseLog) {
                 sb.append(System.getProperty("line.separator")).append(log);
@@ -161,6 +185,75 @@ public class PhaseModel extends Observable {
             phaseLog.add(java.time.LocalTime.now() + "-" + log);
             setChanged();
             notifyObservers(this);
+        }
+    }
+
+    /**
+     * This method randomly assign a country to a player
+     */
+    public void populateCountries() throws ValidationException {
+        int numberOfPlayers = playerNames.size();
+        if (numberOfPlayers < 3)
+            throw new ValidationException("The game need at least Three players to start.");
+        Set<Country> countries = WorldMap.getInstance().getCountries();
+        int numberOfCountries = countries.size();
+        if (numberOfPlayers > numberOfCountries)
+            throw new ValidationException("Too Many Players! Number of player must be equal or lower than number of countries in map!");
+        SecureRandom randomNumber = new SecureRandom();
+        int randomInt = randomNumber.nextInt(numberOfPlayers - 1);
+        for (int i = 0; i < randomInt; i++) {
+            giveTurnToAnotherPlayer();
+        }
+        firstPlayer = getCurrentPlayer();
+        while (!countries.isEmpty()) {
+            Country[] countryArray = new Country[countries.size()];
+            countryArray = countries.toArray(countryArray);
+            int value = randomNumber.nextInt(countries.size());
+            Country country = countryArray[value];
+
+            country.setOwner(getCurrentPlayer());
+            country.placeOneArmy();
+            getCurrentPlayer().addCountry(country);
+            if (getCurrentPlayer().ownedAll(country.getContinent().getCountriesName()))
+                getCurrentPlayer().addContinent(country.getContinent());
+            countries.remove(country);
+            giveTurnToAnotherPlayer();
+        }
+        giveTurnToFirstPlayer();
+        int numberOfInitialArmies = calculateNumberOfInitialArmies(numberOfPlayers);
+        players.forEach(player -> player.addUnplacedArmies(numberOfInitialArmies - player.getNumberOfCountries()));
+        allCountriesArePopulated = true;
+    }
+
+    private void giveTurnToFirstPlayer() {
+        while (!firstPlayer.equals(getCurrentPlayer())) {
+            giveTurnToAnotherPlayer();
+        }
+    }
+
+    /**
+     * @return true if there is any player with unplaced army
+     */
+    private boolean isThereAnyUnplacedArmy() {
+        return players.stream().filter(player -> player.getUnplacedArmies() > 0).count() > 0;
+    }
+
+    /**
+     * Calculate number of initial armies depending on the number of players.
+     *
+     * @param numberOfPlayers the number of players
+     * @return number of initial armies
+     */
+    private int calculateNumberOfInitialArmies(int numberOfPlayers) {
+        switch (numberOfPlayers) {
+            case 3:
+                return 35;
+            case 4:
+                return 30;
+            case 5:
+                return 25;
+            default:
+                return 20;
         }
     }
 
