@@ -137,7 +137,10 @@ class MapReader extends MapIO implements IMapReader {
         int neighborIndex;
         for (int i = 1; i < countryBorders.length; i++) {
             neighborIndex = Integer.parseInt(countryBorders[i]) - 1;
-            worldMap.addNeighbour(countryName, countryList.get(neighborIndex));
+            try {
+                worldMap.addNeighbour(countryName, countryList.get(neighborIndex));
+            } catch (ValidationException ex) {
+            }
         }
     }
 }

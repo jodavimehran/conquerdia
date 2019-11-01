@@ -29,7 +29,6 @@ public class GamePlayerCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
-        List<String> commands = new ArrayList<>();
         Iterator<String> iterator = inputCommandParts.iterator();
         iterator.next();
         while (iterator.hasNext()) {

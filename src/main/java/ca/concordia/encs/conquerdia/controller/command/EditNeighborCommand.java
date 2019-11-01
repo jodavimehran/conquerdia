@@ -36,11 +36,21 @@ public class EditNeighborCommand extends AbstractCommand {
             String secondCountryName = iterator.next();
             switch (option) {
                 case ("-add"): {
-                    phaseLogList.add(WorldMap.getInstance().addNeighbour(firstCountryName, secondCountryName));
+                    try {
+                        WorldMap.getInstance().addNeighbour(firstCountryName, secondCountryName);
+                        phaseLogList.add(String.format("a country adjacency between \"%s\" and \"%s\" is added.", firstCountryName, secondCountryName));
+                    } catch (ValidationException ex) {
+                        errorList.addAll(ex.getValidationErrors());
+                    }
                     break;
                 }
                 case "-remove": {
-                    phaseLogList.add(WorldMap.getInstance().removeNeighbour(firstCountryName, secondCountryName));
+                    try {
+                        WorldMap.getInstance().removeNeighbour(firstCountryName, secondCountryName);
+                        phaseLogList.add(String.format("a country adjacency between \"%s\" and \"%s\" is removed.", firstCountryName, secondCountryName));
+                    } catch (ValidationException ex) {
+                        errorList.addAll(ex.getValidationErrors());
+                    }
                     break;
                 }
                 default: {

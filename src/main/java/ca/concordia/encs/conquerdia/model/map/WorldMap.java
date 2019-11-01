@@ -218,44 +218,42 @@ public class WorldMap {
     /**
      * @param firstCountryName  first country
      * @param secondCountryName second country
-     * @return result
+     * @throws ValidationException
      */
-    public String addNeighbour(String firstCountryName, String secondCountryName) {
-        if (!countries.containsKey(firstCountryName))
-            return String.format("Country with name \"%s\" is not found.", firstCountryName);
-        if (!countries.containsKey(secondCountryName))
-            return String.format("Country with name \"%s\" is not found.", secondCountryName);
+    public void addNeighbour(String firstCountryName, String secondCountryName) throws ValidationException {
+        if (!countries.containsKey(firstCountryName)) {
+            throw new ValidationException(String.format("Country with name \"%s\" is not found.", firstCountryName));
+        }
+        if (!countries.containsKey(secondCountryName)) {
+            throw new ValidationException(String.format("Country with name \"%s\" is not found.", secondCountryName));
+        }
         Country firstCountry = countries.get(firstCountryName);
         Country secondCountry = countries.get(secondCountryName);
 
-        if (firstCountry.isAdjacentTo(secondCountryName) && secondCountry.isAdjacentTo(firstCountryName))
-            return String.format("\"%s\" and \"%s\" are already adjacent countries.", firstCountryName, secondCountryName);
-
+        if (firstCountry.isAdjacentTo(secondCountryName) && secondCountry.isAdjacentTo(firstCountryName)) {
+            throw new ValidationException(String.format("\"%s\" and \"%s\" are already adjacent countries.", firstCountryName, secondCountryName));
+        }
         firstCountry.addNeighbour(secondCountry);
         secondCountry.addNeighbour(firstCountry);
-
-        return String.format("\"%s\" and \"%s\" are adjacent countries now.", firstCountryName, secondCountryName);
     }
 
     /**
      * @param firstCountryName  first country
      * @param secondCountryName second country
-     * @return result
+     * @throws ValidationException
      */
-    public String removeNeighbour(String firstCountryName, String secondCountryName) {
+    public void removeNeighbour(String firstCountryName, String secondCountryName) throws ValidationException {
         if (!countries.containsKey(firstCountryName))
-            return String.format("Country with name \"%s\" is not found.", firstCountryName);
+            throw new ValidationException(String.format("Country with name \"%s\" is not found.", firstCountryName));
         if (!countries.containsKey(secondCountryName))
-            return String.format("Country with name \"%s\" is not found.", secondCountryName);
+            throw new ValidationException(String.format("Country with name \"%s\" is not found.", secondCountryName));
         Country firstCountry = countries.get(firstCountryName);
         Country secondCountry = countries.get(secondCountryName);
         if (!firstCountry.isAdjacentTo(secondCountryName) && !secondCountry.isAdjacentTo(firstCountryName))
-            return String.format("\"%s\" and \"%s\" are not adjacent countries.", firstCountryName, secondCountryName);
+            throw new ValidationException(String.format("\"%s\" and \"%s\" are not adjacent countries.", firstCountryName, secondCountryName));
         removeNeighbour(firstCountry, secondCountry);
         if (!countries.containsKey(firstCountryName))
-            return String.format("Country with name \"%s\" is not found.", firstCountryName);
-
-        return String.format("\"%s\" and \"%s\" are not adjacent countries now.", firstCountryName, secondCountryName);
+            throw new ValidationException(String.format("Country with name \"%s\" is not found.", firstCountryName));
     }
 
     /**
