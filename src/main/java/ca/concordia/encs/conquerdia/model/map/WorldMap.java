@@ -139,77 +139,80 @@ public class WorldMap {
      * @param continentValue value of the continent
      * @return return the result
      */
-    public String addContinent(String continentName, Integer continentValue) {
+    public void addContinent(String continentName, Integer continentValue) throws ValidationException {
         if (StringUtils.isBlank(continentName))
-            return "Continent name is not valid!";
+            throw new ValidationException("Continent name is not valid!");
         if (continentValue == null || continentValue <= 0)
-            return "Continent value is not valid!";
+            throw new ValidationException("Continent value is not valid!");
         if (continents.containsKey(continentName)) {
-            return String.format("Continent with name \"%s\" is already exist.", continentName);
+            throw new ValidationException(String.format("Continent with name \"%s\" is already exist.", continentName));
         }
         Continent continent = new Continent.Builder(continentName)
                 .setValue(Integer.valueOf(continentValue))
                 .build();
         continents.put(continentName, continent);
-        return String.format("Continent with name \"%s\" is successfully added to map", continentName);
     }
 
     /**
-     * @param continentName continent name
-     * @return result
+     * @param continentName name of the continent to be removed
+     * @return the removed continent
+     * @throws ValidationException when a validation exception occurs
      */
-    public String removeContinent(String continentName) {
+    public Continent removeContinent(String continentName) throws ValidationException {
         if (StringUtils.isBlank(continentName))
-            return "Continent name is not valid!";
+            new ValidationException("Continent name is not valid!");
         if (!continents.containsKey(continentName)) {
-            return String.format("Continent with name \"%s\" is not found.", continentName);
+            new ValidationException(String.format("Continent with name \"%s\" is not found.", continentName));
         }
         Continent toRemove = continents.get(continentName);
         for (String countryName : toRemove.getCountriesName()) {
             removeCountry(countryName);
         }
         continents.remove(continentName);
-        return String.format("Continent with name \"%s\" is successfully removed from World Map", continentName);
+        return toRemove;
     }
 
     /**
-     * @param countryName   name of the country
-     * @param continentName continent name
-     * @return result
+     * This method create a new country and add it to a continent
+     *
+     * @param countryName   name of the country to be added
+     * @param continentName name of the continent for adding the new country to it
+     * @throws ValidationException when a country or continent name is not valid. Also it throws when a country with
+     *                             this country name is already exist
      */
-    public String addCountry(String countryName, String continentName) {
+    public void addCountry(String countryName, String continentName) throws ValidationException {
         if (StringUtils.isBlank(countryName))
-            return "Country name is not valid!";
+            throw new ValidationException("Country name is not valid!");
         if (StringUtils.isBlank(continentName))
-            return "Continent name is not valid!";
+            throw new ValidationException("Continent name is not valid!");
         if (countries.containsKey(countryName)) {
-            return String.format("Country with name \"%s\" is already exist.", countryName);
+            throw new ValidationException(String.format("Country with name \"%s\" is already exist.", countryName));
         }
         if (!continents.containsKey(continentName)) {
-            return String.format("Continent with name \"%s\" does not exist in World Map!", continentName);
+            throw new ValidationException(String.format("Continent with name \"%s\" does not exist in World Map!", continentName));
         }
         Country country = new Country.Builder(countryName, continents.get(continentName)).build();
         countries.put(countryName, country);
         continents.get(continentName).addCountry(country);
-        return String.format("Country with name \"%s\" is successfully added to \"%s\"", countryName, continentName);
     }
 
     /**
-     * This Method add this country to the map
+     * This method removes a country from map
      *
-     * @param countryName country name
-     * @return return message result
+     * @param countryName to be removed country name
+     * @return removed country object
+     * @throws ValidationException
      */
-    public String removeCountry(String countryName) {
+    public Country removeCountry(String countryName) throws ValidationException {
         if (!countries.containsKey(countryName)) {
-            return String.format("Country with name \"%s\" is not found.", countryName);
+            throw new ValidationException(String.format("Country with name \"%s\" is not found.", countryName));
         }
         Country removed = countries.remove(countryName);
         removed.getContinent().removeCountry(countryName);
         for (Country adjacentCountry : removed.getAdjacentCountries()) {
             removeNeighbour(removed, adjacentCountry);
         }
-        return String.format("Country with name \"%s\" is successfully removed from World Map", countryName);
+        return removed;
     }
 
     /**
