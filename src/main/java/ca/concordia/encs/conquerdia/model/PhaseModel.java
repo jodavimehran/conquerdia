@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.model;
 
 import ca.concordia.encs.conquerdia.controller.command.CommandType;
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
 import org.apache.commons.lang3.StringUtils;
@@ -15,8 +16,9 @@ import java.util.stream.Collectors;
 public class PhaseModel extends Observable {
     private static PhaseModel instance;
     private final List<String> phaseLog = new ArrayList<>();
+    private final Set<String> playerNames = new HashSet<>();
+    private final Queue<Player> players = new LinkedList<>();
     private PhaseTypes currentPhase = PhaseTypes.NONE;
-    private Queue<Player> players = new LinkedList<>();
     private Player currentPlayer;
 
     /**
@@ -41,13 +43,42 @@ public class PhaseModel extends Observable {
         return instance;
     }
 
-    public void addPlayer(Player player) {
+    /**
+     * Add a new player to the game if player name will not found in current player
+     * name is
+     *
+     * @param playerName name of the plater to add
+     */
+    public void addPlayer(String playerName) throws ValidationException {
+        if (StringUtils.isBlank(playerName))
+            throw new ValidationException("Player name is not valid!");
+        if (playerNames.contains(playerName))
+            throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
+        playerNames.add(playerName);
+        Player player = new Player.Builder(playerName).build();
         if (currentPlayer == null) {
             currentPlayer = player;
         } else {
             players.add(player);
         }
     }
+
+    /**
+     * This Method remove a player
+     *
+     * @param playerName name of the player to remove
+     */
+    public void removePlayer(String playerName) throws ValidationException {
+        if (!playerNames.contains(playerName))
+            throw new ValidationException(String.format("Player with name \"%s\" is not found.", playerName));
+        playerNames.remove(playerName);
+        if (currentPlayer.getName().equals(playerName)) {
+            currentPlayer = players.poll();
+        } else {
+            players.removeIf(player -> player.getName().equals(playerName));
+        }
+    }
+
 
     public Player getCurrentPlayer() {
         return currentPlayer;

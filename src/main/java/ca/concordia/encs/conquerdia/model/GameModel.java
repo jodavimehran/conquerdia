@@ -1,9 +1,7 @@
 package ca.concordia.encs.conquerdia.model;
 
-import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
-import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;
 import java.util.HashMap;
@@ -36,30 +34,6 @@ public class GameModel {
         return instance;
     }
 
-    /**
-     * Add a new player to the game if player name will not found in current player
-     * name is
-     *
-     * @param playerName name of the plater to add
-     */
-    public void addPlayer(String playerName) throws ValidationException {
-        if (StringUtils.isBlank(playerName))
-            throw new ValidationException("Player name is not valid!");
-        if (players.containsKey(playerName))
-            throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
-        players.put(playerName, new Player.Builder(playerName).build());
-    }
-
-    /**
-     * This Method remove a player
-     *
-     * @param playerName name of the player to remove
-     */
-    public void removePlayer(String playerName) throws ValidationException {
-        if (!players.containsKey(playerName))
-            throw new ValidationException(String.format("Player with name \"%s\" is not found.", playerName));
-        players.remove(playerName);
-    }
 
     /**
      * This method randomly assign a country to a player
@@ -81,7 +55,7 @@ public class GameModel {
 
             int firstOne = randomNumber.nextInt(numberOfPlayers - 1);
             for (int i = 0; i < numberOfPlayers; i++) {
-                PhaseModel.getInstance().addPlayer(playerArray[firstOne++]);
+                // PhaseModel.getInstance().addPlayer(playerArray[firstOne++]);
                 if (firstOne >= numberOfPlayers)
                     firstOne = 0;
             }

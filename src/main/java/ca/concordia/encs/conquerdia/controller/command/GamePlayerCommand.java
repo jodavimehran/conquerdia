@@ -1,9 +1,8 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
-import ca.concordia.encs.conquerdia.model.GameModel;
+import ca.concordia.encs.conquerdia.model.PhaseModel;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,8 +36,8 @@ public class GamePlayerCommand extends AbstractCommand {
             switch (option) {
                 case ("-add"): {
                     try {
-                        GameModel.getInstance().addPlayer(playerName);
-                        phaseLogList.add(String.format("Player with name \"%s\" was added", playerName));
+                        PhaseModel.getInstance().addPlayer(playerName);
+                        phaseLogList.add(String.format("Player with name \"%s\" was added.", playerName));
                     } catch (ValidationException ex) {
                         errorList.addAll(ex.getValidationErrors());
                     }
@@ -46,7 +45,7 @@ public class GamePlayerCommand extends AbstractCommand {
                 }
                 case "-remove": {
                     try {
-                        GameModel.getInstance().removePlayer(playerName);
+                        PhaseModel.getInstance().removePlayer(playerName);
                         phaseLogList.add(String.format("Player with name \"%s\" was removed.", playerName));
                     } catch (ValidationException ex) {
                         errorList.addAll(ex.getValidationErrors());
