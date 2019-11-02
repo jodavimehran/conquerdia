@@ -189,6 +189,17 @@ public class Player {
 
         return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName, toCountryName);
     }
+    
+    public String attack(String fromCountryName, String toCountryName, int numdice, boolean isAllout , boolean isNoAttack ) {
+    	
+    	return null;
+    }
+    public String defend() {
+    	return null;
+    }
+    public String attackMove() {
+    	return null;
+    }
 
 
     /**

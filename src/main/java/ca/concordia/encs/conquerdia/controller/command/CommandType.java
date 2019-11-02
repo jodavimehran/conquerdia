@@ -19,7 +19,10 @@ public enum CommandType {
     PLACE_ARMY("placearmy", new PlaceArmyCommand(), 2),
     PLACE_ALL("placeall", new PlaceAllCommand(), 1),
     REINFORCE("reinforce", new ReinforceCommand(), 3),
-    FORTIFY("fortify", new FortifyCommand(), 2);
+    FORTIFY("fortify", new FortifyCommand(), 2),
+	ATTACK("attack" , new AttackCommand() , 4),
+	DEFEND ("defend" , new DefendCommand() , 2),
+	ATTACK_MOVE("attackmove" , new AttackMoveCommand() , 2);
 
     private final String name;
     private final Command command;
