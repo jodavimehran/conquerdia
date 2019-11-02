@@ -79,5 +79,10 @@ public abstract class AbstractCommand implements Command {
      */
     protected abstract CommandType getCommandType();
 
-
+    /**
+     * @return true if the command has minimum number of parameters defined
+     */
+    protected boolean hasMinimumNumberofParameters(List<String> inputCommandParts) {
+    	return inputCommandParts.size() >= getCommandType().getMinNumberOfParts();
+    }
 }
