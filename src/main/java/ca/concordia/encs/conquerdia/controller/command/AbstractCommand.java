@@ -48,12 +48,14 @@ public abstract class AbstractCommand implements Command {
         } else {
             try {
                 runCommand(inputCommandParts);
-                PhaseModel.getInstance().changePhase();
+                resultList.addAll(PhaseModel.getInstance().changePhase());
                 PhaseModel.getInstance().addPhaseLogs(phaseLogList);
                 CommandResultModel.getInstance().addResultList(resultList);
                 if (!errorList.isEmpty()) {
                     CommandResultModel.getInstance().addResult(errorList.stream().collect(Collectors.joining(System.getProperty("line.separator"))));
                 }
+            } catch (ValidationException ex) {
+                CommandResultModel.getInstance().addResultList(ex.getValidationErrors());
             } catch (Exception ex) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("Invalid Command! ").append(getCommandHelpMessage());
@@ -83,6 +85,6 @@ public abstract class AbstractCommand implements Command {
      * @return true if the command has minimum number of parameters defined
      */
     protected boolean hasMinimumNumberofParameters(List<String> inputCommandParts) {
-    	return inputCommandParts.size() >= getCommandType().getMinNumberOfParts();
+        return inputCommandParts.size() >= getCommandType().getMinNumberOfParts();
     }
 }

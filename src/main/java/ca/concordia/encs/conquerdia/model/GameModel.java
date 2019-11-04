@@ -1,10 +1,9 @@
 package ca.concordia.encs.conquerdia.model;
 
-import java.security.SecureRandom;
-
 /**
  * The game model
  */
+@Deprecated
 public class GameModel {
     private static GameModel instance;
 
@@ -69,26 +68,6 @@ public class GameModel {
         return null;
     }
 
-
-    /**
-     * This method automatically randomly place all remaining unplaced armies for all players
-     *
-     * @return the result
-     */
-    public String placeAll() {
-//        if (!GamePhases.COUNTRIES_ARE_POPULATED.equals(currentPhase))
-//            return "Invalid Command! This command is one of the startup phase commands and valid when all countries are populated.";
-        SecureRandom randomNumber = new SecureRandom();
-        StringBuilder sb = new StringBuilder();
-//        while (!GamePhases.REINFORCEMENTS.equals(currentPhase)) {
-//            Set<String> countryNames = players.get(playersPosition[currentPlayer]).getCountryNames();
-//            String[] countriesArray = new String[countryNames.size()];
-//            countriesArray = countryNames.toArray(countriesArray);
-//            sb.append(placeArmy(countriesArray[randomNumber.nextInt(countryNames.size())]));
-//            sb.append(System.getProperty("line.separator"));
-//        }
-        return sb.toString();
-    }
 
     /**
      * @param stringBuilder The builder for append result

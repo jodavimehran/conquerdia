@@ -2,7 +2,7 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 
 /**
- * Every command in the game must be declare in this Enum class and also every command must have an implementation Factory
+ * Every command in the game must be declare in this Enum class and also every command class must extend {@link AbstractCommand}
  * that implement {@link Command command factory}.
  */
 public enum CommandType {
@@ -20,9 +20,9 @@ public enum CommandType {
     PLACE_ALL("placeall", new PlaceAllCommand(), 1),
     REINFORCE("reinforce", new ReinforceCommand(), 3),
     FORTIFY("fortify", new FortifyCommand(), 2),
-	ATTACK("attack" , new AttackCommand() , 4),
-	DEFEND ("defend" , new DefendCommand() , 2),
-	ATTACK_MOVE("attackmove" , new AttackMoveCommand() , 2);
+    ATTACK("attack", new AttackCommand(), 4),
+    DEFEND("defend", new DefendCommand(), 2),
+    ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2);
 
     private final String name;
     private final Command command;

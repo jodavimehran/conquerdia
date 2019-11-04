@@ -1,6 +1,8 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import ca.concordia.encs.conquerdia.model.GameModel;
+import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.PhaseModel;
+import ca.concordia.encs.conquerdia.model.Player;
 
 import java.util.List;
 
@@ -22,7 +24,19 @@ public class PlaceArmyCommand extends AbstractCommand {
      * @return List of Command Results
      */
     @Override
-    public void runCommand(List<String> inputCommandParts) {
-        phaseLogList.add(GameModel.getInstance().placeArmy(inputCommandParts.get(1)));
+    public void runCommand(List<String> inputCommandParts) throws ValidationException {
+        String countryName = inputCommandParts.get(1);
+        PhaseModel phaseModel = PhaseModel.getInstance();
+        phaseModel.placeArmy(countryName);
+        Player currentPlayer = phaseModel.getCurrentPlayer();
+        phaseLogList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
+        phaseModel.giveTurnToAnotherPlayer();
+        boolean thereAnyUnplacedArmy = phaseModel.isThereAnyUnplacedArmy();
+        while (thereAnyUnplacedArmy && currentPlayer.getUnplacedArmies() <= 0) {
+            phaseModel.giveTurnToAnotherPlayer();
+        }
+        if (!thereAnyUnplacedArmy) {
+            phaseLogList.add("Reinforcement phase has began.");
+        }
     }
 }

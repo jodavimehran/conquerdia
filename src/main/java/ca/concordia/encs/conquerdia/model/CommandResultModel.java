@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandResultModel extends Observable {
     private static CommandResultModel instance;
@@ -38,7 +37,11 @@ public class CommandResultModel extends Observable {
      */
     public void addResultList(List<String> resultList) {
         if (resultList != null && !resultList.isEmpty()) {
-            this.resultList.addAll(resultList.stream().filter(StringUtils::isNotBlank).collect(Collectors.toSet()));
+            for (String result : resultList) {
+                if (StringUtils.isNotBlank(result)) {
+                    this.resultList.add(result);
+                }
+            }
             setChanged();
             notifyObservers(this);
         }
