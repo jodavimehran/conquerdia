@@ -15,6 +15,8 @@ public class CommandController {
      * @param commandStr user command
      */
     public void executeCommand(String commandStr) {
+        CommandResultModel.getInstance().clear();
+
         String[] inputCommandParts = commandStr.trim().split(" ");
         if (inputCommandParts.length <= 0) {
             CommandResultModel.getInstance().addResult("Invalid Command! A valid command must have at least one part.");

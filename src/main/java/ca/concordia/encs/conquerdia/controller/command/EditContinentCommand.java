@@ -46,9 +46,9 @@ public class EditContinentCommand extends AbstractCommand {
                         WorldMap.getInstance().addContinent(continentName, Integer.valueOf(continentValue));
                         phaseLogList.add(String.format("Continent with name \"%s\" and value \"%s\" is added to map", continentName, continentValue));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     } catch (NumberFormatException ex) {
-                        errorList.add("Continent value must be an integer number.");
+                        resultList.add("Continent value must be an integer number.");
                     }
                     break;
                 }
@@ -58,7 +58,7 @@ public class EditContinentCommand extends AbstractCommand {
                         Continent continent = WorldMap.getInstance().removeContinent(continentName);
                         phaseLogList.add(String.format("Continent with name \"%s\" is removed.", continentName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }

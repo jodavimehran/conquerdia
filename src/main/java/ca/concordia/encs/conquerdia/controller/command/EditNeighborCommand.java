@@ -40,7 +40,7 @@ public class EditNeighborCommand extends AbstractCommand {
                         WorldMap.getInstance().addNeighbour(firstCountryName, secondCountryName);
                         phaseLogList.add(String.format("a country adjacency between \"%s\" and \"%s\" is added.", firstCountryName, secondCountryName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }
@@ -49,7 +49,7 @@ public class EditNeighborCommand extends AbstractCommand {
                         WorldMap.getInstance().removeNeighbour(firstCountryName, secondCountryName);
                         phaseLogList.add(String.format("a country adjacency between \"%s\" and \"%s\" is removed.", firstCountryName, secondCountryName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }

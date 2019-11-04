@@ -26,8 +26,13 @@ public class PlaceAllCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
-        SecureRandom randomNumber = new SecureRandom();
         PhaseModel phaseModel = PhaseModel.getInstance();
+        if (!phaseModel.isAllCountriesArePopulated()) {
+            throw new ValidationException("Before this command you must run \"populatecountries\" command!");
+        }
+
+        SecureRandom randomNumber = new SecureRandom();
+
         while (phaseModel.isThereAnyUnplacedArmy()) {
             Player currentPlayer = phaseModel.getCurrentPlayer();
             if (currentPlayer.getUnplacedArmies() > 0) {
@@ -36,11 +41,10 @@ public class PlaceAllCommand extends AbstractCommand {
                 countriesArray = countryNames.toArray(countriesArray);
                 String countryName = countriesArray[randomNumber.nextInt(countryNames.size())];
                 phaseModel.placeArmy(countryName);
-                resultList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
+                phaseLogList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
             }
             phaseModel.giveTurnToAnotherPlayer();
         }
-        phaseLogList.add("Reinforcement phase has began.");
     }
 
 }

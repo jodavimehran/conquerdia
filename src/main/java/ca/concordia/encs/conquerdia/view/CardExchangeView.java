@@ -11,6 +11,7 @@ import ca.concordia.encs.conquerdia.util.Observer;
  * after the cards exchange.
  */
 public class CardExchangeView implements Observer {
+
     @Override
     public void update(Observable o, Object arg) {
 

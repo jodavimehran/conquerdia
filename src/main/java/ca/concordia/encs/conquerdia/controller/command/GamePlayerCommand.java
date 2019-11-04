@@ -39,7 +39,7 @@ public class GamePlayerCommand extends AbstractCommand {
                         PhaseModel.getInstance().addPlayer(playerName);
                         phaseLogList.add(String.format("Player with name \"%s\" was added.", playerName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }
@@ -48,7 +48,7 @@ public class GamePlayerCommand extends AbstractCommand {
                         PhaseModel.getInstance().removePlayer(playerName);
                         phaseLogList.add(String.format("Player with name \"%s\" was removed.", playerName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }

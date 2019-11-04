@@ -6,7 +6,6 @@ import ca.concordia.encs.conquerdia.model.PhaseModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * All Commands must extend this class.
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractCommand implements Command {
 
-    protected final List<String> errorList = new ArrayList<>();
     protected final List<String> phaseLogList = new ArrayList<>();
     protected final List<String> resultList = new ArrayList<>();
 
@@ -22,10 +20,8 @@ public abstract class AbstractCommand implements Command {
      * Clear all things
      */
     private void clear() {
-        errorList.clear();
         phaseLogList.clear();
         resultList.clear();
-        CommandResultModel.getInstance().clear();
     }
 
     /**
@@ -48,12 +44,9 @@ public abstract class AbstractCommand implements Command {
         } else {
             try {
                 runCommand(inputCommandParts);
-                resultList.addAll(PhaseModel.getInstance().changePhase());
                 PhaseModel.getInstance().addPhaseLogs(phaseLogList);
+                resultList.addAll(PhaseModel.getInstance().changePhase());
                 CommandResultModel.getInstance().addResultList(resultList);
-                if (!errorList.isEmpty()) {
-                    CommandResultModel.getInstance().addResult(errorList.stream().collect(Collectors.joining(System.getProperty("line.separator"))));
-                }
             } catch (ValidationException ex) {
                 CommandResultModel.getInstance().addResultList(ex.getValidationErrors());
             } catch (Exception ex) {

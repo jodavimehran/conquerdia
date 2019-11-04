@@ -36,7 +36,7 @@ public class EditCountryCommand extends AbstractCommand {
                         WorldMap.getInstance().addCountry(countryName, continentName);
                         phaseLogList.add(String.format("Country with name \"%s\" is added to \"%s\"", countryName, continentName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }
@@ -46,7 +46,7 @@ public class EditCountryCommand extends AbstractCommand {
                         WorldMap.getInstance().removeCountry(countryName);
                         phaseLogList.add(String.format("Country with name \"%s\" is successfully removed from World Map", countryName));
                     } catch (ValidationException ex) {
-                        errorList.addAll(ex.getValidationErrors());
+                        resultList.addAll(ex.getValidationErrors());
                     }
                     break;
                 }

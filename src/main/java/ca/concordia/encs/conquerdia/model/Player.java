@@ -153,7 +153,7 @@ public class Player {
      * @return returns true if the player owns the specified country.
      */
     public boolean owns(String country) {
-        return this.countries.keySet().contains(country);
+        return this.countries.containsKey(country);
     }
 
     /**
@@ -269,30 +269,20 @@ public class Player {
     /**
      * @param countryName  name of the country
      * @param numberOfArmy number of army
-     * @return the result
+     * @throws ValidationException
      */
-    public String reinforce(String countryName, int numberOfArmy) {
+    public void reinforce(String countryName, int numberOfArmy) throws ValidationException {
         Country country = WorldMap.getInstance().getCountry(countryName);
         if (country == null)
-            return String.format("Country with name \"%s\" was not found!", countryName);
+            throw new ValidationException(String.format("Country with name \"%s\" was not found!", countryName));
         if (numberOfArmy < 1)
-            return "Invalid number! Number of armies must be greater than 0.";
+            throw new ValidationException("Invalid number! Number of armies must be greater than zero.");
         if (country.getOwner() == null || !country.getOwner().getName().equals(name))
-            return String.format("Country with name \"%s\" does not belong to you!", countryName);
+            throw new ValidationException(String.format("Country with name \"%s\" does not belong to you!", countryName));
         StringBuilder sb = new StringBuilder();
         int realNumberOfArmies = numberOfArmy > unplacedArmies ? unplacedArmies : numberOfArmy;
         country.placeArmy(realNumberOfArmies);
         minusUnplacedArmies(realNumberOfArmies);
-        sb.append("Dear ").append(name).append(", you placed ").append(realNumberOfArmies).append(" armies to ")
-                .append(countryName);
-        if (unplacedArmies > 0) {
-            sb.append(" and ").append(unplacedArmies).append(" armies are remain unplaced.");
-            return sb.toString();
-        }
-        sb.append(" and finished reinforcement phase successfully.");
-
-        PhaseModel.getInstance().changePhase();
-        return sb.toString();
     }
 
     @Override

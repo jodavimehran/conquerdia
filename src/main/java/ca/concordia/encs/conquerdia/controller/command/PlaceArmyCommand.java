@@ -25,8 +25,11 @@ public class PlaceArmyCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
-        String countryName = inputCommandParts.get(1);
         PhaseModel phaseModel = PhaseModel.getInstance();
+        if (!phaseModel.isAllCountriesArePopulated()) {
+            throw new ValidationException("Before this command you must run \"populatecountries\" command!");
+        }
+        String countryName = inputCommandParts.get(1);
         phaseModel.placeArmy(countryName);
         Player currentPlayer = phaseModel.getCurrentPlayer();
         phaseLogList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
@@ -34,9 +37,6 @@ public class PlaceArmyCommand extends AbstractCommand {
         boolean thereAnyUnplacedArmy = phaseModel.isThereAnyUnplacedArmy();
         while (thereAnyUnplacedArmy && currentPlayer.getUnplacedArmies() <= 0) {
             phaseModel.giveTurnToAnotherPlayer();
-        }
-        if (!thereAnyUnplacedArmy) {
-            phaseLogList.add("Reinforcement phase has began.");
         }
     }
 }

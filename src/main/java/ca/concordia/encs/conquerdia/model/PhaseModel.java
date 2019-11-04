@@ -48,6 +48,13 @@ public class PhaseModel extends Observable {
     }
 
     /**
+     * @return true if all countries are populated
+     */
+    public boolean isAllCountriesArePopulated() {
+        return allCountriesArePopulated;
+    }
+
+    /**
      * @return number of initial armies
      */
     public int getNumberOfInitialArmies() {
@@ -132,7 +139,7 @@ public class PhaseModel extends Observable {
             }
             case REINFORCEMENT: {
                 if (getCurrentPlayer().getUnplacedArmies() > 0) {
-                    results.add(String.format("You have %d reinforcement army. You can place them wherever in your territory."));
+                    results.add(String.format("You have %d reinforcement army. You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
                 } else {
                     changePhase(PhaseTypes.ATTACK);
                 }
@@ -149,16 +156,15 @@ public class PhaseModel extends Observable {
         return results;
     }
 
-    public PhaseTypes getCurrentPhase() {
-        return currentPhase;
-    }
-
     /**
      * @param phaseTypes
      */
     private void changePhase(PhaseTypes phaseTypes) {
         phaseLog.clear();
         currentPhase = phaseTypes;
+        phaseLog.add(LocalTime.now() + " - " + phaseTypes.getName() + " phase has start");
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -168,14 +174,24 @@ public class PhaseModel extends Observable {
         players.add(players.poll());
     }
 
+    /**
+     * @param commandType
+     * @return
+     */
     public boolean isValidCommand(CommandType commandType) {
         return currentPhase.validCommands.contains(commandType);
     }
 
+    /**
+     * @return
+     */
     public String getValidCommands() {
         return currentPhase.validCommands.stream().map(CommandType::getName).collect(Collectors.joining(", "));
     }
 
+    /**
+     * @return
+     */
     public String getPhaseStatus() {
         StringBuilder sb = new StringBuilder();
         sb.append("Phase: ").append(currentPhase.getName());
@@ -189,18 +205,13 @@ public class PhaseModel extends Observable {
         return sb.toString();
     }
 
+    /**
+     * @param logs
+     */
     public void addPhaseLogs(List<String> logs) {
         if (logs != null && !logs.isEmpty()) {
             LocalTime now = LocalTime.now();
-            logs.stream().forEach(log -> phaseLog.add(now + "-" + log));
-            setChanged();
-            notifyObservers(this);
-        }
-    }
-
-    public void addPhaseLog(String log) {
-        if (StringUtils.isNotBlank(log)) {
-            phaseLog.add(java.time.LocalTime.now() + "-" + log);
+            logs.stream().forEach(log -> phaseLog.add(now + " - " + log));
             setChanged();
             notifyObservers(this);
         }
@@ -318,9 +329,9 @@ public class PhaseModel extends Observable {
         NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
         EDIT_MAP("Edit Map", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY, CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP, CommandType.VALIDATE_MAP))),
         START_UP("Startup", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER, CommandType.POPULATE_COUNTRIES, CommandType.PLACE_ARMY, CommandType.PLACE_ALL))),
-        REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP))),
-        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP))),
-        ATTACK("Attack", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP)));
+        REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE))),
+        ATTACK("Attack", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP))),
+        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP)));
 
         private final String name;
         private final Set<CommandType> validCommands;
