@@ -20,6 +20,18 @@ public class Country {
      */
     private final String name;
     /**
+     * state of the country that is true if  an attack is  declared on it.
+     */
+    private boolean attackDeclared;
+    /**
+     * Sets the state of the COuntry to attackDeclared
+     * 
+     */
+    public void setAttackDeclared() {
+		this.attackDeclared = true;
+	}
+
+	/**
      * Represents the borders of a country.
      * All neighbor countries of a country must add to this set.
      */
@@ -48,6 +60,7 @@ public class Country {
     public Country(String name, Continent continent) {
         this.name = name;
         this.continent = continent;
+        this.attackDeclared = false;
     }
 
     /**
@@ -56,7 +69,6 @@ public class Country {
     public Player getOwner() {
         return owner;
     }
-
     /**
      * @param owner The owner of this country
      */

@@ -1,6 +1,10 @@
 package ca.concordia.encs.conquerdia.model;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -139,6 +143,15 @@ public class Player {
 	public boolean ownedAll(Set<String> countries) {
 		return this.countries.keySet().containsAll(countries);
 	}
+	/**
+	 * This  Method return checks if the player owns the specified country.
+	 * 
+	 * @param country the specified country
+	 * @return returns true if the player owns the specified country.
+	 */
+	public boolean owns(String country) {
+		return this.countries.keySet().contains(country);
+	}
 
 	/**
 	 * @return number of reinforcement armies according to the Risk rules.
@@ -198,13 +211,46 @@ public class Player {
 				toCountryName);
 	}
 
-	public String attack(String fromCountryName, String toCountryName, int numdice, boolean isAllout,
-			boolean isNoAttack) {
-
+	public String attack(String fromCountryName, String toCountryName, int numdice, String allOut,
+			String noAttack) {
+		Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
+		if (fromCountry == null)
+			return String.format("Country with name \"%s\" was not found!", fromCountryName);
+		Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
+		if (toCountry == null)
+			return String.format("Country with name \"%s\" was not found!", toCountryName);
+		/*Rule1: (Country Selection Validation):
+		 *The player may choose one of the countries he owns( that contains two or more armies)
+		 *and declare an attack on an adjacent country that is owned by another player.*/
+		if(fromCountry != null && toCountry != null) {  
+			if(this.owns(fromCountry.getName()) ) {
+				if(fromCountry.getNumberOfArmies() >= 2) { 
+					if(numdice <= 3) {
+						if(numdice < fromCountry.getNumberOfArmies()) {
+							toCountry.setAttackDeclared();
+							//Rule 2:(Battle) A battle is then simulated by the attacker rolling at most 3 dice
+							//	(which should not be more than the number of armies contained in the attacking country)
+							simulateAttack(fromCountry,toCountry);
+						}else {
+							return String.format("Number of dice rolled by Arracker \"%s\" : is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")" , getName(), Integer.valueOf(numdice), fromCountry.getNumberOfArmies(), fromCountry.getName());
+						}
+					}else {
+						return String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)" , getName(), Integer.valueOf(numdice));
+					}
+				}
+			}else {
+				return String.format("Country with name \"%s\" is not  onwend by the player \"%s\"!", fromCountry.getName() ,getName());
+			}
+		}		
 		return null;
 	}
-
+	public void  simulateAttack(Country fromCountry , Country toCountry){
+		
+	}
 	public String defend(int numDice) {
+		
+		//defender should choose the number of dice to defend with if attack is declared on a country
+
 		if (numDice > 2 /* || numDice > army attacking */) {
 			return "Defender cannot roll more than 2 dices or more than the number of armies contained in the attacking country";
 		}
