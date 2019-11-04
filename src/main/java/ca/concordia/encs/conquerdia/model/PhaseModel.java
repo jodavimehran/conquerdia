@@ -145,11 +145,19 @@ public class PhaseModel extends Observable {
                 }
                 break;
             }
+            case ATTACK: {
+                if (getCurrentPlayer().isAttackFinished()) {
+                    changePhase(PhaseTypes.FORTIFICATION);
+                }
+                break;
+            }
             case FORTIFICATION: {
-                changePhase(PhaseTypes.REINFORCEMENT);
-                giveTurnToAnotherPlayer();
-                getCurrentPlayer().calculateNumberOfReinforcementArmies();
-                results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
+                if (getCurrentPlayer().isFortificationFinished()) {
+                    giveTurnToAnotherPlayer();
+                    changePhase(PhaseTypes.REINFORCEMENT);
+                    getCurrentPlayer().calculateNumberOfReinforcementArmies();
+                    results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
+                }
                 break;
             }
         }
@@ -171,7 +179,9 @@ public class PhaseModel extends Observable {
      * give turn to another player based on player positions
      */
     public void giveTurnToAnotherPlayer() {
-        players.add(players.poll());
+        Player player = players.poll();
+        player.cleanPlayerStatus();
+        players.add(player);
     }
 
     /**
@@ -258,6 +268,9 @@ public class PhaseModel extends Observable {
         allCountriesArePopulated = true;
     }
 
+    /**
+     * Give turn to the first player
+     */
     private void giveTurnToFirstPlayer() {
         while (!firstPlayer.equals(getCurrentPlayer())) {
             giveTurnToAnotherPlayer();
@@ -308,18 +321,6 @@ public class PhaseModel extends Observable {
         }
         getCurrentPlayer().minusUnplacedArmies(1);
         country.placeOneArmy();
-////        for (int i = 0; i < playersPosition.length; i++) {
-////            giveTurnToAnotherPlayer();
-////            if (players.get(currentPlayerName).getUnplacedArmies() > 0) {
-////                appendPlaceArmyMessage(sb);
-////                return sb.toString();
-////            }
-////        }
-//        sb.append(System.getProperty("line.separator"));
-//        currentPhase = GamePhases.REINFORCEMENTS;
-//        currentPlayer = 0;
-//        runMainPlayPhase(sb);
-//        return sb.toString();
     }
 
     /**

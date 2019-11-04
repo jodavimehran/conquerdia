@@ -29,8 +29,7 @@ public class ReinforceCommand extends AbstractCommand {
             String countryName = inputCommandParts.get(1);
             int numberOfArmy = Integer.valueOf(inputCommandParts.get(2));
             Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
-            currentPlayer.reinforce(countryName, numberOfArmy);
-            phaseLogList.add(String.format("%s placed %d army/armies to %s.", currentPlayer.getName(), numberOfArmy, countryName));
+            phaseLogList.add(currentPlayer.reinforce(countryName, numberOfArmy));
         } catch (NumberFormatException ex) {
             throw new ValidationException("Number of armies(latest parameter) must be an integer number.");
         }

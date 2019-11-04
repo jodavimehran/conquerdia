@@ -38,6 +38,13 @@ public class Player {
     private int unplacedArmies = 0;
 
     /**
+     * true if fortification phase for the current turn has down by player
+     */
+    private boolean fortificationFinished;
+
+    private boolean attackFinished;
+
+    /**
      * @param name The name of a player must be determined when you want to create a
      *             player
      */
@@ -48,6 +55,20 @@ public class Player {
     private static int getNumberOfArmiesForExchangeCard() {
         NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD += 5;
         return NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD;
+    }
+
+    /**
+     * @return true if fortification is down
+     */
+    public boolean isFortificationFinished() {
+        return fortificationFinished;
+    }
+
+    /**
+     * @return true if attack is down
+     */
+    public boolean isAttackFinished() {
+        return attackFinished;
     }
 
     /**
@@ -181,37 +202,45 @@ public class Player {
     }
 
     /**
+     * This method is called when a player use none in fortification phase
+     */
+    public void fortify() {
+        fortificationFinished = true;
+    }
+
+    /**
      * @param fromCountryName source country
      * @param toCountryName   destination country
      * @param numberOfArmy    number of army
-     * @return the result
+     * @throws ValidationException
      */
-    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) {
+    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) throws ValidationException {
         Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
-        if (fromCountry == null)
-            return String.format("Country with name \"%s\" was not found!", fromCountryName);
+        if (fromCountry == null) {
+            throw new ValidationException(String.format("Country with name \"%s\" was not found!", fromCountryName));
+        }
         Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
-        if (toCountry == null)
-            return String.format("Country with name \"%s\" was not found!", toCountryName);
-        if (numberOfArmy < 1)
-            return "Invalid number! Number of armies must be greater than 0.";
-
-        if (fromCountry.getOwner() == null || !fromCountry.getOwner().getName().equals(name))
-            return String.format("Country with name \"%s\" does not belong to you!", fromCountryName);
-
+        if (toCountry == null) {
+            throw new ValidationException(String.format("Country with name \"%s\" was not found!", toCountryName));
+        }
+        if (numberOfArmy < 1) {
+            throw new ValidationException("Invalid number! Number of armies must be greater than 0.");
+        }
+        if (fromCountry.getOwner() == null || !fromCountry.getOwner().getName().equals(name)) {
+            throw new ValidationException(String.format("Country with name \"%s\" does not belong to you!", fromCountryName));
+        }
         if (toCountry.getOwner() == null || !toCountry.getOwner().getName().equals(name))
-            return String.format("Country with name \"%s\" does not belong to you!", toCountryName);
-
+            throw new ValidationException(String.format("Country with name \"%s\" does not belong to you!", toCountryName));
         if (!WorldMap.isTherePath(fromCountry, toCountry))
-            return "There is no path between these two countries that is composed of countries that you owns.";
+            throw new ValidationException("There is no path between these two countries that is composed of countries that you owns.");
+
         int realNumberOfArmies = numberOfArmy > fromCountry.getNumberOfArmies() - 1
                 ? fromCountry.getNumberOfArmies() - 1
                 : numberOfArmy;
         fromCountry.removeArmy(realNumberOfArmies);
         toCountry.placeArmy(realNumberOfArmies);
-
-        return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName,
-                toCountryName);
+        fortify();
+        return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName, toCountryName);
     }
 
     public String attack(String fromCountryName, String toCountryName, int numdice, String allOut,
@@ -271,7 +300,7 @@ public class Player {
      * @param numberOfArmy number of army
      * @throws ValidationException
      */
-    public void reinforce(String countryName, int numberOfArmy) throws ValidationException {
+    public String reinforce(String countryName, int numberOfArmy) throws ValidationException {
         Country country = WorldMap.getInstance().getCountry(countryName);
         if (country == null)
             throw new ValidationException(String.format("Country with name \"%s\" was not found!", countryName));
@@ -283,6 +312,7 @@ public class Player {
         int realNumberOfArmies = numberOfArmy > unplacedArmies ? unplacedArmies : numberOfArmy;
         country.placeArmy(realNumberOfArmies);
         minusUnplacedArmies(realNumberOfArmies);
+        return String.format("%s placed %d army/armies to %s.", name, realNumberOfArmies, countryName);
     }
 
     @Override
@@ -339,6 +369,11 @@ public class Player {
         cards.remove(secondCard);
         cards.remove(thirdCard);
         unplacedArmies += getNumberOfArmiesForExchangeCard();
+    }
+
+    public void cleanPlayerStatus() {
+        fortificationFinished = false;
+        attackFinished = false;
     }
 
     /**
