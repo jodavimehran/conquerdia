@@ -149,6 +149,20 @@ public class Player {
     }
 
     /**
+     * @return name of the continents this player owns
+     */
+    public Set<String> getContinentNames() {
+        return continents.keySet();
+    }
+
+    /**
+     * @return the total number of armies owned by this player
+     */
+    public int getTotalNumberOfArmies() {
+        return countries.values().stream().mapToInt(Country::getNumberOfArmies).sum();
+    }
+
+    /**
      * @return the number of continents this player owns
      */
     public int getNumberOfContinent() {
