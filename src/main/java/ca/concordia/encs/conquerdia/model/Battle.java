@@ -62,6 +62,7 @@ public class Battle {
 		}
 		fromCountry.removeArmy(attackerKilledArmies);
 		toCountry.removeArmy(defenderKilledArmies);
+		return null;
 	}
 
 	public void allOutAttack(Country fromCountry, Country toCountry) {
