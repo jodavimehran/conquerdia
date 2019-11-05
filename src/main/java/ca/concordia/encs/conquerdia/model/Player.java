@@ -41,7 +41,12 @@ public class Player {
      * true if fortification phase for the current turn has down by player
      */
     private boolean fortificationFinished;
-
+    
+    /**
+     * 
+     */
+    private Battle battle;
+    
     private boolean attackFinished;
 
     /**
@@ -243,38 +248,38 @@ public class Player {
         return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName, toCountryName);
     }
 
-    public String attack(String fromCountryName, String toCountryName, int numdice, String allOut,
-                         String noAttack) {
+
+    public void attack(String fromCountryName, String toCountryName, int numdice)  throws ValidationException {
         Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
-        if (fromCountry == null)
-            return String.format("Country with name \"%s\" was not found!", fromCountryName);
-        Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
-        if (toCountry == null)
-            return String.format("Country with name \"%s\" was not found!", toCountryName);
-        /*Rule1: (Country Selection Validation):
-         *The player may choose one of the countries he owns( that contains two or more armies)
-         *and declare an attack on an adjacent country that is owned by another player.*/
-        if (fromCountry != null && toCountry != null) {
-            if (this.owns(fromCountry.getName())) {
-                if (fromCountry.getNumberOfArmies() >= 2) {
-                    if (numdice <= 3) {
-                        if (numdice < fromCountry.getNumberOfArmies()) {
-                            toCountry.setAttackDeclared();
-                            //Rule 2:(Battle) A battle is then simulated by the attacker rolling at most 3 dice
-                            //	(which should not be more than the number of armies contained in the attacking country)
-                            simulateAttack(fromCountry, toCountry);
-                        } else {
-                            return String.format("Number of dice rolled by Arracker \"%s\" : is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")", getName(), Integer.valueOf(numdice), fromCountry.getNumberOfArmies(), fromCountry.getName());
-                        }
-                    } else {
-                        return String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)", getName(), Integer.valueOf(numdice));
-                    }
-                }
-            } else {
-                return String.format("Country with name \"%s\" is not  onwend by the player \"%s\"!", fromCountry.getName(), getName());
-            }
+        if (fromCountry == null) {
+            throw new ValidationException( String.format("Country with name \"%s\" was not found!", fromCountryName));
         }
-        return null;
+        if (this.owns(fromCountryName)) {
+        	throw new ValidationException(String.format("Country with name \"%s\" is not  onwend by the player \"%s\"!", fromCountry.getName(), getName()));
+        }
+        Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
+        if (toCountry == null) {
+        	throw new ValidationException( String.format("Country with name \"%s\" was not found!", toCountryName));
+        }
+        if(!fromCountry.isAdjacentTo(toCountryName)) {
+        	throw new ValidationException( String.format("Country with name \"%s\" is not adjacent to \"%s\"!",fromCountryName, toCountryName));
+        }
+        if (fromCountry.getNumberOfArmies() <= 1) {
+        	throw new ValidationException( "TODO");
+        }
+        if (numdice > 3) {
+        	throw new ValidationException(String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)", getName(), Integer.valueOf(numdice)));
+        }
+        if (numdice > 3 || numdice > fromCountry.getNumberOfArmies()) {
+        	throw new ValidationException( String.format("Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")", getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
+        }
+        battle = new Battle();
+        battle.setFromCountry(fromCountry);
+        battle.setToCountry(toCountry);
+        battle.setNumberOfAttackerDices(numdice);
+        
+        //simulateAttack(fromCountry, toCountry);
+                   
     }
 
     public void simulateAttack(Country fromCountry, Country toCountry) {
