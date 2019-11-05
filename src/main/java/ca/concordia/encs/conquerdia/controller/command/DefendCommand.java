@@ -11,13 +11,18 @@ public class DefendCommand extends AbstractCommand {
 
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		if (hasMinimumNumberofParameters(inputCommandParts)) {			
+		if (hasMinimumNumberofParameters(inputCommandParts)) {
 			try {
 				int numDice = Integer.parseInt(inputCommandParts.get(1));
+				if (numDice < 0) {
+					throw new NumberFormatException();
+				}
+
 				Player defender = PhaseModel.getInstance().getCurrentPlayer();
-				phaseLogList.add(defender.defend(numDice));
+				phaseLogList.addAll(defender.defend(numDice));
+
 			} catch (NumberFormatException ex) {
-				throw new ValidationException("Number of dices must be an integer number.");
+				throw new ValidationException("Number of dices must be a positive integer number.");
 			}
 		} else {
 			throw new ValidationException("Invalid input! " + getCommandHelpMessage());
