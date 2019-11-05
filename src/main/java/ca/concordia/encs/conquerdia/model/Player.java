@@ -298,15 +298,41 @@ public class Player {
 
 	}
 
-    public String defend(int numDice) {
+    /**
+	 * Performs a defend action of attack phase. It also checks if this player is in
+	 * battle and have a country to defend.
+	 * 
+	 * @param numDice Number of dice rolled by the defending player
+	 * @return
+	 */
+	public ArrayList<String> defend(int numDice) throws ValidationException {
+		Country defendingCountry;
+		ArrayList<String> messages = new ArrayList<>();
 
-        //defender should choose the number of dice to defend with if attack is declared on a country
+		if (numDice > 2) {
+			throw new ValidationException(
+					"Defender cannot roll more than 2 dices and not more than the number of armies contained defending country");
+		}
 
-        if (numDice > 2 /* || numDice > army attacking */) {
-            return "Defender cannot roll more than 2 dices or more than the number of armies contained in the attacking country";
-        }
-        return "TODO Defend status?";
-    }
+		// Check if country is under attack)
+		if (battle == null) {
+			throw new ValidationException(String.format("{0} does not have any country under attack.", this.name));
+		} else if (numDice > (defendingCountry = battle.getToCountry()).getNumberOfArmies()) {
+
+			throw new ValidationException(String.format(
+					"Country {0} has less number of armies {1} than the number of dice rolled {2}."
+							+ " The number of dice must be equal to the number of armies in the defending country.",
+					defendingCountry.getName(), defendingCountry.getNumberOfArmies(), numDice));
+		} else {
+			messages.add("Player blah defend with 2 r");
+			battle.setNumberOfDefenderDices(numDice);
+			battle.simulateAttack(battle.getFromCountry(), battle.getToCountry());
+			
+			//messages.add(battleSimulateResult);
+		}
+
+		return messages;
+	}
 
     public String attackMove() {
         return null;
