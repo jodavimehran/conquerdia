@@ -2,6 +2,7 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
+import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 import java.util.List;
@@ -30,6 +31,6 @@ public class PopulateCountriesCommand extends AbstractCommand {
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
         PhaseModel phaseModel = PhaseModel.getInstance();
         phaseModel.populateCountries();
-        phaseLogList.add(String.format("All %d countries are populated and each of %d players are allocated %d initial armies.", WorldMap.getInstance().getCountries().size(), phaseModel.getNumberOfPlayers(), phaseModel.getNumberOfInitialArmies()));
+        phaseLogList.add(String.format("All %d countries are populated and each of %d players are allocated %d initial armies.", WorldMap.getInstance().getCountries().size(), PlayersModel.getInstance().getNumberOfPlayers(), phaseModel.getNumberOfInitialArmies()));
     }
 }

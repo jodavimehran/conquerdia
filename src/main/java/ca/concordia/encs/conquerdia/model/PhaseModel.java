@@ -5,7 +5,6 @@ import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
-import org.apache.commons.lang3.StringUtils;
 
 import java.security.SecureRandom;
 import java.time.LocalTime;
@@ -18,12 +17,9 @@ import java.util.stream.Collectors;
 public class PhaseModel extends Observable {
     private static PhaseModel instance;
     private final List<String> phaseLog = new ArrayList<>();
-    private final Set<String> playerNames = new HashSet<>();
-    private final Queue<Player> players = new LinkedList<>();
     private PhaseTypes currentPhase = PhaseTypes.NONE;
     private int numberOfInitialArmies = -1;
     private boolean allCountriesArePopulated;
-    private Player firstPlayer;
 
     /**
      * private Constructor to implementation of the Singleton Pattern
@@ -38,7 +34,7 @@ public class PhaseModel extends Observable {
      */
     public static PhaseModel getInstance() {
         if (instance == null) {
-            synchronized (CommandResultModel.class) {
+            synchronized (PhaseModel.class) {
                 if (instance == null) {
                     instance = new PhaseModel();
                 }
@@ -61,45 +57,17 @@ public class PhaseModel extends Observable {
         return numberOfInitialArmies;
     }
 
-    /**
-     * @return number of players
-     */
-    public int getNumberOfPlayers() {
-        return playerNames.size();
-    }
 
     /**
-     * Add a new player to the game if player name will not found in current player
-     * name is
-     *
-     * @param playerName name of the plater to add
+     * @return current player
      */
-    public void addPlayer(String playerName) throws ValidationException {
-        if (StringUtils.isBlank(playerName))
-            throw new ValidationException("Player name is not valid!");
-        if (playerNames.contains(playerName))
-            throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
-        playerNames.add(playerName);
-        Player player = new Player.Builder(playerName).build();
-        players.add(player);
-    }
-
-    /**
-     * This Method remove a player
-     *
-     * @param playerName name of the player to remove
-     */
-    public void removePlayer(String playerName) throws ValidationException {
-        if (!playerNames.contains(playerName))
-            throw new ValidationException(String.format("Player with name \"%s\" is not found.", playerName));
-        playerNames.remove(playerName);
-        players.removeIf(player -> player.getName().equals(playerName));
-    }
-
     public Player getCurrentPlayer() {
-        return players.peek();
+        return PlayersModel.getInstance().getCurrentPlayer();
     }
 
+    /**
+     * @return result
+     */
     public List<String> changePhase() {
         List<String> results = new ArrayList<>();
         switch (currentPhase) {
@@ -119,11 +87,11 @@ public class PhaseModel extends Observable {
             }
             case START_UP: {
                 if (allCountriesArePopulated) {
-                    if (isThereAnyUnplacedArmy()) {
+                    if (PlayersModel.getInstance().isThereAnyUnplacedArmy()) {
                         results.add(String.format("Dear %s, you have %d unplaced armies.", getCurrentPlayer().getName(), getCurrentPlayer().getUnplacedArmies()));
                         results.add("Use \"placearmy\" to place one of them or use \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
                     } else {
-                        giveTurnToFirstPlayer();
+                        PlayersModel.getInstance().giveTurnToFirstPlayer();
                         changePhase(PhaseTypes.REINFORCEMENT);
                         CardExchangeModel.getInstance().setReinforcementPhaseActive(true);
                         results.add("================================================================================================================================================");
@@ -157,7 +125,7 @@ public class PhaseModel extends Observable {
             }
             case FORTIFICATION: {
                 if (getCurrentPlayer().isFortificationFinished()) {
-                    giveTurnToAnotherPlayer();
+                    PlayersModel.getInstance().giveTurnToAnotherPlayer();
                     changePhase(PhaseTypes.REINFORCEMENT);
                     getCurrentPlayer().calculateNumberOfReinforcementArmies();
                     results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
@@ -179,14 +147,6 @@ public class PhaseModel extends Observable {
         notifyObservers(this);
     }
 
-    /**
-     * give turn to another player based on player positions
-     */
-    public void giveTurnToAnotherPlayer() {
-        Player player = players.poll();
-        player.cleanPlayerStatus();
-        players.add(player);
-    }
 
     /**
      * @param commandType
@@ -238,7 +198,7 @@ public class PhaseModel extends Observable {
         if (allCountriesArePopulated) {
             throw new ValidationException("All countries are populated before!");
         }
-        int numberOfPlayers = playerNames.size();
+        int numberOfPlayers = PlayersModel.getInstance().getNumberOfPlayers();
         if (numberOfPlayers < 3) {
             throw new ValidationException("The game need at least Three players to start.");
         }
@@ -249,9 +209,10 @@ public class PhaseModel extends Observable {
         SecureRandom randomNumber = new SecureRandom();
         int randomInt = randomNumber.nextInt(numberOfPlayers - 1);
         for (int i = 0; i < randomInt; i++) {
-            giveTurnToAnotherPlayer();
+            PlayersModel.getInstance().giveTurnToAnotherPlayer();
         }
-        firstPlayer = getCurrentPlayer();
+        Player firstPlayer = getCurrentPlayer();
+        PlayersModel.getInstance().setFirstPlayer(firstPlayer);
         while (!countries.isEmpty()) {
             Country[] countryArray = new Country[countries.size()];
             countryArray = countries.toArray(countryArray);
@@ -264,28 +225,12 @@ public class PhaseModel extends Observable {
             if (getCurrentPlayer().ownedAll(country.getContinent().getCountriesName()))
                 getCurrentPlayer().addContinent(country.getContinent());
             countries.remove(country);
-            giveTurnToAnotherPlayer();
+            PlayersModel.getInstance().giveTurnToAnotherPlayer();
         }
-        giveTurnToFirstPlayer();
+        PlayersModel.getInstance().giveTurnToFirstPlayer();
         numberOfInitialArmies = calculateNumberOfInitialArmies(numberOfPlayers);
-        players.forEach(player -> player.addUnplacedArmies(numberOfInitialArmies - player.getNumberOfCountries()));
+        PlayersModel.getInstance().getPlayers().forEach(player -> player.addUnplacedArmies(numberOfInitialArmies - player.getNumberOfCountries()));
         allCountriesArePopulated = true;
-    }
-
-    /**
-     * Give turn to the first player
-     */
-    private void giveTurnToFirstPlayer() {
-        while (!firstPlayer.equals(getCurrentPlayer())) {
-            giveTurnToAnotherPlayer();
-        }
-    }
-
-    /**
-     * @return true if there is any player with unplaced army
-     */
-    public boolean isThereAnyUnplacedArmy() {
-        return players.stream().filter(player -> player.getUnplacedArmies() > 0).count() > 0;
     }
 
     /**
@@ -307,25 +252,6 @@ public class PhaseModel extends Observable {
         }
     }
 
-    /**
-     * @param countryName Name of the country that one army be placed on it
-     * @return the result
-     */
-    public void placeArmy(String countryName) throws ValidationException {
-        if (StringUtils.isBlank(countryName))
-            throw new ValidationException("Country name is not valid!");
-        Country country = WorldMap.getInstance().getCountry(countryName);
-        if (country == null)
-            throw new ValidationException(String.format("Country with name \"%s\" was not found!", countryName));
-        if (!getCurrentPlayer().equals(country.getOwner())) {
-            throw new ValidationException(String.format("Dear %s, Country with name \"%s\" does not belong to you!", getCurrentPlayer().getName(), countryName));
-        }
-        if (getCurrentPlayer().getUnplacedArmies() < 1) {
-            throw new ValidationException("You Don't have any unplaced army!");
-        }
-        getCurrentPlayer().minusUnplacedArmies(1);
-        country.placeOneArmy();
-    }
 
     /**
      * Phase Types
