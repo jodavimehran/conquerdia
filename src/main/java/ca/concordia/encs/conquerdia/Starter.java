@@ -38,7 +38,7 @@ public class Starter extends JFrame {
         output.println("Welcome to Conquerdia Game");
         CommandResultModel.getInstance().addObserver(new CommandResultView(output));
         PhaseModel.getInstance().addObserver(new PhaseView(output));
-        CardExchangeModel.getInstance().addObserver(new CardExchangeView());
+        CardExchangeModel.getInstance().addObserver(new CardExchangeView(output));
         while (true) {
             output.print("> ");
             String commandStr = scanner.nextLine();
