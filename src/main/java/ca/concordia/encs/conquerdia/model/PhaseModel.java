@@ -140,6 +140,8 @@ public class PhaseModel extends Observable {
             case REINFORCEMENT: {
                 if (getCurrentPlayer().getUnplacedArmies() > 0) {
                     results.add(String.format("You have %d reinforcement army. You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
+                } else if (getCurrentPlayer().getCards().size() >= 5) {
+                    results.add("You have more than five cards. You must exchange them by using \"exchangecards\" command.");
                 } else {
                     changePhase(PhaseTypes.ATTACK);
                 }

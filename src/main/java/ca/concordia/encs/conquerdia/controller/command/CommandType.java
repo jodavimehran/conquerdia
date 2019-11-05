@@ -22,7 +22,8 @@ public enum CommandType {
     FORTIFY("fortify", new FortifyCommand(), 2),
     ATTACK("attack", new AttackCommand(), 4),
     DEFEND("defend", new DefendCommand(), 2),
-    ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2);
+    ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2),
+    EXCHANGE_CARDS("exchangecards", new ExchangeCardsCommand(), 2);
 
     private final String name;
     private final Command command;

@@ -41,9 +41,9 @@ public class Player {
      * true if fortification phase for the current turn has down by player
      */
     private boolean fortificationFinished;
-    
+
     /**
-     * This class contains the attack simulation
+     * 
      */
     private Battle battle;
     
@@ -262,36 +262,37 @@ public class Player {
     }
 
 
-    public void attack(String fromCountryName, String toCountryName, int numdice)  throws ValidationException {
+    public void attack(String fromCountryName, String toCountryName, int numdice) throws ValidationException {
         Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
         if (fromCountry == null) {
-            throw new ValidationException( String.format("Country with name \"%s\" was not found!", fromCountryName));
+            throw new ValidationException(String.format("Country with name \"%s\" was not found!", fromCountryName));
         }
         if (this.owns(fromCountryName)) {
-        	throw new ValidationException(String.format("Country with name \"%s\" is not  onwend by the player \"%s\"!", fromCountry.getName(), getName()));
+            throw new ValidationException(String.format("Country with name \"%s\" is not  onwend by the player \"%s\"!", fromCountry.getName(), getName()));
         }
         Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
         if (toCountry == null) {
-        	throw new ValidationException( String.format("Country with name \"%s\" was not found!", toCountryName));
+            throw new ValidationException(String.format("Country with name \"%s\" was not found!", toCountryName));
         }
-        if(!fromCountry.isAdjacentTo(toCountryName)) {
-        	throw new ValidationException( String.format("Country with name \"%s\" is not adjacent to \"%s\"!",fromCountryName, toCountryName));
+        if (!fromCountry.isAdjacentTo(toCountryName)) {
+            throw new ValidationException(String.format("Country with name \"%s\" is not adjacent to \"%s\"!", fromCountryName, toCountryName));
         }
         if (fromCountry.getNumberOfArmies() <= 1) {
-        	throw new ValidationException( String.format("The Attacker can not initiate an attack with \"%d\" armies." , fromCountry.getNumberOfArmies()));
+        	throw new ValidationException( "TODO");
         }
         if (numdice > 3) {
-        	throw new ValidationException(String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)", getName(), Integer.valueOf(numdice)));
+            throw new ValidationException(String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)", getName(), Integer.valueOf(numdice)));
         }
         if (numdice > 3 || numdice > fromCountry.getNumberOfArmies()) {
-        	throw new ValidationException( String.format("Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")", getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
+            throw new ValidationException(String.format("Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")", getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
         }
         battle = new Battle();
         battle.setFromCountry(fromCountry);
         battle.setToCountry(toCountry);
-        battle.setNumberOfAttackerDices(numdice);     
+        battle.setNumberOfAttackerDices(numdice);
+        
         //simulateAttack(fromCountry, toCountry);
-                   
+
     }
     private void allOutAttack() {
 		// TODO Auto-generated method stub
@@ -351,7 +352,6 @@ public class Player {
             throw new ValidationException("Invalid number! Number of armies must be greater than zero.");
         if (country.getOwner() == null || !country.getOwner().getName().equals(name))
             throw new ValidationException(String.format("Country with name \"%s\" does not belong to you!", countryName));
-        StringBuilder sb = new StringBuilder();
         int realNumberOfArmies = numberOfArmy > unplacedArmies ? unplacedArmies : numberOfArmy;
         country.placeArmy(realNumberOfArmies);
         minusUnplacedArmies(realNumberOfArmies);
@@ -395,7 +395,7 @@ public class Player {
      * @param third  position of third card
      * @throws ValidationException validation exception
      */
-    private void exchangeCard(int first, int second, int third) throws ValidationException {
+    public String exchangeCard(int first, int second, int third) throws ValidationException {
         if (cards.size() < 3) {
             throw new ValidationException(String.format("Dear %s, you need at least three cards to exchange.", name));
         }
@@ -411,12 +411,18 @@ public class Player {
         cards.remove(firstCard);
         cards.remove(secondCard);
         cards.remove(thirdCard);
-        unplacedArmies += getNumberOfArmiesForExchangeCard();
+        int numberOfArmiesForExchangeCard = getNumberOfArmiesForExchangeCard();
+        unplacedArmies += numberOfArmiesForExchangeCard;
+        return String.format("Player %s exchanges %s, %s, %s cards with %d armies.", name, firstCard.getName(), secondCard.getName(), thirdCard.getName(), numberOfArmiesForExchangeCard);
     }
 
     public void cleanPlayerStatus() {
         fortificationFinished = false;
         attackFinished = false;
+    }
+
+    public List<CardType> getCards() {
+        return cards;
     }
 
     /**

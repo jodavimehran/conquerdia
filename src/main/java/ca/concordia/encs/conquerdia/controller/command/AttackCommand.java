@@ -37,7 +37,7 @@ public class AttackCommand extends AbstractCommand {
         	}
         	//attack A B -allout
         	if("-allout".equals(thirdParam)) {
-        		PhaseModel.getInstance().getCurrentPlayer().getBattle();
+//        		PhaseModel.getInstance().getCurrentPlayer().getBattle().;
         	}else {
                 throw new ValidationException("Invalid input! " + getCommandHelpMessage());
         	}
