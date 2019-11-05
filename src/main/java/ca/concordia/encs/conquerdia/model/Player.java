@@ -303,14 +303,13 @@ public class Player {
 
 		// simulateAttack(fromCountry, toCountry);
 
-	}
-
-	private void allOutAttack() {
+    }
+    private void allOutAttack() {
 		// TODO Auto-generated method stub
 
 	}
 
-	/**
+    /**
 	 * Performs a defend action of attack phase. It also checks if this player is in
 	 * battle and have a country to defend.
 	 * 
@@ -338,9 +337,7 @@ public class Player {
 		} else {
 			messages.add(String.format("Player {0} defended with {1} dice(s).", this.name, numDice));
 			battle.setNumberOfDefenderDices(numDice);
-			battle.simulateAttack(battle.getFromCountry(), battle.getToCountry());
-
-			// messages.add(battleSimulateResult);
+			messages.add(battle.simulateAttack());
 		}
 
 		return messages;
