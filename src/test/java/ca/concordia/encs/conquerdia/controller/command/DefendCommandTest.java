@@ -7,10 +7,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import ca.concordia.encs.conquerdia.model.PhaseModel;
+
 public class DefendCommandTest extends AttackPhaseCommandTest {
 
 	@Test
 	public void testCommandValidity() {
+		SetupAttack();
 		DefendCommand defendCommand = new DefendCommand();
 		List<String> list = new ArrayList<String>();
 		list.add("defend");
@@ -19,5 +22,9 @@ public class DefendCommandTest extends AttackPhaseCommandTest {
 			defendCommand.runCommand(list);
 		} catch (Exception ex) {
 		}
+	}
+	
+	private void SetupAttack() {
+		
 	}
 }
