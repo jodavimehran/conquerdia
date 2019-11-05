@@ -25,7 +25,7 @@ public abstract class AttackPhaseCommandTest {
 	public static WorldMap createMapForTest() throws ValidationException {
 
 		WorldMap map = WorldMap.getInstance();
-
+		map.clear();
 		map.addContinent("Africa", 5);
 		map.addCountry("Greece", "Africa");
 		map.addCountry("Germany", "Africa");
