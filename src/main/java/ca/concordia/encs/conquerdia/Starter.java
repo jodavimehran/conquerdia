@@ -1,10 +1,12 @@
 package ca.concordia.encs.conquerdia;
 
 import ca.concordia.encs.conquerdia.controller.CommandController;
+import ca.concordia.encs.conquerdia.model.CardExchangeModel;
 import ca.concordia.encs.conquerdia.model.CommandResultModel;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.map.io.FileHelper;
 import ca.concordia.encs.conquerdia.model.map.io.MapIO;
+import ca.concordia.encs.conquerdia.view.CardExchangeView;
 import ca.concordia.encs.conquerdia.view.CommandResultView;
 import ca.concordia.encs.conquerdia.view.PhaseView;
 
@@ -36,6 +38,7 @@ public class Starter extends JFrame {
         output.println("Welcome to Conquerdia Game");
         CommandResultModel.getInstance().addObserver(new CommandResultView(output));
         PhaseModel.getInstance().addObserver(new PhaseView(output));
+        CardExchangeModel.getInstance().addObserver(new CardExchangeView());
         while (true) {
             output.print("> ");
             String commandStr = scanner.nextLine();

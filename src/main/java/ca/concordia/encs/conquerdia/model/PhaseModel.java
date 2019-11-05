@@ -125,6 +125,7 @@ public class PhaseModel extends Observable {
                     } else {
                         giveTurnToFirstPlayer();
                         changePhase(PhaseTypes.REINFORCEMENT);
+                        CardExchangeModel.getInstance().setReinforcementPhaseActive(true);
                         results.add("================================================================================================================================================");
                         results.add("All players have placed their armies.");
                         results.add("Startup phase is finished.");
@@ -144,6 +145,7 @@ public class PhaseModel extends Observable {
                     results.add("You have more than five cards. You must exchange them by using \"exchangecards\" command.");
                 } else {
                     changePhase(PhaseTypes.ATTACK);
+                    CardExchangeModel.getInstance().setReinforcementPhaseActive(false);
                 }
                 break;
             }
