@@ -346,7 +346,7 @@ public class Player {
 		return messages;
 	}
 
-	public String attackMove() {
+	public String attackMove(int numberOfArmies) {
 		return null;
 	}
 

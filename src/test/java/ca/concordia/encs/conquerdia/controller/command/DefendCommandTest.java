@@ -7,24 +7,23 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ca.concordia.encs.conquerdia.model.PhaseModel;
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 
 public class DefendCommandTest extends AttackPhaseCommandTest {
 
 	@Test
 	public void testCommandValidity() {
-		SetupAttack();
+
 		DefendCommand defendCommand = new DefendCommand();
 		List<String> list = new ArrayList<String>();
 		list.add("defend");
-		list.add("5");
+		list.add("-5");
+		String message = null;
 		try {
 			defendCommand.runCommand(list);
-		} catch (Exception ex) {
+		} catch (ValidationException ex) {
+			message = ex.getMessage();
 		}
-	}
-	
-	private void SetupAttack() {
-		
+		assertTrue(message.contains("must be a positive integer"));
 	}
 }
