@@ -32,5 +32,11 @@ public class Battle {
 	public void setNumberOfDefenderDices(int numberOfDefenderDices) {
 		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
+    public void simulateAttack(Country fromCountry, Country toCountry) {
+    	
+    }
+    public void allOutAttack(Country fromCountry, Country toCountry) {
+
+    }
 	
 }

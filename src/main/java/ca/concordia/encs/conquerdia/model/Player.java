@@ -43,13 +43,26 @@ public class Player {
     private boolean fortificationFinished;
     
     /**
-     * 
+     * This class contains the attack simulation
      */
     private Battle battle;
     
-    private boolean attackFinished;
-
     /**
+     * Gets the battle of the player
+     */
+    public Battle getBattle() {
+		return battle;
+	}
+
+	private boolean attackFinished;
+    /**
+     * This is set to true whenever the attack is finished.
+     */
+    public void setAttackFinished() {
+		this.attackFinished = true;
+	}
+
+	/**
      * @param name The name of a player must be determined when you want to create a
      *             player
      */
@@ -265,7 +278,7 @@ public class Player {
         	throw new ValidationException( String.format("Country with name \"%s\" is not adjacent to \"%s\"!",fromCountryName, toCountryName));
         }
         if (fromCountry.getNumberOfArmies() <= 1) {
-        	throw new ValidationException( "TODO");
+        	throw new ValidationException( String.format("The Attacker can not initiate an attack with \"%d\" armies." , fromCountry.getNumberOfArmies()));
         }
         if (numdice > 3) {
         	throw new ValidationException(String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)", getName(), Integer.valueOf(numdice)));
@@ -276,15 +289,14 @@ public class Player {
         battle = new Battle();
         battle.setFromCountry(fromCountry);
         battle.setToCountry(toCountry);
-        battle.setNumberOfAttackerDices(numdice);
-        
+        battle.setNumberOfAttackerDices(numdice);     
         //simulateAttack(fromCountry, toCountry);
                    
     }
+    private void allOutAttack() {
+		// TODO Auto-generated method stub
 
-    public void simulateAttack(Country fromCountry, Country toCountry) {
-
-    }
+	}
 
     public String defend(int numDice) {
 

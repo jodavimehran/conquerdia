@@ -5,6 +5,7 @@ import java.util.List;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
+import ca.concordia.encs.conquerdia.model.Player;
 import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
@@ -22,7 +23,27 @@ public class AttackCommand extends AbstractCommand {
             throw new ValidationException("Invalid input! " + getCommandHelpMessage());
         
         try {
-            phaseLogList.add(PhaseModel.getInstance().getCurrentPlayer().attack(inputCommandParts.get(1), inputCommandParts.get(2),  Integer.valueOf(inputCommandParts.get(3)), inputCommandParts.get(4), inputCommandParts.get(5)));
+        	
+        	
+        	String fromCountryName = inputCommandParts.get(1);
+        	String toCountryName = inputCommandParts.get(2);
+        	String thirdParam = inputCommandParts.get(3);
+        	//attack A B -noAttack
+        	String noAttack = inputCommandParts.get(1);
+        	if("-noattack".equals(noAttack)) {
+        		PhaseModel.getInstance().getCurrentPlayer().setAttackFinished();
+        	}else {
+                throw new ValidationException("Invalid input! " + getCommandHelpMessage());
+        	}
+        	//attack A B -allout
+        	if("-allout".equals(thirdParam)) {
+        		PhaseModel.getInstance().getCurrentPlayer().getBattle().;
+        	}else {
+                throw new ValidationException("Invalid input! " + getCommandHelpMessage());
+        	}
+        	int numberOfDices = Integer.valueOf(thirdParam);
+        	PhaseModel.getInstance().getCurrentPlayer().attack(fromCountryName,toCountryName , numberOfDices );
+            phaseLogList.add(String.format("Player %s attacked from %s to %s by %d armies.", fromCountryName, toCountryName, numberOfDices));
         } catch (NumberFormatException ex) {
             throw new ValidationException("\"Number of dices(3rd parameter) must be an integer number.\"");
         }
