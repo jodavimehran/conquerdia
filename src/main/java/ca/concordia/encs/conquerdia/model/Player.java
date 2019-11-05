@@ -326,10 +326,10 @@ public class Player {
 
     /**
      * Performs a defend action of attack phase. It also checks if this player is in
-     * battle and have a country to defend.
+     * battle and has a country to defend.
      *
      * @param numDice Number of dice rolled by the defending player
-     * @return
+     * @return messages for the view
      */
     public ArrayList<String> defend(int numDice) throws ValidationException {
         Country defendingCountry;
@@ -358,6 +358,11 @@ public class Player {
         return messages;
     }
 
+    /**
+     * Move armies after conquering another country during a battle
+     * @param numberOfArmies
+     * @return
+     */
     public String attackMove(int numberOfArmies) {
         return null;
     }
