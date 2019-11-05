@@ -294,10 +294,6 @@ public class Player {
         //simulateAttack(fromCountry, toCountry);
 
     }
-    private void allOutAttack() {
-		// TODO Auto-generated method stub
-
-	}
 
     /**
 	 * Performs a defend action of attack phase. It also checks if this player is in
@@ -327,8 +323,7 @@ public class Player {
 		} else {
 			messages.add("Player blah defend with 2 r");
 			battle.setNumberOfDefenderDices(numDice);
-			battle.simulateAttack(battle.getFromCountry(), battle.getToCountry());
-			
+			messages.add(battle.simulateAttack());
 			//messages.add(battleSimulateResult);
 		}
 
