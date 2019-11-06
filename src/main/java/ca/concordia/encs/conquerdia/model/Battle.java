@@ -49,7 +49,6 @@ public class Battle {
 		// Check if toCuntry is Conquered
 		if (toCountry.hasNoArmy()) {
 			conquer();
-
 			return String.format(
 					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conqured country %s.",
 					fromCountry.getOwner().getName(), toCountry.getName(), numberOfAttackerDices,
@@ -88,6 +87,12 @@ public class Battle {
 		if (defender.getNumberOfCountries() == 0) {
 			fromCountry.getOwner().getCards().addAll(defender.getCards());
 			PlayersModel.getInstance().getPlayers().remove(defender);
+		}
+		Player attacker = fromCountry.getOwner();
+		boolean isAttackerOwnedAContinent = attacker.ownedAll(toCountry.getContinent().getCountriesName());
+		if(isAttackerOwnedAContinent) {
+			attacker.addContinent(toCountry.getContinent());
+			attacker.addUnplacedArmies(toCountry.getContinent().getValue());
 		}
 	}
 
