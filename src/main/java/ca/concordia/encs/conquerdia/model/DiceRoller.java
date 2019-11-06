@@ -2,7 +2,6 @@ package ca.concordia.encs.conquerdia.model;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Provides methods to simulate dice rolls

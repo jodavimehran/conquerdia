@@ -20,6 +20,14 @@ public class Battle {
 	}
 
 	public String simulateBattle() {
+		if (isAllOut) {
+			numberOfAttackerDices = getMaxDiceCountForAttacker();
+			if (numberOfAttackerDices < 1) {
+				fromCountry.getOwner().setAttackFinished();
+				return String.format("%s does not have enough army to attack", fromCountry.getOwner().getName());
+			}
+		}
+
 		int[] attackerDiceRolled = diceRoller.generateSortedDices(numberOfAttackerDices);
 		int[] defenderDiceRolled = diceRoller.generateSortedDices(numberOfDefenderDices);
 
@@ -43,21 +51,36 @@ public class Battle {
 			conquer();
 
 			return String.format(
-					"Congrats! {0} has conquered {1}. Please move atleast {2} of your armies from {3} to the conqured country",
+					"Congrats! %s has conquered %. Please move atleast % of your armies from % to the conqured country %.",
 					fromCountry.getOwner().getName(), toCountry.getName(), numberOfAttackerDices,
-					fromCountry.getName());
+					fromCountry.getName(), toCountry.getName());
 		}
 
-		return String.format("Attacker rolled {0} & killed {1} armies. Defender rolled {2} and killed {3} armies",
+		return String.format("Attacker rolled % & killed % armies. Defender rolled % and killed % armies",
 				Arrays.toString(attackerDiceRolled),
 				killedByAttacker,
 				Arrays.toString(defenderDiceRolled),
 				killedByDefender);
 	}
 
+	/**
+	 * 
+	 * @return The maximum dice count of attacker for the all out phase
+	 */
+	private int getMaxDiceCountForAttacker() {
+		int armies = fromCountry.getNumberOfArmies();
+		int max = 0;
+
+		if (armies > 1) {
+			max = Math.min(armies, 3);
+		}
+		return max;
+	}
+
 	private void conquer() {
 		toCountry.setOwner(fromCountry.getOwner());
 		winner = fromCountry;
+		fromCountry.getOwner().setAttackFinished();
 		fromCountry.getOwner().setSuccessfulAttack(true);
 		/// Check Number of countries owned by the defender, if 0 gives all cards to
 		/// attacker and remove player from model player queue

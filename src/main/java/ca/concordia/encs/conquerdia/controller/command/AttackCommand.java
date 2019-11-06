@@ -28,14 +28,14 @@ public class AttackCommand extends AbstractCommand {
 
 			// attack A B -allout
 			if ("-allout".equals(thirdParam)) {
-				currentPlayer.allOutAttack(fromCountryName, toCountryName);
+				currentPlayer.attack(fromCountryName, toCountryName, -1, true);
 				phaseLogList.add(String.format("Player %s all out attacked from %s to %s .",
 						currentPlayer.getName(), fromCountryName, toCountryName));
 			} else {
 				try {
 					int numberOfDices = Integer.valueOf(thirdParam);
 
-					currentPlayer.attack(fromCountryName, toCountryName, numberOfDices);
+					currentPlayer.attack(fromCountryName, toCountryName, numberOfDices, false);
 					phaseLogList.add(String.format("Player %s attacked from %s to %s by %d armies.",
 							currentPlayer.getName(), fromCountryName, toCountryName, numberOfDices));
 				} catch (NumberFormatException ex) {
