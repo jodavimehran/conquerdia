@@ -61,7 +61,19 @@ public class Battle {
 			}
 		}
 		fromCountry.removeArmy(attackerKilledArmies);
-		toCountry.removeArmy(defenderKilledArmies);
+		toCountry.removeArmy(defenderKilledArmies);	
+		//Check if toCuntry is Conquered
+		Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
+		if(toCountry.getNumberOfArmies() == 0) {
+			toCountry.setOwner(currentPlayer);
+			PhaseModel.getInstance().getCurrentPlayer().setHasSuccessfulAttack(true);
+			///Check Number of countries owned by the defender, if 0 gives all cards to attacker and remove player from model player queue 
+			Player defender = toCountry.getOwner();
+			if(defender.getNumberOfCountries() == 0) {
+				currentPlayer.getCards().addAll(defender.getCards());
+				PlayersModel.getInstance().getPlayers().remove(defender);
+			}
+		}
 		return null;
 	}
 

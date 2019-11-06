@@ -118,9 +118,12 @@ public class PhaseModel extends Observable {
                 break;
             }
             case ATTACK: {
-                if (getCurrentPlayer().isAttackFinished()) {
+    			getCurrentPlayer().setHasSuccessfulAttack(false);
+    			if (getCurrentPlayer().isAttackFinished()) {
+    				getCurrentPlayer().winCard();
                     changePhase(PhaseTypes.FORTIFICATION);
                 }
+                
                 break;
             }
             case FORTIFICATION: {

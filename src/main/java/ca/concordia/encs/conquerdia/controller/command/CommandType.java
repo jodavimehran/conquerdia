@@ -20,7 +20,7 @@ public enum CommandType {
     PLACE_ALL("placeall", new PlaceAllCommand(), 1),
     REINFORCE("reinforce", new ReinforceCommand(), 3),
     FORTIFY("fortify", new FortifyCommand(), 2),
-    ATTACK("attack", new AttackCommand(), 4),
+    ATTACK("attack", new AttackCommand(), 2),
     DEFEND("defend", new DefendCommand(), 2),
     ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2),
     EXCHANGE_CARDS("exchangecards", new ExchangeCardsCommand(), 2);

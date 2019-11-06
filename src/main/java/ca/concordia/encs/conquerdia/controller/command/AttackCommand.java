@@ -14,12 +14,17 @@ public class AttackCommand extends AbstractCommand {
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
        
-		
-		if ("-noattack".equals(inputCommandParts.get(1))) {
-            return;
-        }
+    	//attack A B -noAttack
+    	if(inputCommandParts.size() == 2) {
+        	String noAttack = inputCommandParts.get(1);
+        	if("-noattack".equals(noAttack)) {
+        		PhaseModel.getInstance().getCurrentPlayer().setAttackFinished();
+        	}else {
+                throw new ValidationException("Invalid input! " + getCommandHelpMessage());
+        	}
+    	}
         if (inputCommandParts.size() < CommandType.ATTACK.getMinNumberOfParts() || inputCommandParts.get(1).isEmpty()
-        		|| inputCommandParts.get(2).isEmpty())
+        		|| inputCommandParts.get(2).isEmpty() )
             throw new ValidationException("Invalid input! " + getCommandHelpMessage());
         
         try {
@@ -28,13 +33,7 @@ public class AttackCommand extends AbstractCommand {
         	String fromCountryName = inputCommandParts.get(1);
         	String toCountryName = inputCommandParts.get(2);
         	String thirdParam = inputCommandParts.get(3);
-        	//attack A B -noAttack
-        	String noAttack = inputCommandParts.get(1);
-        	if("-noattack".equals(noAttack)) {
-        		PhaseModel.getInstance().getCurrentPlayer().setAttackFinished();
-        	}else {
-                throw new ValidationException("Invalid input! " + getCommandHelpMessage());
-        	}
+
         	//attack A B -allout
         	if("-allout".equals(thirdParam)) {
 //        		PhaseModel.getInstance().getCurrentPlayer().getBattle().;

@@ -44,12 +44,27 @@ public class Player {
     private boolean fortificationFinished;
 
     /**
-     *
+     *This Class performs the simulation for Attack
      */
     private Battle battle;
-    private boolean attackFinished;
-
     /**
+     * This Attribute shows the Attack is finished.
+     */
+    private boolean attackFinished;
+    
+    /**
+     * This Attribute shows that during the attack phase of the current player there has been a successful attack
+     */
+    private boolean hasSuccessfulAttack ;
+    /**
+     * 
+     * @param hasSuccessfulAttack
+     */
+    public void setHasSuccessfulAttack(boolean hasSuccessfulAttack) {
+		this.hasSuccessfulAttack = hasSuccessfulAttack;
+	}
+
+	/**
      * @param name The name of a player must be determined when you want to create a
      *             player
      */
@@ -393,7 +408,7 @@ public class Player {
     /**
      * Add a card randomly to the list of the cards that this player have
      */
-    private void winCard() {
+    public void winCard() {
         cards.add(CardType.values()[new SecureRandom().nextInt(CardType.values().length)]);
     }
 
