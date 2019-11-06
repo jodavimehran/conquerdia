@@ -44,27 +44,20 @@ public class Player {
     private boolean fortificationFinished;
 
     /**
-     *This Class performs the simulation for Attack
+     * This Class performs the simulation for Attack
      */
     private Battle battle;
     /**
      * This Attribute shows the Attack is finished.
      */
     private boolean attackFinished;
-    
+
     /**
      * This Attribute shows that during the attack phase of the current player there has been a successful attack
      */
-    private boolean hasSuccessfulAttack ;
-    /**
-     * 
-     * @param hasSuccessfulAttack
-     */
-    public void setHasSuccessfulAttack(boolean hasSuccessfulAttack) {
-		this.hasSuccessfulAttack = hasSuccessfulAttack;
-	}
+    private boolean hasSuccessfulAttack;
 
-	/**
+    /**
      * @param name The name of a player must be determined when you want to create a
      *             player
      */
@@ -75,6 +68,13 @@ public class Player {
     private static int getNumberOfArmiesForExchangeCard() {
         NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD += 5;
         return NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD;
+    }
+
+    /**
+     * @param hasSuccessfulAttack
+     */
+    public void setHasSuccessfulAttack(boolean hasSuccessfulAttack) {
+        this.hasSuccessfulAttack = hasSuccessfulAttack;
     }
 
     /**
@@ -300,13 +300,16 @@ public class Player {
         if (fromCountry == null) {
             throw new ValidationException(String.format("Country with name \"%s\" was not found!", fromCountryName));
         }
-        if (this.owns(fromCountryName)) {
+        if (!this.owns(fromCountryName)) {
             throw new ValidationException(String.format("Country with name \"%s\" is not  onwend by the player \"%s\"!",
                     fromCountry.getName(), getName()));
         }
         Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
         if (toCountry == null) {
             throw new ValidationException(String.format("Country with name \"%s\" was not found!", toCountryName));
+        }
+        if (this.owns(toCountryName)) {
+            throw new ValidationException("You cannot attack to your countries.");
         }
         if (!fromCountry.isAdjacentTo(toCountryName)) {
             throw new ValidationException(String.format("Country with name \"%s\" is not adjacent to \"%s\"!",
@@ -376,6 +379,7 @@ public class Player {
 
     /**
      * Move armies after conquering another country during a battle
+     *
      * @param numberOfArmies
      * @return
      */
