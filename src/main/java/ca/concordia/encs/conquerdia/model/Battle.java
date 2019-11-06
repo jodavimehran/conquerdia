@@ -45,31 +45,38 @@ public class Battle {
 		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
 
-	public String simulateAttack() {
+	public String simulate() {
 		int attackerKilledArmies = 0;
 		int defenderKilledArmies = 0;
-		int maxDiceRolled = numberOfAttackerDices > numberOfDefenderDices ? numberOfAttackerDices:numberOfDefenderDices;
+
+		int minDiceRolled = Math.min(numberOfAttackerDices, numberOfDefenderDices);
+
 		Integer[] attackerDiceRolled = new Integer[numberOfAttackerDices];
 		Integer[] defenderDiceRolled = new Integer[numberOfDefenderDices];
+		
 		Arrays.sort(attackerDiceRolled, (a, b) -> b - a);
 		Arrays.sort(defenderDiceRolled, (a, b) -> b - a);
-		for(int i = 0 ; i < maxDiceRolled ; i++) {
-			if(defenderDiceRolled[i] >=  attackerDiceRolled[i]) {
-				defenderKilledArmies++;
-			}else {
+		
+		for (int i = 0; i < minDiceRolled; i++) {
+			if (defenderDiceRolled[i] >= attackerDiceRolled[i]) {
 				attackerKilledArmies++;
+			} else {
+				defenderKilledArmies++;
 			}
 		}
+		
 		fromCountry.removeArmy(attackerKilledArmies);
-		toCountry.removeArmy(defenderKilledArmies);	
-		//Check if toCuntry is Conquered
+		toCountry.removeArmy(defenderKilledArmies);
+		
+		// Check if toCuntry is Conquered
 		Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
-		if(toCountry.getNumberOfArmies() == 0) {
+		if (toCountry.getNumberOfArmies() == 0) {
 			toCountry.setOwner(currentPlayer);
 			PhaseModel.getInstance().getCurrentPlayer().setHasSuccessfulAttack(true);
-			///Check Number of countries owned by the defender, if 0 gives all cards to attacker and remove player from model player queue 
+			/// Check Number of countries owned by the defender, if 0 gives all cards to
+			/// attacker and remove player from model player queue
 			Player defender = toCountry.getOwner();
-			if(defender.getNumberOfCountries() == 0) {
+			if (defender.getNumberOfCountries() == 0) {
 				currentPlayer.getCards().addAll(defender.getCards());
 				PlayersModel.getInstance().getPlayers().remove(defender);
 			}
@@ -80,5 +87,4 @@ public class Battle {
 	public void allOutAttack(Country fromCountry, Country toCountry) {
 
 	}
-
 }

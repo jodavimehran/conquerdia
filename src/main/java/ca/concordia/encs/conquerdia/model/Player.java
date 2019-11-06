@@ -367,7 +367,8 @@ public class Player {
         } else {
             messages.add(String.format("Player {0} defended with {1} dice(s).", this.name, numDice));
             battle.setNumberOfDefenderDices(numDice);
-            messages.add(battle.simulateAttack());
+            String battleMessage = battle.simulate();
+            messages.add(battleMessage);
         }
 
         return messages;
