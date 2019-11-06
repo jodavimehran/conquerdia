@@ -316,25 +316,18 @@ public class Player {
                     fromCountryName, toCountryName));
         }
         if (fromCountry.getNumberOfArmies() <= 1) {
-            throw new ValidationException("TODO");
+            throw new ValidationException("You have not enough army in source country.");
         }
         if (numdice > 3) {
-            throw new ValidationException(
-                    String.format("The Attacker \"%s\"  can not roll more than 3 dices. (\"%d\" dice rolled)",
-                            getName(), Integer.valueOf(numdice)));
+            throw new ValidationException(String.format("The Attacker \"%s\" can not roll more than 3 dices. (\"%d\" dice rolled)", getName(), numdice));
         }
-        if (numdice > 3 || numdice > fromCountry.getNumberOfArmies()) {
-            throw new ValidationException(String.format(
-                    "Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")",
-                    getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
+        if (numdice >= fromCountry.getNumberOfArmies()) {
+            throw new ValidationException(String.format("Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")", getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
         }
         battle = new Battle();
         battle.setFromCountry(fromCountry);
         battle.setToCountry(toCountry);
         battle.setNumberOfAttackerDices(numdice);
-
-        // simulateAttack(fromCountry, toCountry);
-
     }
 
     private void allOutAttack() {
