@@ -332,8 +332,7 @@ public class Player {
         battle.setNumberOfAttackerDices(numdice);
     }
 
-    private void allOutAttack() {
-        // TODO Auto-generated method stub
+    public void allOutAttack(String fromCountryName, String toCountryName) {
 
     }
 
