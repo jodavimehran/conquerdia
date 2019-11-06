@@ -11,35 +11,12 @@ public class Battle {
 	private int numberOfAttackerDices;
 	private int numberOfDefenderDices;
 	private DiceRoller diceRoller;
+	private boolean isAllOut;
 
 	public Battle(Country attackingCountry, Country defendingCountry) {
 		this.fromCountry = attackingCountry;
 		this.toCountry = defendingCountry;
 		diceRoller = DiceRoller.getInstance();
-	}
-
-	public Country getFromCountry() {
-		return fromCountry;
-	}
-
-	public Country getToCountry() {
-		return toCountry;
-	}
-
-	public int getNumberOfAttackerDices() {
-		return numberOfAttackerDices;
-	}
-
-	public void setNumberOfAttackerDices(int numberOfAttackerDices) {
-		this.numberOfAttackerDices = numberOfAttackerDices;
-	}
-
-	public int getNumberOfDefenderDices() {
-		return numberOfDefenderDices;
-	}
-
-	public void setNumberOfDefenderDices(int numberOfDefenderDices) {
-		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
 
 	public String simulateBattle() {
@@ -62,7 +39,7 @@ public class Battle {
 		toCountry.removeArmy(killedByAttacker);
 
 		// Check if toCuntry is Conquered
-		if (toCountry.getNumberOfArmies() == 0) {
+		if (toCountry.hasNoArmy()) {
 			conquer();
 
 			return String.format(
@@ -99,7 +76,35 @@ public class Battle {
 		return fromCountry.getNumberOfArmies() > 1;
 	}
 
-	public void allOutAttack(Country fromCountry, Country toCountry) {
+	public boolean isAllOut() {
+		return isAllOut;
+	}
 
+	public void setAllOut(boolean isAllOut) {
+		this.isAllOut = isAllOut;
+	}
+
+	public Country getFromCountry() {
+		return fromCountry;
+	}
+
+	public Country getToCountry() {
+		return toCountry;
+	}
+
+	public int getNumberOfAttackerDices() {
+		return numberOfAttackerDices;
+	}
+
+	public void setNumberOfAttackerDices(int numberOfAttackerDices) {
+		this.numberOfAttackerDices = numberOfAttackerDices;
+	}
+
+	public int getNumberOfDefenderDices() {
+		return numberOfDefenderDices;
+	}
+
+	public void setNumberOfDefenderDices(int numberOfDefenderDices) {
+		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
 }
