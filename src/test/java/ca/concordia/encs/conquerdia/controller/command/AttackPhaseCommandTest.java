@@ -2,6 +2,7 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
@@ -11,6 +12,7 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
 /**
  * Abstraction for attack phase commands tests
  */
+@Ignore
 public abstract class AttackPhaseCommandTest {
 
 	protected static WorldMap map;
@@ -47,10 +49,7 @@ public abstract class AttackPhaseCommandTest {
 
 		map.getCountry("Italy").setOwner(new Player.Builder("Robert").build());
 		map.getCountry("Germany").setOwner(new Player.Builder("Doe").build());
-
-		// phaseModel.populateCountries();
-		// placeAllArmy();
-
+		
 		return map;
 	}
 
@@ -59,21 +58,5 @@ public abstract class AttackPhaseCommandTest {
 		if (map != null) {
 			map.clear();
 		}
-	}
-
-	private static void placeAllArmy() {
-		// boolean x =phaseModel.isThereAnyUnplacedArmy();
-		/*
-		 * while (phaseModel.isThereAnyUnplacedArmy()) { Player currentPlayer =
-		 * phaseModel.getCurrentPlayer(); if (currentPlayer.getUnplacedArmies() > 0) {
-		 * Set<String> countryNames = currentPlayer.getCountryNames(); String[]
-		 * countriesArray = new String[countryNames.size()]; countriesArray =
-		 * countryNames.toArray(countriesArray); String countryName =
-		 * countriesArray[randomNumber.nextInt(countryNames.size())];
-		 * phaseModel.placeArmy(countryName);
-		 * phaseLogList.add(String.format("%s placed one army to %s",
-		 * currentPlayer.getName(), countryName)); }
-		 * phaseModel.giveTurnToAnotherPlayer(); }
-		 */
 	}
 }
