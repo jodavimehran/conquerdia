@@ -300,10 +300,11 @@ public class Player {
 				toCountryName);
 	}
 
-	public void attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut)
+	public ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut)
 			throws ValidationException {
 		validateCountries(fromCountryName, toCountryName);
 
+		ArrayList<String> log = new ArrayList<String>();
 		Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
 		Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
 
@@ -318,11 +319,17 @@ public class Player {
 						"Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")",
 						getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
 			}
+			log.add(String.format("%s has attacked %s with %s number of dice(s).", fromCountryName, toCountryName,
+					numdice));
+		} else {
+			log.add(String.format("%s has started an all out attack on %s.", fromCountryName, toCountryName));
 		}
 
 		battle = new Battle(fromCountry, toCountry);
 		battle.setAllOut(isAllOut);
 		battle.setNumberOfAttackerDices(numdice);
+
+		return log;
 	}
 
 	private void validateCountries(String fromCountryName, String toCountryName)
@@ -367,18 +374,18 @@ public class Player {
 
 		if (numDice > 2) {
 			error = "Defender cannot roll more than 2 dices and not more than the number of armies contained defending country";
-		} else if (battle == null || battle.getToCountry().getOwner() != this) {
-			error = String.format("{0} does not have any country under attack.", this.name);
+		} else if (battle == null /* || battle.getToCountry().getOwner() != this */) {
+			error = String.format("% does not have any country under attack.", this.name);
 		} else if (numDice > (defendingCountry = battle.getToCountry()).getNumberOfArmies()) {
 
 			error = String.format(
-					"Defending country {0} has less number of armies {1} than the number of dice rolled {2}."
+					"Defending country %s has less number of armies %s than the number of dice rolled %s."
 							+ " The number of dice cannot be more the number of armies in the defending country.",
 					defendingCountry.getName(), defendingCountry.getNumberOfArmies(), numDice);
 		} else if (numDice > (attackingCountry = battle.getFromCountry()).getNumberOfArmies()) {
 
 			error = String.format(
-					"Attacking country {0} has less number of armies {1} than the number of dice rolled {2}."
+					"Attacking country %s has less number of armies %s than the number of dice rolled %s."
 							+ " The number of dice cannot be more the number of armies in the attacking country.",
 					attackingCountry.getName(), attackingCountry.getNumberOfArmies(), numDice);
 		}
@@ -386,7 +393,7 @@ public class Player {
 		if (error != null) {
 			throw new ValidationException(error);
 		} else {
-			messages.add(String.format("Player {0} defended with {1} dice(s).", this.name, numDice));
+			messages.add(String.format("Player %s defended with %d dice(s).", this.name, numDice));
 			battle.setNumberOfDefenderDices(numDice);
 			String battleMessage = battle.simulateBattle();
 			messages.add(battleMessage);
