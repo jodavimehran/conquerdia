@@ -70,6 +70,7 @@ public class PhaseModel extends Observable {
      */
     public List<String> changePhase() {
         List<String> results = new ArrayList<>();
+        Player currentPlayer = getCurrentPlayer();
         switch (currentPhase) {
             case NONE: {
                 if (WorldMap.getInstance().isMapLoaded()) {
@@ -88,7 +89,7 @@ public class PhaseModel extends Observable {
             case START_UP: {
                 if (allCountriesArePopulated) {
                     if (PlayersModel.getInstance().isThereAnyUnplacedArmy()) {
-                        results.add(String.format("Dear %s, you have %d unplaced armies.", getCurrentPlayer().getName(), getCurrentPlayer().getUnplacedArmies()));
+                        results.add(String.format("Dear %s, you have %d unplaced armies.", currentPlayer.getName(), currentPlayer.getUnplacedArmies()));
                         results.add("Use \"placearmy\" to place one of them or use \"placeall\" to automatically randomly place all remaining unplaced armies for all players.");
                     } else {
                         PlayersModel.getInstance().giveTurnToFirstPlayer();
@@ -100,16 +101,18 @@ public class PhaseModel extends Observable {
                         results.add("The turn-based main phase of the game is about to begin.");
                         results.add("================================================================================================================================================");
 
-                        getCurrentPlayer().calculateNumberOfReinforcementArmies();
-                        results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", getCurrentPlayer().getName(), getCurrentPlayer().getUnplacedArmies()));
+                        currentPlayer.calculateNumberOfReinforcementArmies();
+                        results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getName(), currentPlayer.getUnplacedArmies()));
+                        results.add(String.format("[%s]", currentPlayer.getCountryNames().stream().collect(Collectors.joining(","))));
                     }
                 }
                 break;
             }
             case REINFORCEMENT: {
-                if (getCurrentPlayer().getUnplacedArmies() > 0) {
-                    results.add(String.format("You have %d reinforcement army. You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
-                } else if (getCurrentPlayer().getCards().size() >= 5) {
+                if (currentPlayer.getUnplacedArmies() > 0) {
+                    results.add(String.format("You have %d reinforcement army. You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
+                    results.add(String.format("[%s]", currentPlayer.getCountryNames().stream().collect(Collectors.joining(","))));
+                } else if (currentPlayer.getCards().size() >= 5) {
                     results.add("You have more than five cards. You must exchange them by using \"exchangecards\" command.");
                 } else {
                     changePhase(PhaseTypes.ATTACK);
@@ -118,20 +121,26 @@ public class PhaseModel extends Observable {
                 break;
             }
             case ATTACK: {
-    			getCurrentPlayer().setHasSuccessfulAttack(false);
-    			if (getCurrentPlayer().isAttackFinished()) {
-    				getCurrentPlayer().winCard();
+                currentPlayer.setSuccessfulAttack(false);
+                if (currentPlayer.isAttackFinished()) {
+                    if (currentPlayer.hasSuccessfulAttack()) {
+                        currentPlayer.winCard();
+                    }
                     changePhase(PhaseTypes.FORTIFICATION);
+                } else if (currentPlayer.getBattle() == null) {
+                    results.add("You can declare an attack or use \"attack -noattack\" to skip this phase.");
+                } else if (currentPlayer.getBattle() != null) {
+                    results.add(String.format("%s!!! \"%s\" is under attack by %s. You have %d army at this country. You must defend by using defend command.", currentPlayer.getBattle().getToCountry().getOwner().getName(), currentPlayer.getBattle().getToCountry().getName(), currentPlayer.getName(), currentPlayer.getBattle().getToCountry().getNumberOfArmies()));
                 }
-                
                 break;
             }
             case FORTIFICATION: {
-                if (getCurrentPlayer().isFortificationFinished()) {
+                if (currentPlayer.isFortificationFinished()) {
                     PlayersModel.getInstance().giveTurnToAnotherPlayer();
                     changePhase(PhaseTypes.REINFORCEMENT);
-                    getCurrentPlayer().calculateNumberOfReinforcementArmies();
-                    results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", getCurrentPlayer().getUnplacedArmies()));
+                    currentPlayer.calculateNumberOfReinforcementArmies();
+                    results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getUnplacedArmies()));
+                    results.add(String.format("[%s]", currentPlayer.getCountryNames().stream().collect(Collectors.joining(","))));
                 }
                 break;
             }

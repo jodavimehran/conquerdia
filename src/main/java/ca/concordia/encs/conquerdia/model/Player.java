@@ -55,7 +55,7 @@ public class Player {
     /**
      * This Attribute shows that during the attack phase of the current player there has been a successful attack
      */
-    private boolean hasSuccessfulAttack;
+    private boolean successfulAttack;
 
     /**
      * @param name The name of a player must be determined when you want to create a
@@ -71,10 +71,14 @@ public class Player {
     }
 
     /**
-     * @param hasSuccessfulAttack
+     * @param successfulAttack
      */
-    public void setHasSuccessfulAttack(boolean hasSuccessfulAttack) {
-        this.hasSuccessfulAttack = hasSuccessfulAttack;
+    public void setSuccessfulAttack(boolean successfulAttack) {
+        this.successfulAttack = successfulAttack;
+    }
+
+    public boolean hasSuccessfulAttack() {
+        return successfulAttack;
     }
 
     /**

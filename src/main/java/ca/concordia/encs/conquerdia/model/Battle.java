@@ -1,8 +1,6 @@
 package ca.concordia.encs.conquerdia.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import ca.concordia.encs.conquerdia.model.map.Country;
 
@@ -72,7 +70,7 @@ public class Battle {
 		Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
 		if (toCountry.getNumberOfArmies() == 0) {
 			toCountry.setOwner(currentPlayer);
-			PhaseModel.getInstance().getCurrentPlayer().setHasSuccessfulAttack(true);
+			PhaseModel.getInstance().getCurrentPlayer().setSuccessfulAttack(true);
 			/// Check Number of countries owned by the defender, if 0 gives all cards to
 			/// attacker and remove player from model player queue
 			Player defender = toCountry.getOwner();
