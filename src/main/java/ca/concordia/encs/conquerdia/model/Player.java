@@ -325,9 +325,7 @@ public class Player {
                     "Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")",
                     getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
         }
-        battle = new Battle();
-        battle.setFromCountry(fromCountry);
-        battle.setToCountry(toCountry);
+        battle = new Battle(fromCountry, toCountry);
         battle.setNumberOfAttackerDices(numdice);
 
         // simulateAttack(fromCountry, toCountry);
@@ -366,8 +364,9 @@ public class Player {
                     defendingCountry.getName(), defendingCountry.getNumberOfArmies(), numDice));
         } else {
             messages.add(String.format("Player {0} defended with {1} dice(s).", this.name, numDice));
+           
             battle.setNumberOfDefenderDices(numDice);
-            String battleMessage = battle.simulate();
+            String battleMessage = battle.simulateBattle();
             messages.add(battleMessage);
         }
 
