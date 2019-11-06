@@ -64,6 +64,7 @@ public class Player {
 	 */
 	private Player(String name) {
 		this.name = name;
+		this.battle = null;
 	}
 
 	private static int getNumberOfArmiesForExchangeCard() {
@@ -302,12 +303,13 @@ public class Player {
 
 	public ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut)
 			throws ValidationException {
+		if(battle == null) {
+			throw new ValidationException("attack is not valid Command at this stage!");
+		}
 		validateCountries(fromCountryName, toCountryName);
-
 		ArrayList<String> log = new ArrayList<String>();
 		Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
 		Country toCountry = WorldMap.getInstance().getCountry(toCountryName);
-
 		if (!isAllOut) {
 			if (numdice > 3) {
 				throw new ValidationException(String.format(
@@ -428,7 +430,7 @@ public class Player {
 		Country defender = battle.getToCountry();
 		attacker.removeArmy(armiesToMove);
 		defender.placeArmy(armiesToMove);
-
+		battle = null;    
 		return String.format("Country %s has moved %s armies to % ", attacker.getName(), armiesToMove,
 				defender.getName());
 	}
