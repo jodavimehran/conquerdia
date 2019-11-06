@@ -51,12 +51,12 @@ public class Battle {
 			conquer();
 
 			return String.format(
-					"Congrats! %s has conquered %. Please move atleast % of your armies from % to the conqured country %.",
+					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conqured country %s.",
 					fromCountry.getOwner().getName(), toCountry.getName(), numberOfAttackerDices,
 					fromCountry.getName(), toCountry.getName());
 		}
 
-		return String.format("Attacker rolled % & killed % armies. Defender rolled % and killed % armies",
+		return String.format("Attacker rolled %s & killed %s armies. Defender rolled %s and killed %s armies",
 				Arrays.toString(attackerDiceRolled),
 				killedByAttacker,
 				Arrays.toString(defenderDiceRolled),

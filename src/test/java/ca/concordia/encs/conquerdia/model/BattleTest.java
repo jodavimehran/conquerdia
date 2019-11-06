@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import ca.concordia.encs.conquerdia.model.map.Continent;
-import ca.concordia.encs.conquerdia.model.map.Country;
 
 public class BattleTest {
 
