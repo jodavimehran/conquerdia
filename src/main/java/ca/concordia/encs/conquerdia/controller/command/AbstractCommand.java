@@ -3,6 +3,7 @@ package ca.concordia.encs.conquerdia.controller.command;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.CommandResultModel;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
+import ca.concordia.encs.conquerdia.model.PlayersModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public abstract class AbstractCommand implements Command {
         } else {
             try {
                 runCommand(inputCommandParts);
+                PlayersModel.getInstance().update();
                 PhaseModel.getInstance().addPhaseLogs(phaseLogList);
                 resultList.addAll(PhaseModel.getInstance().changePhase());
                 CommandResultModel.getInstance().addResultList(resultList);

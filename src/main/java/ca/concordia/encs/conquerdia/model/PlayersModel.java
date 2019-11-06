@@ -116,4 +116,8 @@ public class PlayersModel extends Observable {
         return PlayersModel.getInstance().getPlayers().stream().filter(player -> player.getUnplacedArmies() > 0).count() > 0;
     }
 
+    public void update() {
+        setChanged();
+        notifyObservers();
+    }
 }
