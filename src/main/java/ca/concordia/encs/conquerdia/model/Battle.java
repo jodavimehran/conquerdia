@@ -130,4 +130,8 @@ public class Battle {
 	public void setNumberOfDefenderDices(int numberOfDefenderDices) {
 		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
+	
+	public Country getWinner() {
+		return winner;	
+	}
 }

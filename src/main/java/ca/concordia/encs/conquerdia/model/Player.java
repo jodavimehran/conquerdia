@@ -405,11 +405,32 @@ public class Player {
 	/**
 	 * Move armies after conquering another country during a battle
 	 *
-	 * @param numberOfArmies
-	 * @return
+	 * @param armiesToMove
 	 */
-	public String attackMove(int numberOfArmies) {
-		return null;
+	public String attackMove(int armiesToMove) throws ValidationException {
+		String error = null;
+
+		if (battle == null) {
+			error = String.format("Player %s is not in battle", name);
+		} else if (battle.getWinner() == null) {
+			error = String.format("Player %s has not conquered the defending country.", name);
+		} else if (armiesToMove + 1 > battle.getFromCountry().getNumberOfArmies()) {
+			error = String.format(
+					"You cannot move more army than what you have in your attacking country."
+							+ " And you must keep atleast one army in your attacking country.");
+		}
+
+		if (error != null) {
+			throw new ValidationException(error);
+		}
+
+		Country attacker = battle.getFromCountry();
+		Country defender = battle.getToCountry();
+		attacker.removeArmy(armiesToMove);
+		defender.placeArmy(armiesToMove);
+
+		return String.format("Country %s has moved %s armies to % ", attacker.getName(), armiesToMove,
+				defender.getName());
 	}
 
 	/**
