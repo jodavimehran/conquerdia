@@ -10,10 +10,12 @@ public class Battle {
 	private Country toCountry;
 	private int numberOfAttackerDices;
 	private int numberOfDefenderDices;
+	private DiceRoller diceRoller;
 
 	public Battle(Country attackingCountry, Country defendingCountry) {
 		this.fromCountry = attackingCountry;
 		this.toCountry = defendingCountry;
+		diceRoller = DiceRoller.getInstance();
 	}
 
 	public Country getFromCountry() {
@@ -41,27 +43,23 @@ public class Battle {
 	}
 
 	public String simulateBattle() {
-		int attackerKilledArmies = 0;
-		int defenderKilledArmies = 0;
+		int[] attackerDiceRolled = diceRoller.generateSortedDices(numberOfAttackerDices);
+		int[] defenderDiceRolled = diceRoller.generateSortedDices(numberOfDefenderDices);
 
+		int killedByDefender = 0;
+		int killedByAttacker = 0;
 		int minDiceRolled = Math.min(numberOfAttackerDices, numberOfDefenderDices);
-
-		Integer[] attackerDiceRolled = new Integer[numberOfAttackerDices];
-		Integer[] defenderDiceRolled = new Integer[numberOfDefenderDices];
-
-		Arrays.sort(attackerDiceRolled, (a, b) -> b - a);
-		Arrays.sort(defenderDiceRolled, (a, b) -> b - a);
 
 		for (int i = 0; i < minDiceRolled; i++) {
 			if (defenderDiceRolled[i] >= attackerDiceRolled[i]) {
-				attackerKilledArmies++;
+				killedByDefender++;
 			} else {
-				defenderKilledArmies++;
+				killedByAttacker++;
 			}
 		}
 
-		fromCountry.removeArmy(attackerKilledArmies);
-		toCountry.removeArmy(defenderKilledArmies);
+		fromCountry.removeArmy(killedByDefender);
+		toCountry.removeArmy(killedByAttacker);
 
 		// Check if toCuntry is Conquered
 		if (toCountry.getNumberOfArmies() == 0) {
@@ -73,7 +71,11 @@ public class Battle {
 					fromCountry.getName());
 		}
 
-		return null;
+		return String.format("Attacker rolled {0} & killed {1} armies. Defender rolled {2} and killed {3} armies",
+				Arrays.toString(attackerDiceRolled),
+				killedByAttacker,
+				Arrays.toString(defenderDiceRolled),
+				killedByDefender);
 	}
 
 	private void conquer() {
