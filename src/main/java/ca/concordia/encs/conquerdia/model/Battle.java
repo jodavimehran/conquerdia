@@ -20,6 +20,10 @@ public class Battle {
 	}
 
 	public String simulateBattle() {
+		if (isAllOut) {
+			numberOfAttackerDices = getMaxDiceCountForAttacker();
+		}
+
 		int[] attackerDiceRolled = diceRoller.generateSortedDices(numberOfAttackerDices);
 		int[] defenderDiceRolled = diceRoller.generateSortedDices(numberOfDefenderDices);
 
@@ -53,6 +57,25 @@ public class Battle {
 				killedByAttacker,
 				Arrays.toString(defenderDiceRolled),
 				killedByDefender);
+	}
+
+	/**
+	 * 
+	 * @return The maximum dice count of attacker for the all out phase
+	 */
+	private int getMaxDiceCountForAttacker() {
+		int armies = fromCountry.getNumberOfArmies();
+		int max = 0;
+
+		if (armies > 1) {
+
+			max = Math.min(armies, 3);
+			max = armies;
+			if (max > 3) {
+				max = 3;
+			}
+		}
+		return max;
 	}
 
 	private void conquer() {
