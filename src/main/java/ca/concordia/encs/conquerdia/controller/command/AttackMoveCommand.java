@@ -23,7 +23,7 @@ public class AttackMoveCommand extends AbstractCommand {
 
 				Player player = PhaseModel.getInstance().getCurrentPlayer();
 				phaseLogList.add(player.attackMove(numOfArmiesToMove));
-
+ 
 			} catch (NumberFormatException ex) {
 				throw new ValidationException("Number of armies to be moved must be a positive integer number.");
 			}

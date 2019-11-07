@@ -304,13 +304,15 @@ public class Player {
 		return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName,
 				toCountryName);
 	}
+
 	/**
 	 * Performs an attack in the attack phase.
+	 * 
 	 * @param fromCountryName The attacker country
-	 * @param toCountryName That country that has been attacked
-	 * @param numdice Number of dices used to perform attack.
-	 * @param isAllOut The option to attack with all possible armies
-	 * @return Message log returned about the status of the attack. 
+	 * @param toCountryName   That country that has been attacked
+	 * @param numdice         Number of dices used to perform attack.
+	 * @param isAllOut        The option to attack with all possible armies
+	 * @return Message log returned about the status of the attack.
 	 * @throws ValidationException
 	 */
 	public ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut)
@@ -351,10 +353,12 @@ public class Player {
 
 		return log;
 	}
+
 	/**
-	 * Checking validation rules related to countries 
+	 * Checking validation rules related to countries
+	 * 
 	 * @param fromCountryName The attacker country
-	 * @param toCountryName The country that was attacked.
+	 * @param toCountryName   The country that was attacked.
 	 * @throws ValidationException
 	 */
 	private void validateCountries(String fromCountryName, String toCountryName)
@@ -424,8 +428,7 @@ public class Player {
 		} else {
 			messages.add(String.format("Player %s defended with %d dice(s).", this.name, numDice));
 			battle.setNumberOfDefenderDices(numDice);
-			String battleMessage = battle.simulateBattle();
-			messages.add(battleMessage);
+			messages.addAll(battle.simulateBattle());
 		}
 
 		return messages;
@@ -486,6 +489,7 @@ public class Player {
 		minusUnplacedArmies(realNumberOfArmies);
 		return String.format("%s placed %d army/armies to %s.", name, realNumberOfArmies, countryName);
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -503,6 +507,7 @@ public class Player {
 				.append(getName(), player.getName())
 				.isEquals();
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -652,6 +657,7 @@ public class Player {
 	public boolean canPerformAttackMove() {
 		return battle != null && (battle.getState() == BattleState.Conquered);
 	}
+
 	/**
 	 * 
 	 * @return true if the battle is not Null; otherwise false;
