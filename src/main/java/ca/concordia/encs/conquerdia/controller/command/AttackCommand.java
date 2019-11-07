@@ -35,12 +35,18 @@ public class AttackCommand extends AbstractCommand {
 	}
 
 	private void handleNoAttack(Player currentPlayer) throws ValidationException {
+		if (currentPlayer.isInBattle()) {
+			throw new ValidationException(String.format(
+					"Cannot finish attack because you are in a battle with %s",
+					currentPlayer.getBattle().getToCountry().getName()));
+		}
+
 		if (!currentPlayer.canPerformAttackMove()) {
 			currentPlayer.setAttackFinished();
 			phaseLogList.add(String.format("\"-noattack\" is selected by %s.", currentPlayer.getName()));
 		} else {
 			throw new ValidationException(String.format(
-					"Cannot finish attack since you have unplaced armies in your newly conquered country %s",
+					"Cannot finish attack since you have to place armies in your newly conquered country %s",
 					currentPlayer.getBattle().getToCountry().getName()));
 		}
 	}

@@ -620,4 +620,8 @@ public class Player {
 	public boolean canPerformAttackMove() {
 		return battle != null && (battle.getState() == BattleState.Conquered);
 	}
+	
+	public boolean isInBattle() {
+		return battle != null;
+	}
 }
