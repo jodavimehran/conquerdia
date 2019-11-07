@@ -248,7 +248,6 @@ public class Player {
 			numberOfReinforcementArmies = 3;
 		unplacedArmies = numberOfReinforcementArmies;
 		return numberOfReinforcementArmies;
-
 	}
 
 	/**
