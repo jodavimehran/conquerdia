@@ -118,11 +118,15 @@ public class WorldMap {
      * @return return true if a map file was successfully saved.
      * return false if a map file was successfully saved
      */
-    public String saveMap(String fileName) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "save");
-        IMapWriter.createMapWriter(this).writeMap(fileName);
-        return String.format("Map with file name \"%s\" has been saved successfully", fileName);
+    public void saveMap(String fileName) throws ValidationException {
+        if (!readyForEdit) {
+            throw new ValidationException(String.format(NO_MAP_TO_EDIT_ERROR, "save"));
+        }
+        if (checkAllMapValidationRules()) {
+            IMapWriter.createMapWriter(this).writeMap(fileName);
+        } else {
+            throw new ValidationException(validateMap());
+        }
     }
 
     /**
