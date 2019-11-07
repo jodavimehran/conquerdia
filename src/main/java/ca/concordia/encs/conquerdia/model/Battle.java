@@ -14,20 +14,26 @@ public class Battle {
 	private DiceRoller diceRoller;
 
 	private BattleState state;
-
 	public enum BattleState {
 		Attacked,
 		Defended,
 		Conquered,
 	}
-
+	/**
+	 * The constructor of the battle class
+	 * @param attackingCountry The attacker country
+	 * @param defendingCountry The country that is being attacked.
+	 */
 	public Battle(Country attackingCountry, Country defendingCountry) {
 		state = BattleState.Attacked;
 		this.fromCountry = attackingCountry;
 		this.toCountry = defendingCountry;
 		diceRoller = DiceRoller.getInstance();
 	}
-
+	/**
+	 * Performs an allOut attack
+	 * @return the result of the allOut Attack
+	 */
 	public ArrayList<String> allOutAttack() {
 		ArrayList<String> log = new ArrayList<String>();
 		boolean continueAttack = true;
@@ -47,7 +53,10 @@ public class Battle {
 		fromCountry.getOwner().setAttackFinished();
 		return log;
 	}
-
+	/**
+	 * This method simulates the battle for attack commands
+	 * @return An String of arrays demonstrating the  result of  simulating the attacks.
+	 */
 	public String simulateBattle() {
 		state = BattleState.Defended;
 
@@ -128,52 +137,88 @@ public class Battle {
 			attacker.addUnplacedArmies(toCountry.getContinent().getValue());
 		}
 	}
-
+	/**
+	 * 
+	 * @return true if the result of an attack is to conquer a country; otherwise return false.
+	 */
 	public boolean isConquered() {
 		return winner != null;
 	}
-
+	/**
+	 * 
+	 * @return true if more attack is possible
+	 */
 	public boolean isMoreAttackPossible() {
 		return fromCountry.getNumberOfArmies() > 1;
 	}
-
+	/**
+	 * 
+	 * @return  the Attacking country
+	 */
 	public Country getFromCountry() {
 		return fromCountry;
 	}
-
+	/**
+	 * 
+	 * @return the country that is being attacked.
+	 */
 	public Country getToCountry() {
 		return toCountry;
 	}
-
+	/**
+	 * 
+	 * @return the number of Attacker dices.
+	 */
 	public int getNumberOfAttackerDices() {
 		return numberOfAttackerDices;
 	}
-
+	/**
+	 * Set the number of attacker dices
+	 * @param numberOfAttackerDices number of attacker dices
+	 */
 	public void setNumberOfAttackerDices(int numberOfAttackerDices) {
 		this.numberOfAttackerDices = numberOfAttackerDices;
 	}
-
+	/**
+	 * 
+	 * @return the number of defender dices
+	 */
 	public int getNumberOfDefenderDices() {
 		return numberOfDefenderDices;
 	}
-
+	/**
+	 * Sets the number of defender dices
+	 * @param numberOfDefenderDices number of defender dices
+	 */
 	public void setNumberOfDefenderDices(int numberOfDefenderDices) {
 		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
-
+	/**
+	 * 
+	 * @return The winner country
+	 */
 	public Country getWinner() {
 		return winner;
 	}
-
+	/**
+	 * 
+	 * @return get the current state of the battle
+	 */
 	public BattleState getState() {
 		return state;
 	}
-
+	/**
+	 * 
+	 * @return true if the attack is possible; false otherwise.
+	 */
 	public boolean isAttackPossible() {
 
 		return state == BattleState.Defended;
 	}
-
+	/**
+	 * 
+	 * @return true if the defend is possible; otherwise false.
+	 */
 	public boolean isDefendPossible() {
 		return state == BattleState.Attacked;
 	}
