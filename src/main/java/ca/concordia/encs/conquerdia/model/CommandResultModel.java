@@ -11,9 +11,15 @@ public class CommandResultModel extends Observable {
     private static CommandResultModel instance;
     private final List<String> resultList = new ArrayList<>();
 
+    /**
+     * Constructor set private for singleton design pattern for Command Result Model
+     */
     private CommandResultModel() {
     }
-
+    /**
+     * 
+     * @return The instance of the result model Singleton class.
+     */
     public static CommandResultModel getInstance() {
         if (instance == null) {
             synchronized (CommandResultModel.class) {
