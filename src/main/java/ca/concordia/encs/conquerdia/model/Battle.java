@@ -46,19 +46,20 @@ public class Battle {
 			} else {
 				numberOfDefenderDices = getMaxDiceCountForDefender();
 				state = BattleState.Attacked;
-				log.add(simulateBattle());
+				log.addAll(simulateBattle());
 				continueAttack = (winner == null);
 			}
 		} while (continueAttack);
-		fromCountry.getOwner().setAttackFinished();
+
 		return log;
 	}
 	/**
 	 * This method simulates the battle for attack commands
 	 * @return An String of arrays demonstrating the  result of  simulating the attacks.
 	 */
-	public String simulateBattle() {
+	public ArrayList<String> simulateBattle() {
 		state = BattleState.Defended;
+		ArrayList<String> log = new ArrayList<>();
 
 		int[] attackerDiceRolled = diceRoller.generateSortedDices(numberOfAttackerDices);
 		int[] defenderDiceRolled = diceRoller.generateSortedDices(numberOfDefenderDices);
@@ -78,20 +79,22 @@ public class Battle {
 		fromCountry.removeArmy(killedByDefender);
 		toCountry.removeArmy(killedByAttacker);
 
-		// Check if toCuntry is Conquered
-		if (toCountry.hasNoArmy()) {
-			conquer();
-			return String.format(
-					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conqured country %s.",
-					fromCountry.getOwner().getName(), toCountry.getName(), numberOfAttackerDices,
-					fromCountry.getName(), toCountry.getName());
-		}
-
-		return String.format("Attacker rolled %s & killed %s armies. Defender rolled %s and killed %s armies",
+		log.add(String.format("Attacker rolled %s & killed %s armies. Defender rolled %s and killed %s armies",
 				Arrays.toString(attackerDiceRolled),
 				killedByAttacker,
 				Arrays.toString(defenderDiceRolled),
-				killedByDefender);
+				killedByDefender));
+
+		// Check if toCuntry is Conquered
+		if (toCountry.hasNoArmy()) {
+			conquer();
+			log.add(String.format(
+					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conqured country %s.",
+					fromCountry.getOwner().getName(), toCountry.getName(), numberOfAttackerDices,
+					fromCountry.getName(), toCountry.getName()));
+		}
+
+		return log;
 	}
 
 	/**
@@ -124,7 +127,7 @@ public class Battle {
 		state = BattleState.Conquered;
 		toCountry.setOwner(fromCountry.getOwner());
 		winner = fromCountry;
-		fromCountry.getOwner().setAttackFinished();
+		// fromCountry.getOwner().setAttackFinished();
 		fromCountry.getOwner().setSuccessfulAttack(true);
 		/// Check Number of countries owned by the defender, if 0 gives all cards to
 		/// attacker and remove player from model player queue
@@ -215,7 +218,6 @@ public class Battle {
 	 * @return true if the attack is possible; false otherwise.
 	 */
 	public boolean isAttackPossible() {
-
 		return state == BattleState.Defended;
 	}
 	/**
