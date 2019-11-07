@@ -42,26 +42,35 @@ public class MapFormattorTest {
         map.getCountry("Ross-shire-and-Chromartyshire").setOwner(new Player.Builder("Doe").build());
 
     }
-
+    /**
+     * Release all objects after All Test cases are performed in the Test Class
+     */
     @AfterClass
     public static void cleanup() {
         WorldMap.getInstance().clear();
     }
-
+    /**
+     * TEst for Default Map formatter
+     */
     @Test
     public void testDefaultMapFormattor() {
         MapFormattor formattor = new MapFormattor(map);
         String res = formattor.format();
         assertTrue(res.contains("Northamptonshire_Northamptonshire"));
     }
-
+    /**
+     * Test for DetailMapFormatter
+     */
     @Test
     public void testDetailMapFormattor() {
         MapFormattor formattor = new MapFormattor(map);
         String res = formattor.format(MapFormattor.FormatType.Detail);
         assertTrue(res.contains("Northamptonshire_Northamptonshire| 15    | John"));
     }
-
+    /**
+     * Tests for PresenseOfEmptyContinents()
+     * @throws ValidationException
+     */
     @Test
     public void testPresenseOfEmptyContinents() throws ValidationException {
         map.addContinent("Antarctica", 8);

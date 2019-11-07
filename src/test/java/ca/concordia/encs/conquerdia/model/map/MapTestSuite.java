@@ -10,6 +10,11 @@ import org.junit.runners.Suite;
 	MapFormattorTest.class,
 	MapValidationTest.class
 })
+/**
+ * Test Suite for Map and Country Test classes
+ * @author Sadegh Aalizadeh
+ *
+ */
 public class MapTestSuite {
 
 }
