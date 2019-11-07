@@ -136,16 +136,17 @@ public class Battle {
         List<String> result = new ArrayList<>();
         state = BattleState.Conquered;
         Player attacker = fromCountry.getOwner();
-        toCountry.setOwner(attacker);
+        Player defender = toCountry.getOwner();
+        defender.removeCountry(toCountry.getName());
+        defender.removeContinent(toCountry.getContinent().getName());
         attacker.addCountry(toCountry);
+        toCountry.setOwner(attacker);
 
         winner = fromCountry;
         // fromCountry.getOwner().setAttackFinished();
         attacker.setSuccessfulAttack(true);
         /// Check Number of countries owned by the defender, if 0 gives all cards to
         /// attacker and remove player from model player queue
-        Player defender = toCountry.getOwner();
-        defender.removeCountry(toCountry.getName());
         if (defender.getNumberOfCountries() == 0) {
             result.add(String.format("%s is kicked out from game.", defender.getName()));
             PlayersModel.getInstance().getPlayers().remove(defender);

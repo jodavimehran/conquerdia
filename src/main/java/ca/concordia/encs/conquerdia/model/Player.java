@@ -147,7 +147,7 @@ public class Player {
 	 * @param country The country to add
 	 */
 	public void addCountry(Country country) {
-		countries.put(country.getName(), country);
+		this.countries.put(country.getName(), country);
 	}
 
 	/**

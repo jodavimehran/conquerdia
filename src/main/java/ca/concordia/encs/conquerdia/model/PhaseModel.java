@@ -160,6 +160,7 @@ public class PhaseModel extends Observable {
                     PlayersModel.getInstance().giveTurnToAnotherPlayer();
                     currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
                     changePhase(PhaseTypes.REINFORCEMENT);
+                    CardExchangeModel.getInstance().setReinforcementPhaseActive(true);
                     currentPlayer.calculateNumberOfReinforcementArmies();
                     results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getName(), currentPlayer.getUnplacedArmies()));
                     results.add(String.format("[%s]", currentPlayer.getCountryNames().stream().collect(Collectors.joining(", "))));
@@ -300,7 +301,7 @@ public class PhaseModel extends Observable {
         START_UP("Startup",
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER,
                         CommandType.POPULATE_COUNTRIES, CommandType.PLACE_ARMY, CommandType.PLACE_ALL))),
-        REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE))),
+        REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS))),
         ATTACK("Attack",
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND,
                         CommandType.ATTACK_MOVE))),
