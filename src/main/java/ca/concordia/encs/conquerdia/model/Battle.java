@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import ca.concordia.encs.conquerdia.model.map.Country;
@@ -11,7 +12,6 @@ public class Battle {
 	private int numberOfAttackerDices;
 	private int numberOfDefenderDices;
 	private DiceRoller diceRoller;
-	private boolean isAllOut;
 
 	private BattleState state;
 
@@ -28,15 +28,28 @@ public class Battle {
 		diceRoller = DiceRoller.getInstance();
 	}
 
-	public String simulateBattle() {
-		state = BattleState.Defended;
-		if (isAllOut) {
+	public ArrayList<String> allOutAttack() {
+		ArrayList<String> log = new ArrayList<String>();
+		boolean continueAttack = true;
+
+		do {
 			numberOfAttackerDices = getMaxDiceCountForAttacker();
 			if (numberOfAttackerDices < 1) {
-				fromCountry.getOwner().setAttackFinished();
-				return String.format("%s does not have enough army to attack", fromCountry.getOwner().getName());
+				continueAttack = false;
+				log.add(String.format("%s does not have anymore army to attack", fromCountry.getOwner().getName()));
+			} else {
+				numberOfDefenderDices = getMaxDiceCountForDefender();
+				state = BattleState.Attacked;
+				log.add(simulateBattle());
+				continueAttack = (winner == null);
 			}
-		}
+		} while (continueAttack);
+		fromCountry.getOwner().setAttackFinished();
+		return log;
+	}
+
+	public String simulateBattle() {
+		state = BattleState.Defended;
 
 		int[] attackerDiceRolled = diceRoller.generateSortedDices(numberOfAttackerDices);
 		int[] defenderDiceRolled = diceRoller.generateSortedDices(numberOfDefenderDices);
@@ -78,12 +91,21 @@ public class Battle {
 	 */
 	private int getMaxDiceCountForAttacker() {
 		int armies = fromCountry.getNumberOfArmies();
-		int max = 0;
+		int count = 0;
 
 		if (armies > 1) {
-			max = Math.min(armies, 3);
+			count = Math.min(armies, 3);
 		}
-		return max;
+		return count;
+	}
+
+	/**
+	 * 
+	 * @return The maximum dice count of defender for the all out phase
+	 */
+	private int getMaxDiceCountForDefender() {
+		int armies = fromCountry.getNumberOfArmies();// toCountry.getNumberOfArmies();
+		return Math.min(armies, 2);
 	}
 
 	private void conquer() {
@@ -113,14 +135,6 @@ public class Battle {
 
 	public boolean isMoreAttackPossible() {
 		return fromCountry.getNumberOfArmies() > 1;
-	}
-
-	public boolean isAllOut() {
-		return isAllOut;
-	}
-
-	public void setAllOut(boolean isAllOut) {
-		this.isAllOut = isAllOut;
 	}
 
 	public Country getFromCountry() {
@@ -154,12 +168,12 @@ public class Battle {
 	public BattleState getState() {
 		return state;
 	}
-	
+
 	public boolean isAttackPossible() {
-	
+
 		return state == BattleState.Defended;
 	}
-	
+
 	public boolean isDefendPossible() {
 		return state == BattleState.Attacked;
 	}

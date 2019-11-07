@@ -335,8 +335,11 @@ public class Player {
 		}
 
 		battle = new Battle(fromCountry, toCountry);
-		battle.setAllOut(isAllOut);
-		battle.setNumberOfAttackerDices(numdice);
+		if (isAllOut) {
+			log.addAll(battle.allOutAttack());
+		} else {
+			battle.setNumberOfAttackerDices(numdice);
+		}
 
 		return log;
 	}
