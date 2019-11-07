@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Set;
 
 public class PlaceAllCommand extends AbstractCommand {
-
+	/**
+	 * {@inheritDoc}
+	 */
     @Override
     protected CommandType getCommandType() {
         return CommandType.PLACE_ALL;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return "";

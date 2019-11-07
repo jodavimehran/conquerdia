@@ -8,12 +8,16 @@ import java.util.List;
 
 public class ReinforceCommand extends AbstractCommand {
     public final static String COMMAND_HELP_MSG = "The \"reinforce\" command must has at least two parameter, first one is countryname and second one is number of armies.";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.REINFORCE;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;

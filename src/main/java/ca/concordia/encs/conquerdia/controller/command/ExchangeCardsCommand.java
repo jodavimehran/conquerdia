@@ -7,7 +7,9 @@ import java.util.List;
 
 public class ExchangeCardsCommand extends AbstractCommand {
     public final static String COMMAND_HELP_MSG = "exchangecards num num num –none (exchange three cards from the hand, as specified by three numbers that represent the position of the exchanged cards in the player’s hand. If –none is specified, choose to not exchange cards.)";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void runCommand(List<String> inputCommandParts) throws ValidationException {
         if ("–none".equals(inputCommandParts.get(1))) {
@@ -20,12 +22,16 @@ public class ExchangeCardsCommand extends AbstractCommand {
             }
         }
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.EXCHANGE_CARDS;

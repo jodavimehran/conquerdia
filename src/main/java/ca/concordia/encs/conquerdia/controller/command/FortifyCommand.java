@@ -8,12 +8,16 @@ import java.util.List;
 public class FortifyCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "a valid \"fortify\" command is something like \"fortify fromcountry tocountry num\" or \"fortify none\".";
-
+    /**
+     * {@inheritDoc'}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.FORTIFY;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;

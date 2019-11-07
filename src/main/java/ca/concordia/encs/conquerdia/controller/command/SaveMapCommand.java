@@ -7,12 +7,16 @@ import java.util.List;
 public class SaveMapCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "Invalid \"savemap\" command. a valid \"savemap\" command is something like \"savemap filename\".";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.SAVE_MAP;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;

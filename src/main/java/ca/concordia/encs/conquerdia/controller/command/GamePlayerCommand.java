@@ -11,12 +11,16 @@ import java.util.List;
  */
 public class GamePlayerCommand extends AbstractCommand {
     public final static String COMMAND_HELP_MSG = "The \"gameplayer\" command must has at least one option like \"-add\" or \"-remove\".";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.GAME_PLAYER;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;

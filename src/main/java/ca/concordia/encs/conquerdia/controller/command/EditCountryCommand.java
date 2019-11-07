@@ -8,12 +8,16 @@ import java.util.List;
 
 public class EditCountryCommand extends AbstractCommand {
     public final static String COMMAND_HELP_MSG = "Invalid input! The \"editcountry\" command must has at least one option like \"-add\" or \"-remove\".";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.EDIT_COUNTRY;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;
