@@ -8,7 +8,7 @@ import ca.concordia.encs.conquerdia.model.Player;
 
 public class AttackMoveCommand extends AbstractCommand {
 
-	private static final String COMMAND_HELP_MSG = "A valid \"attackmove\" command format is \"attackmove num\".";
+	public static final String COMMAND_HELP_MSG = "A valid \"attackmove\" command format is \"attackmove num\".";
 
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {

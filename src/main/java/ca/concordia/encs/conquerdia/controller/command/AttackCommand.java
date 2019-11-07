@@ -35,10 +35,9 @@ public class AttackCommand extends AbstractCommand {
 	}
 
 	private void handleNoAttack(Player currentPlayer) throws ValidationException {
-		if (currentPlayer.isInBattle()) {
-			throw new ValidationException(String.format(
-					"Cannot finish attack because you are in a battle with %s",
-					currentPlayer.getBattle().getToCountry().getName()));
+
+		if (currentPlayer.canPerformDefend()) {
+			throw new ValidationException(DefendCommand.COMMAND_HELP_MSG);
 		}
 
 		if (!currentPlayer.canPerformAttackMove()) {

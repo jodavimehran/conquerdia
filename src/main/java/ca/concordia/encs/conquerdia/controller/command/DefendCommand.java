@@ -13,7 +13,7 @@ public class DefendCommand extends AbstractCommand {
 	/**
 	 * Helper message for the user
 	 */
-	private static final String COMMAND_HELP_MSG = "A valid \"defend\" command format is \"defend numdice\".";
+	public static final String COMMAND_HELP_MSG = "A valid \"defend\" command format is \"defend numdice\".";
 
 	/**
 	 * Validates and executes the defend command with the input params.
