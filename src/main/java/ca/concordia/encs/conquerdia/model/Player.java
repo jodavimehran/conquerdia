@@ -438,7 +438,6 @@ public class Player {
 	 */
 	public String attackMove(int armiesToMove) throws ValidationException {
 		String error = null;
-
 		if (battle == null) {
 			error = String.format("Player %s is not in battle", name);
 		} else if (canPerformAttack()) {
@@ -461,6 +460,8 @@ public class Player {
 		Country defender = battle.getToCountry();
 		attacker.removeArmy(armiesToMove);
 		defender.placeArmy(armiesToMove);
+
+		PlayersModel.getInstance().getCurrentPlayer().setAttackFinished();
 		battle = null;
 		return String.format("Country %s has moved %s armies to % ", attacker.getName(), armiesToMove,
 				defender.getName());
