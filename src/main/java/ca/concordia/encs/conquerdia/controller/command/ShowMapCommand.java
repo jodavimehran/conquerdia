@@ -10,12 +10,16 @@ import java.util.List;
 public class ShowMapCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.SHOW_MAP;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;
