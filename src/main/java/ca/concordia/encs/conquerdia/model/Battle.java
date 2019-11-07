@@ -13,13 +13,23 @@ public class Battle {
 	private DiceRoller diceRoller;
 	private boolean isAllOut;
 
+	private BattleState state;
+
+	public enum BattleState {
+		Attacked,
+		Defended,
+		Conquered,
+	}
+
 	public Battle(Country attackingCountry, Country defendingCountry) {
+		state = BattleState.Attacked;
 		this.fromCountry = attackingCountry;
 		this.toCountry = defendingCountry;
 		diceRoller = DiceRoller.getInstance();
 	}
 
 	public String simulateBattle() {
+		state = BattleState.Defended;
 		if (isAllOut) {
 			numberOfAttackerDices = getMaxDiceCountForAttacker();
 			if (numberOfAttackerDices < 1) {
@@ -77,6 +87,7 @@ public class Battle {
 	}
 
 	private void conquer() {
+		state = BattleState.Conquered;
 		toCountry.setOwner(fromCountry.getOwner());
 		winner = fromCountry;
 		fromCountry.getOwner().setAttackFinished();
@@ -90,7 +101,7 @@ public class Battle {
 		}
 		Player attacker = fromCountry.getOwner();
 		boolean isAttackerOwnedAContinent = attacker.ownedAll(toCountry.getContinent().getCountriesName());
-		if(isAttackerOwnedAContinent) {
+		if (isAttackerOwnedAContinent) {
 			attacker.addContinent(toCountry.getContinent());
 			attacker.addUnplacedArmies(toCountry.getContinent().getValue());
 		}
@@ -135,8 +146,21 @@ public class Battle {
 	public void setNumberOfDefenderDices(int numberOfDefenderDices) {
 		this.numberOfDefenderDices = numberOfDefenderDices;
 	}
-	
+
 	public Country getWinner() {
-		return winner;	
+		return winner;
+	}
+
+	public BattleState getState() {
+		return state;
+	}
+	
+	public boolean isAttackPossible() {
+	
+		return state == BattleState.Defended;
+	}
+	
+	public boolean isDefendPossible() {
+		return state == BattleState.Attacked;
 	}
 }

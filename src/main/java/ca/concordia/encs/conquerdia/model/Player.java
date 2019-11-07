@@ -1,6 +1,10 @@
 package ca.concordia.encs.conquerdia.model;
 
+import ca.concordia.encs.conquerdia.controller.command.AttackCommand;
+import ca.concordia.encs.conquerdia.controller.command.AttackMoveCommand;
+import ca.concordia.encs.conquerdia.controller.command.DefendCommand;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.Battle.BattleState;
 import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
@@ -303,9 +307,11 @@ public class Player {
 
 	public ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut)
 			throws ValidationException {
-		if(battle == null) {
-			throw new ValidationException("attack is not valid Command at this stage!");
+
+		if (!canPerformAttack()) {
+			throw new ValidationException("Player can perform only one attack at a time.");
 		}
+
 		validateCountries(fromCountryName, toCountryName);
 		ArrayList<String> log = new ArrayList<String>();
 		Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
@@ -321,6 +327,7 @@ public class Player {
 						"Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")",
 						getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
 			}
+
 			log.add(String.format("%s has attacked %s with %s number of dice(s).", fromCountryName, toCountryName,
 					numdice));
 		} else {
@@ -376,8 +383,12 @@ public class Player {
 
 		if (numDice > 2) {
 			error = "Defender cannot roll more than 2 dices and not more than the number of armies contained defending country";
-		} else if (battle == null /* || battle.getToCountry().getOwner() != this */) {
-			error = String.format("% does not have any country under attack.", this.name);
+		} else if (!isInBattle()) {
+			error = String.format("%s does not have any country under attack.", this.name);
+		} else if (canPerformAttackMove()) {
+			error = AttackMoveCommand.COMMAND_HELP_MSG;
+		} else if (canPerformAttack()) {
+			error = AttackCommand.COMMAND_HELP_MSG;
 		} else if (numDice > (defendingCountry = battle.getToCountry()).getNumberOfArmies()) {
 
 			error = String.format(
@@ -414,6 +425,10 @@ public class Player {
 
 		if (battle == null) {
 			error = String.format("Player %s is not in battle", name);
+		} else if (canPerformAttack()) {
+			error = AttackCommand.COMMAND_HELP_MSG;
+		} else if (canPerformDefend()) {
+			error = DefendCommand.COMMAND_HELP_MSG;
 		} else if (battle.getWinner() == null) {
 			error = String.format("Player %s has not conquered the defending country.", name);
 		} else if (armiesToMove + 1 > battle.getFromCountry().getNumberOfArmies()) {
@@ -430,7 +445,7 @@ public class Player {
 		Country defender = battle.getToCountry();
 		attacker.removeArmy(armiesToMove);
 		defender.placeArmy(armiesToMove);
-		battle = null;    
+		battle = null;
 		return String.format("Country %s has moved %s armies to % ", attacker.getName(), armiesToMove,
 				defender.getName());
 	}
@@ -588,5 +603,36 @@ public class Player {
 		public Player build() {
 			return this.player;
 		}
+	}
+
+	/**
+	 * Determines if the player can do a attack
+	 * 
+	 * @return
+	 */
+	public boolean canPerformAttack() {
+		return battle == null || battle.isAttackPossible();
+	}
+
+	/**
+	 * Determines if the player can do a defend command
+	 * 
+	 * @return
+	 */
+	public boolean canPerformDefend() {
+		return battle != null && (battle.getState() == BattleState.Attacked);
+	}
+
+	/**
+	 * Determines if the player can move an army or not to the conquered country
+	 * 
+	 * @return
+	 */
+	public boolean canPerformAttackMove() {
+		return battle != null && (battle.getState() == BattleState.Conquered);
+	}
+
+	public boolean isInBattle() {
+		return battle != null;
 	}
 }

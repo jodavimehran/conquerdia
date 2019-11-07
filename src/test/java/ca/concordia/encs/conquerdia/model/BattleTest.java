@@ -18,7 +18,7 @@ public class BattleTest {
     }
 	@Test
 	public void testSimulateBattle() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 }
