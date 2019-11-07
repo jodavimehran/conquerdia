@@ -116,7 +116,10 @@ public class Battle {
 		int armies = fromCountry.getNumberOfArmies();// toCountry.getNumberOfArmies();
 		return Math.min(armies, 2);
 	}
-
+	/**
+	 * When the attack is done and the country is conquered this method is performed 
+	 * to apply attack related rules 
+	 */
 	private void conquer() {
 		state = BattleState.Conquered;
 		toCountry.setOwner(fromCountry.getOwner());
