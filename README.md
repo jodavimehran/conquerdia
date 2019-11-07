@@ -13,6 +13,7 @@ Advanced Programming Practices, SOEN 6441 --- Fall 2019
 
 - All the commands defined in the [build 1 requirements](https://users.encs.concordia.ca/~paquet/wiki/images/7/75/Build1Grading.SOEN6441.2019.2.pdf "project build 1 requirements/grading scheme (handout)")
 
+- All the commands defined in the [build 2 requirements](https://users.encs.concordia.ca/~paquet/wiki/images/3/36/Build2Grading.SOEN6441.2019.2.pdf)
 
 **Tools & Technologies**
 - Java
