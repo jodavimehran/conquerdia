@@ -8,7 +8,9 @@ import org.junit.Test;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 
 public class AttackMoveCommandTest extends AttackPhaseCommandTest {
-
+	/**
+	 * Tests the AttackMoveCommand validity
+	 */
 	@Test
 	public void testCommandValidity() {
 

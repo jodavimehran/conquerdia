@@ -9,9 +9,14 @@ import org.junit.runners.Suite;
 	DefendCommandTest.class,
 	CommandTypeTest.class,
 	AttackPhaseCommandTest.class,
-	AttackMoveCommandTest.class
+	AttackMoveCommandTest.class,
+	AttackCommandTest.class
 })
-
+/**
+ * 
+ * @author Sadegh Aalizadeh
+ *
+ */
 public class CommandTestSuite {
 
 }

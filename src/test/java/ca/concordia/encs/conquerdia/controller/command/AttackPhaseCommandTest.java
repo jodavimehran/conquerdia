@@ -17,13 +17,20 @@ public abstract class AttackPhaseCommandTest {
 
 	protected static WorldMap map;
 	protected static PhaseModel phaseModel;
-
+	/**
+	 * This method setups the Test class
+	 * @throws ValidationException
+	 */
 	@BeforeClass
 	public static void onStart() throws ValidationException {
 		map = createMapForTest();
 		phaseModel = PhaseModel.getInstance();
 	}
-
+	/**
+	 * Creates a Map for test
+	 * @return the WOrldMap created for the test
+	 * @throws ValidationException
+	 */
 	public static WorldMap createMapForTest() throws ValidationException {
 
 		WorldMap map = WorldMap.getInstance();
@@ -52,7 +59,9 @@ public abstract class AttackPhaseCommandTest {
 		
 		return map;
 	}
-
+	/**
+	 * Free resources after the test.
+	 */
 	@AfterClass
 	public static void onFinish() {
 		if (map != null) {
