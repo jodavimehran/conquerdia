@@ -25,6 +25,8 @@ public class CardReader implements ICardReader {
 
 	/**
 	 * Reads cards from the card file and returns all the cards 
+	 * @param fileName Card File name
+	 * @return list of cards 
 	 */
 	public ArrayList<Card> loadCards(String filename) throws IOException {
 		final String path = getCardsFilePath(filename);
@@ -48,7 +50,12 @@ public class CardReader implements ICardReader {
 
 		return cards;
 	}
-
+	/**
+	 * Reads the cards in the map.
+	 * @param reader the BufferReaser for the cards
+	 * @return List of cards read.
+	 * @throws IOException
+	 */
 	private ArrayList<Card> readCards(BufferedReader reader) throws IOException {
 
 		ArrayList<Card> cardList = new ArrayList<>();
@@ -69,15 +76,27 @@ public class CardReader implements ICardReader {
 
 		return cardList;
 	}
-
+	/**
+	 * CHecks if the CardType is supported.
+	 * @param cardType the card Type that is being checked.
+	 * @return true if the Card Type is supported; false otherwise.
+	 */
 	private boolean isSupprotedCardType(String cardType) {
 		return SUPPORTED_TYPES.contains(cardType.toUpperCase());
 	}
-
+	/**
+	 * CHecks the line to see if it is a Card identifier.
+	 * @param line line of the map.
+	 * @return true if it is a card identifier; otherwise false.
+	 */
 	private static boolean isCardsIdentifier(String line) {
 		return line.equalsIgnoreCase(CARDS_SECTION_IDENTIFIER);
 	}
-
+	/**
+	 * gets the cards file path
+	 * @param filename the file name 
+	 * @return The path to card files
+	 */
 	private static String getCardsFilePath(String filename) {
 		return FileHelper.getResourcePath(FileHelper.combinePath(CARDS_FOLDER,
 				FileHelper.getFileNameWithoutExtension(filename) + CARDS_FILE_EXTENSION));
