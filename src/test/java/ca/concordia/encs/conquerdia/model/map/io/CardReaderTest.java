@@ -17,12 +17,17 @@ import ca.concordia.encs.conquerdia.model.map.Card;
 public class CardReaderTest {
 
 	private ICardReader reader;
-
+	/**
+	 * Setup All tests 
+	 */
 	@Before
 	public void beforeTests() {
 		reader = new CardReader();
 	}
-
+	/**
+	 * Test the loadcards method
+	 * @throws IOException
+	 */
 	@Test
 	public void testLoadCard() throws IOException {
 		String path = "lotr.cards";
