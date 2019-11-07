@@ -16,9 +16,11 @@ public class BattleTest {
 
 
     }
+    /**
+     * Testing The simulate battle
+     */
 	@Test
 	public void testSimulateBattle() {
-		//fail("Not yet implemented");
 	}
 
 }
