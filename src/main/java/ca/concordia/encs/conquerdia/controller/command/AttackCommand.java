@@ -16,12 +16,12 @@ public class AttackCommand extends AbstractCommand {
 	private boolean isAllOut;
 	private int numberOfDices;
 
-	public AttackCommand() {
-		super();
-	}
-
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
+		isNoAttack = isAllOut = false;
+		fromCountryName = toCountryName = null;
+		numberOfDices = 0;
+
 		validateAttackCommand(inputCommandParts);
 
 		Player currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
@@ -33,6 +33,7 @@ public class AttackCommand extends AbstractCommand {
 			phaseLogList.addAll(logs);
 		}
 	}
+
 	/**
 	 * 
 	 * @param currentPlayer
@@ -53,6 +54,7 @@ public class AttackCommand extends AbstractCommand {
 					currentPlayer.getBattle().getToCountry().getName()));
 		}
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -60,6 +62,7 @@ public class AttackCommand extends AbstractCommand {
 	protected String getCommandHelpMessage() {
 		return COMMAND_HELP_MSG;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -67,8 +70,10 @@ public class AttackCommand extends AbstractCommand {
 	protected CommandType getCommandType() {
 		return CommandType.ATTACK;
 	}
+
 	/**
 	 * Validating the -noAttack command options in input parameters
+	 * 
 	 * @param inputCommandParts input parameters of attack command.
 	 * @return true if the noAtatck command is valid; otherwise return false.
 	 * @throws ValidationException
@@ -83,8 +88,10 @@ public class AttackCommand extends AbstractCommand {
 		}
 		return false;
 	}
+
 	/**
-	 * Validates the attack command inout parameters
+	 * Validates the attack command input parameters
+	 * 
 	 * @param inputCommandParts input parameters parts.
 	 * @throws ValidationException
 	 */
