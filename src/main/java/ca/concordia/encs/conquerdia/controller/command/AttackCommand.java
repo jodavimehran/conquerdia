@@ -33,7 +33,11 @@ public class AttackCommand extends AbstractCommand {
 			phaseLogList.addAll(logs);
 		}
 	}
-
+	/**
+	 * 
+	 * @param currentPlayer
+	 * @throws ValidationException
+	 */
 	private void handleNoAttack(Player currentPlayer) throws ValidationException {
 
 		if (currentPlayer.canPerformDefend()) {
@@ -49,17 +53,26 @@ public class AttackCommand extends AbstractCommand {
 					currentPlayer.getBattle().getToCountry().getName()));
 		}
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected String getCommandHelpMessage() {
 		return COMMAND_HELP_MSG;
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected CommandType getCommandType() {
 		return CommandType.ATTACK;
 	}
-
+	/**
+	 * Validating the -noAttack command options in input parameters
+	 * @param inputCommandParts input parameters of attack command.
+	 * @return true if the noAtatck command is valid; otherwise return false.
+	 * @throws ValidationException
+	 */
 	private boolean validateNoAttackCommand(List<String> inputCommandParts) throws ValidationException {
 		if (inputCommandParts.contains("-noattack")) {
 			if ((inputCommandParts.size() == 2 || inputCommandParts.size() == 4)) {
@@ -70,7 +83,11 @@ public class AttackCommand extends AbstractCommand {
 		}
 		return false;
 	}
-
+	/**
+	 * Validates the attack command inout parameters
+	 * @param inputCommandParts input parameters parts.
+	 * @throws ValidationException
+	 */
 	private void validateAttackCommand(List<String> inputCommandParts) throws ValidationException {
 
 		if (!hasMinimumNumberofParameters(inputCommandParts) || inputCommandParts.size() > 4) {
