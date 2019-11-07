@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Represents a country in the world map of the game.
  * <p>
- * A country can place on a Continent
- * A country has a set of adjacent countries
+ * A country can place on a Continent A country has a set of adjacent countries
  */
 public class Country {
 
@@ -33,8 +32,8 @@ public class Country {
 	}
 
 	/**
-	 * Represents the borders of a country.
-	 * All neighbor countries of a country must add to this set.
+	 * Represents the borders of a country. All neighbor countries of a country must
+	 * add to this set.
 	 */
 	private final Map<String, Country> adjacentCountries = new HashMap<>();
 	/**
@@ -80,9 +79,8 @@ public class Country {
 	}
 
 	/**
-	 * Add the specified country to this country's adjacency list
-	 * This implies that this country has a an edge / border to the specified
-	 * country
+	 * Add the specified country to this country's adjacency list This implies that
+	 * this country has a an edge / border to the specified country
 	 *
 	 * @param adjacentCountry A country which should have a border to this country
 	 */
@@ -211,5 +209,15 @@ public class Country {
 		public Country build() {
 			return this.country;
 		}
+	}
+
+	/**
+	 * @return True if there exists one neighbor country that is owned by other
+	 *         players otherwise false
+	 */
+	public boolean isAdjacentToOtherPlayerCountries() {
+		return adjacentCountries.values()
+				.stream()
+				.anyMatch(country -> country.getOwner() != owner);
 	}
 }
