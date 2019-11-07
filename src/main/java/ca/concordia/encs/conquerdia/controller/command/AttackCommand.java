@@ -68,7 +68,7 @@ public class AttackCommand extends AbstractCommand {
 
 	private void validateAttackCommand(List<String> inputCommandParts) throws ValidationException {
 
-		if (!hasMinimumNumberofParameters(inputCommandParts)) {
+		if (!hasMinimumNumberofParameters(inputCommandParts) || inputCommandParts.size() > 4) {
 			throw new ValidationException(getCommandHelpMessage());
 		}
 

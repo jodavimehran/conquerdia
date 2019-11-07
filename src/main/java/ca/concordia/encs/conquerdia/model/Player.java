@@ -305,7 +305,7 @@ public class Player {
 	public ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut)
 			throws ValidationException {
 
-		if (canPerformAttack()) {
+		if (!canPerformAttack()) {
 			throw new ValidationException("Player can perform only one attack at a time.");
 		}
 
@@ -324,6 +324,7 @@ public class Player {
 						"Number of dice rolled by Attacker \"%s\" is \"%d\". It should be less than \"%d\" (the number of armies in \"%s\")",
 						getName(), numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
 			}
+
 			log.add(String.format("%s has attacked %s with %s number of dice(s).", fromCountryName, toCountryName,
 					numdice));
 		} else {
