@@ -36,15 +36,24 @@ public class PlayersModel extends Observable {
         }
         return instance;
     }
-
+    /**
+     * Get the queue of the game players
+     * @return  A queue of the game players
+     */
     public Queue<Player> getPlayers() {
         return players;
     }
-
+    /**Gets the first player of the game.
+     * 
+     * @return the first player of the game.
+     */
     public Player getFirstPlayer() {
         return firstPlayer;
     }
-
+    /**
+     * Sets the first player of the game.
+     * @param firstPlayer the first player of the game
+     */
     public void setFirstPlayer(Player firstPlayer) {
         this.firstPlayer = firstPlayer;
     }
@@ -115,7 +124,7 @@ public class PlayersModel extends Observable {
     public boolean isThereAnyUnplacedArmy() {
         return PlayersModel.getInstance().getPlayers().stream().filter(player -> player.getUnplacedArmies() > 0).count() > 0;
     }
-
+    //
     public void update() {
         setChanged();
         notifyObservers();
