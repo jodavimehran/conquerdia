@@ -16,31 +16,25 @@ public class AttackCommand extends AbstractCommand {
 	private boolean isAllOut;
 	private int numberOfDices;
 
-	Player currentPlayer;
-
 	public AttackCommand() {
 		super();
-		currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
 	}
 
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		String error = validateAttackCommand(inputCommandParts);
+		validateAttackCommand(inputCommandParts);
 
-		if (error == null) {
-			if (isNoAttack) {
-				handleNoAttack();
-			} else {
-				ArrayList<String> logs = currentPlayer.attack(fromCountryName, toCountryName,
-						isAllOut ? -1 : numberOfDices, isAllOut);
-				phaseLogList.addAll(logs);
-			}
+		Player currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
+		if (isNoAttack) {
+			handleNoAttack(currentPlayer);
 		} else {
-			throw new ValidationException("Invalid input! " + error + " " + getCommandHelpMessage());
+			ArrayList<String> logs = currentPlayer.attack(fromCountryName, toCountryName,
+					isAllOut ? -1 : numberOfDices, isAllOut);
+			phaseLogList.addAll(logs);
 		}
 	}
 
-	private void handleNoAttack() throws ValidationException {
+	private void handleNoAttack(Player currentPlayer) throws ValidationException {
 		if (!currentPlayer.canPerformAttackMove()) {
 			currentPlayer.setAttackFinished();
 			phaseLogList.add(String.format("\"-noattack\" is selected by %s.", currentPlayer.getName()));
@@ -72,8 +66,8 @@ public class AttackCommand extends AbstractCommand {
 		return false;
 	}
 
-	private String validateAttackCommand(List<String> inputCommandParts) throws ValidationException {
-		String error = null;
+	private void validateAttackCommand(List<String> inputCommandParts) throws ValidationException {
+
 		if (!hasMinimumNumberofParameters(inputCommandParts)) {
 			throw new ValidationException(getCommandHelpMessage());
 		}
@@ -94,11 +88,10 @@ public class AttackCommand extends AbstractCommand {
 						throw new NumberFormatException();
 					}
 				} catch (NumberFormatException ex) {
-					error = "Number of dices(3rd parameter) must be a positive integer number or -allout or -noattack.";
+					throw new ValidationException(
+							"Number of dices(3rd parameter) must be a positive integer number or -allout or -noattack.");
 				}
 			}
 		}
-
-		return error;
 	}
 }
