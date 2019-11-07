@@ -89,8 +89,8 @@ public class Battle {
 		if (toCountry.hasNoArmy()) {
 			conquer();
 			log.add(String.format(
-					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conqured country %s.",
-					fromCountry.getOwner().getName(), toCountry.getName(), numberOfAttackerDices,
+					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conquered country %s.",
+					fromCountry.getOwner().getName(), toCountry.getName(), 1,
 					fromCountry.getName(), toCountry.getName()));
 		}
 

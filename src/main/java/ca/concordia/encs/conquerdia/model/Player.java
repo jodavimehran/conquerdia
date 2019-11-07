@@ -466,7 +466,7 @@ public class Player {
 
 		PlayersModel.getInstance().getCurrentPlayer().setAttackFinished();
 		battle = null;
-		return String.format("Country %s has moved %s armies to % ", attacker.getName(), armiesToMove,
+		return String.format("Country %s has moved %s armies to %s ", attacker.getName(), armiesToMove,
 				defender.getName());
 	}
 
