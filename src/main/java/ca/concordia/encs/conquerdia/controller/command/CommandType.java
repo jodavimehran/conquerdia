@@ -58,11 +58,17 @@ public enum CommandType {
     public Command getCommand() {
         return command;
     }
-
+    /**
+     * 
+     * @return Returns the name of the attack.
+     */
     public String getName() {
         return name;
     }
-
+    /**
+     * 
+     * @return the minimum number of valid input parameters
+     */
     public int getMinNumberOfParts() {
         return minNumberOfParts;
     }

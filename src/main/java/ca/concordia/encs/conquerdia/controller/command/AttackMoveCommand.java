@@ -9,7 +9,9 @@ import ca.concordia.encs.conquerdia.model.Player;
 public class AttackMoveCommand extends AbstractCommand {
 
 	public static final String COMMAND_HELP_MSG = "A valid \"attackmove\" command format is \"attackmove num\".";
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
 		if (hasMinimumNumberofParameters(inputCommandParts)) {
@@ -29,12 +31,16 @@ public class AttackMoveCommand extends AbstractCommand {
 			throw new ValidationException("Invalid input! " + getCommandHelpMessage());
 		}
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected String getCommandHelpMessage() {
 		return COMMAND_HELP_MSG;
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected CommandType getCommandType() {
 		return CommandType.DEFEND;

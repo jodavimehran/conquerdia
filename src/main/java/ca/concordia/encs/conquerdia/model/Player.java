@@ -485,7 +485,9 @@ public class Player {
 		minusUnplacedArmies(realNumberOfArmies);
 		return String.format("%s placed %d army/armies to %s.", name, realNumberOfArmies, countryName);
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -500,7 +502,9 @@ public class Player {
 				.append(getName(), player.getName())
 				.isEquals();
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
@@ -647,7 +651,10 @@ public class Player {
 	public boolean canPerformAttackMove() {
 		return battle != null && (battle.getState() == BattleState.Conquered);
 	}
-
+	/**
+	 * 
+	 * @return true if the battle is not Null; otherwise false;
+	 */
 	public boolean isInBattle() {
 		return battle != null;
 	}
