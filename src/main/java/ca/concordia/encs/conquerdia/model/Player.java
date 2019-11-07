@@ -347,6 +347,10 @@ public class Player {
 		battle = new Battle(fromCountry, toCountry);
 		if (isAllOut) {
 			log.addAll(battle.allOutAttack());
+
+			if (!hasAttackOpportunities()) {
+				this.setAttackFinished();
+			}
 		} else {
 			battle.setNumberOfAttackerDices(numdice);
 		}
@@ -431,6 +435,9 @@ public class Player {
 			messages.addAll(battle.simulateBattle());
 		}
 
+		if (!hasAttackOpportunities()) {
+			this.setAttackFinished();
+		}
 		return messages;
 	}
 
@@ -451,7 +458,7 @@ public class Player {
 			error = String.format("Player %s has not conquered the defending country.", name);
 		} else if (armiesToMove + 1 > battle.getFromCountry().getNumberOfArmies()) {
 			error = String.format(
-					"You cannot move more army than what you have in your attacking country."
+					"You must move less armies than what you have in your attacking country."
 							+ " And you must keep atleast one army in your attacking country.");
 		}
 
@@ -464,8 +471,12 @@ public class Player {
 		attacker.removeArmy(armiesToMove);
 		defender.placeArmy(armiesToMove);
 
-		PlayersModel.getInstance().getCurrentPlayer().setAttackFinished();
 		battle = null;
+
+		if (!hasAttackOpportunities()) {
+			this.setAttackFinished();
+		}
+
 		return String.format("Country %s has moved %s armies to %s ", attacker.getName(), armiesToMove,
 				defender.getName());
 	}
@@ -559,11 +570,19 @@ public class Player {
 				secondCard.getName(), thirdCard.getName(), numberOfArmiesForExchangeCard);
 	}
 
+	/**
+	 * Reset status of various phases
+	 */
 	public void cleanPlayerStatus() {
 		fortificationFinished = false;
 		attackFinished = false;
 	}
 
+	/**
+	 * Get current cards of this player
+	 * 
+	 * @return list of cards
+	 */
 	public List<CardType> getCards() {
 		return cards;
 	}
@@ -664,5 +683,16 @@ public class Player {
 	 */
 	public boolean isInBattle() {
 		return battle != null;
+	}
+
+	/**
+	 * Checks if the player can attack a country or can re-attack the same country
+	 * 
+	 * @return true if user can attack
+	 */
+	public boolean hasAttackOpportunities() {
+		return countries.values()
+				.stream()
+				.anyMatch(country -> country.getNumberOfArmies() >= 1 && country.isAdjacentToOtherPlayerCountries());
 	}
 }
