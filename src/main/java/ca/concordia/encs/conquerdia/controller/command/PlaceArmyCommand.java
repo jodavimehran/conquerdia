@@ -9,6 +9,7 @@ import java.util.List;
 
 public class PlaceArmyCommand extends AbstractCommand {
     private static final String COMMAND_HELP_MSG = "A valid \"placearmy\" command is something like \"placearmy countryname\".";
+
     /**
      * {@inheritDoc}
      */
@@ -16,6 +17,7 @@ public class PlaceArmyCommand extends AbstractCommand {
     protected CommandType getCommandType() {
         return CommandType.PLACE_ARMY;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -26,7 +28,6 @@ public class PlaceArmyCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {

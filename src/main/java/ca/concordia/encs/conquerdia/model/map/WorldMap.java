@@ -115,8 +115,6 @@ public class WorldMap {
 
     /**
      * @param fileName file name
-     * @return return true if a map file was successfully saved.
-     * return false if a map file was successfully saved
      */
     public void saveMap(String fileName) throws ValidationException {
         if (!readyForEdit) {
@@ -141,7 +139,6 @@ public class WorldMap {
      *
      * @param continentName  name of the continent
      * @param continentValue value of the continent
-     * @return return the result
      */
     public void addContinent(String continentName, Integer continentValue) throws ValidationException {
         if (StringUtils.isBlank(continentName))

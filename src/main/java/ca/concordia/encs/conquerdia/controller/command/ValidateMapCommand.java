@@ -10,6 +10,7 @@ import java.util.List;
 public class ValidateMapCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "";
+
     /**
      * {@inheritDoc}
      */
@@ -17,6 +18,7 @@ public class ValidateMapCommand extends AbstractCommand {
     protected CommandType getCommandType() {
         return CommandType.VALIDATE_MAP;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -27,7 +29,6 @@ public class ValidateMapCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {
