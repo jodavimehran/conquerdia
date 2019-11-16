@@ -6,10 +6,13 @@ import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.util.Observable;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * This class represent the phases of the game
@@ -22,6 +25,7 @@ public class PhaseModel extends Observable {
 
 	private int numberOfInitialArmies = -1;
 	private boolean allCountriesArePopulated;
+    @JsonIgnore
 
 	/**
 	 * 
@@ -308,7 +312,7 @@ public class PhaseModel extends Observable {
     /**
      * Phase Types
      */
-    public enum PhaseTypes {
+    public enum PhaseTypes implements Serializable {
         NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
         EDIT_MAP("Edit Map",
                 new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY,

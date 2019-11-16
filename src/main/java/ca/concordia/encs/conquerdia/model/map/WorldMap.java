@@ -6,6 +6,9 @@ import ca.concordia.encs.conquerdia.model.map.io.IMapReader;
 import ca.concordia.encs.conquerdia.model.map.io.IMapWriter;
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -15,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Represents the world map of the game.
  */
-public class WorldMap {
+public class WorldMap implements Serializable {
     private final static String NO_MAP_TO_EDIT_ERROR = "There is no map to %s. Use \"editmap filename\" command to load or create a map.";
     private static WorldMap instance;
     private final Map<String, Continent> continents = new HashMap<>();
@@ -26,7 +29,7 @@ public class WorldMap {
     private boolean mapLoaded;
     private boolean connectedGraph;
     private boolean connectedSubGraph;
-
+    @JsonIgnore
     private WorldMap() {
     }
 

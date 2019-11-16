@@ -2,12 +2,17 @@ package ca.concordia.encs.conquerdia.model;
 
 import ca.concordia.encs.conquerdia.model.map.Country;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Battle {
-    private Country winner;
+public class Battle implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Country winner;
     private Country fromCountry;
     private Country toCountry;
     private int numberOfAttackerDices;

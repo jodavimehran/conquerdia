@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
+import ca.concordia.encs.conquerdia.model.io.GameIO;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 import java.util.List;
@@ -33,6 +34,18 @@ public class ShowMapCommand extends AbstractCommand {
     @Override
     public void runCommand(List<String> inputCommandParts) {
         resultList.add(WorldMap.getInstance().showMap());
+       
+        GameIO stateIO = new GameIO();
+        stateIO.SaveGame();
+        try {
+        	if(stateIO != null) {
+        		stateIO = null;
+        		stateIO = new GameIO();
+        	}
+			stateIO.LoadGame();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
 }

@@ -12,14 +12,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 
 /**
  * Represents a player in the Game
  */
-public class Player {
-    private static int NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD = 0;
+public class Player implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static int NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD = 0;
     /**
      * Player Name
      */
@@ -61,6 +68,7 @@ public class Player {
      * has been a successful attack
      */
     private boolean successfulAttack;
+    @JsonIgnore
 
     /**
      * @param name The name of a player must be determined when you want to create a
