@@ -22,11 +22,6 @@ public class PhaseModel extends Observable {
 
 	private int numberOfInitialArmies = -1;
 	private boolean allCountriesArePopulated;
-    private static PhaseModel instance;
-    private final List<String> phaseLog = new ArrayList<>();
-    private PhaseTypes currentPhase = PhaseTypes.NONE;
-    private int numberOfInitialArmies = -1;
-    private boolean allCountriesArePopulated;
 
 	/**
 	 * 
