@@ -18,6 +18,21 @@ public class PhaseModel extends Observable {
 	private static PhaseModel instance;
 	private final List<String> phaseLog = new ArrayList<>();
 	private PhaseTypes currentPhase = PhaseTypes.NONE;
+	/**
+	 * 
+	 * @return The current Phase of the game
+	 */
+	public PhaseTypes getCurrentPhase() {
+		return currentPhase;
+	}
+	/**
+	 * 
+	 * @param currentPhase The current Phase of the game
+	 */
+	public void setCurrentPhase(PhaseTypes currentPhase) {
+		this.currentPhase = currentPhase;
+	}
+
 	private int numberOfInitialArmies = -1;
 	private boolean allCountriesArePopulated;
 
