@@ -29,7 +29,6 @@ public class LoadMapCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
     public void runCommand(List<String> inputCommandParts) {

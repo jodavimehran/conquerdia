@@ -8,15 +8,15 @@ import java.util.List;
 public class FortifyCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "a valid \"fortify\" command is something like \"fortify fromcountry tocountry num\" or \"fortify none\".";
+
     /**
-     * {@inheritDoc'}
      */
     @Override
     protected CommandType getCommandType() {
         return CommandType.FORTIFY;
     }
+
     /**
-     * {@inheritDoc}
      */
     @Override
     protected String getCommandHelpMessage() {
@@ -25,11 +25,10 @@ public class FortifyCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
-        if ("none".equals(inputCommandParts.get(1))) {
+        if ("-none".equals(inputCommandParts.get(1))) {
             PhaseModel.getInstance().getCurrentPlayer().fortify();
             return;
         }

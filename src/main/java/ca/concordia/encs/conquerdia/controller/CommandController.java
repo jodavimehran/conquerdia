@@ -19,10 +19,7 @@ public class CommandController {
      */
     public void executeCommand(String commandStr) {
         CommandResultModel.getInstance().clear();
-        Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
-        if (currentPlayer != null) {
-            CardExchangeModel.getInstance().addCards(currentPlayer.getCards());
-        }
+
         String[] inputCommandParts = commandStr.trim().split(" ");
         if (inputCommandParts.length <= 0) {
             CommandResultModel.getInstance().addResult("Invalid Command! A valid command must have at least one part.");
@@ -35,6 +32,10 @@ public class CommandController {
         }
         commandType.getCommand().execute(Arrays.asList(inputCommandParts));
 
+        Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
+        if (currentPlayer != null) {
+            CardExchangeModel.getInstance().addCards(currentPlayer.getCards());
+        }
     }
 
 }

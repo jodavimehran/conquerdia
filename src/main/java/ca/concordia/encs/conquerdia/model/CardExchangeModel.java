@@ -25,10 +25,12 @@ public class CardExchangeModel extends Observable {
     }
 
     public void addCards(List<Player.CardType> cards) {
-        this.cards.clear();
-        this.cards.addAll(cards);
-        setChanged();
-        notifyObservers(this);
+        if (cards != null && !cards.isEmpty()) {
+            this.cards.clear();
+            this.cards.addAll(cards);
+            setChanged();
+            notifyObservers(this);
+        }
     }
 
     public boolean isReinforcementPhaseActive() {

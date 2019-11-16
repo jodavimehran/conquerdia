@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.Set;
 
 public class PlaceAllCommand extends AbstractCommand {
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.PLACE_ALL;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -27,7 +28,6 @@ public class PlaceAllCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {

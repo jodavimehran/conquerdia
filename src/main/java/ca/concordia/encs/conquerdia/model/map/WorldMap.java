@@ -115,14 +115,16 @@ public class WorldMap {
 
     /**
      * @param fileName file name
-     * @return return true if a map file was successfully saved.
-     * return false if a map file was successfully saved
      */
-    public String saveMap(String fileName) {
-        if (!readyForEdit)
-            return String.format(NO_MAP_TO_EDIT_ERROR, "save");
-        IMapWriter.createMapWriter(this).writeMap(fileName);
-        return String.format("Map with file name \"%s\" has been saved successfully", fileName);
+    public void saveMap(String fileName) throws ValidationException {
+        if (!readyForEdit) {
+            throw new ValidationException(String.format(NO_MAP_TO_EDIT_ERROR, "save"));
+        }
+        if (checkAllMapValidationRules()) {
+            IMapWriter.createMapWriter(this).writeMap(fileName);
+        } else {
+            throw new ValidationException(validateMap());
+        }
     }
 
     /**
@@ -137,7 +139,6 @@ public class WorldMap {
      *
      * @param continentName  name of the continent
      * @param continentValue value of the continent
-     * @return return the result
      */
     public void addContinent(String continentName, Integer continentValue) throws ValidationException {
         if (StringUtils.isBlank(continentName))

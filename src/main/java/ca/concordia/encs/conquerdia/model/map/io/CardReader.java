@@ -25,7 +25,7 @@ public class CardReader implements ICardReader {
 
 	/**
 	 * Reads cards from the card file and returns all the cards 
-	 * @param fileName Card File name
+	 * @param filename Card File name
 	 * @return list of cards 
 	 */
 	public ArrayList<Card> loadCards(String filename) throws IOException {

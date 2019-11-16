@@ -11,6 +11,7 @@ import java.util.List;
  */
 public class EditNeighborCommand extends AbstractCommand {
     public final static String COMMAND_HELP_MSG = "Invalid input! The \"editneighbor\" command must has at least one option like \"-add\" or \"-remove\".";
+
     /**
      * {@inheritDoc}
      */
@@ -18,6 +19,7 @@ public class EditNeighborCommand extends AbstractCommand {
     protected CommandType getCommandType() {
         return CommandType.EDIT_NEIGHBOR;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -28,7 +30,6 @@ public class EditNeighborCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {

@@ -31,6 +31,7 @@ public class CardExchangeView implements Observer {
             for (Player.CardType cardType : cardExchangeModel.getCards()) {
                 output.print(++i + "-" + cardType.getName() + ", ");
             }
+            output.println("");
             output.println("****____________________________________________________________________________________________");
         }
     }

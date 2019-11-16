@@ -27,6 +27,8 @@ public class AttackCommandTest {
 		AttackCommand attackCommand = new AttackCommand();
 		List<String> list = new ArrayList<String>();
 		list.add("attack");
+		list.add("Greece");
+		list.add("Iran");
 		list.add("-5");
 		String message = null;
 		try {
@@ -43,5 +45,4 @@ public class AttackCommandTest {
 	public void testValidateNoAttackCommand() {
 		
 	}
-
 }

@@ -1,5 +1,6 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 public class SaveMapCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "Invalid \"savemap\" command. a valid \"savemap\" command is something like \"savemap filename\".";
+
     /**
      * {@inheritDoc}
      */
@@ -14,6 +16,7 @@ public class SaveMapCommand extends AbstractCommand {
     protected CommandType getCommandType() {
         return CommandType.SAVE_MAP;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -24,10 +27,11 @@ public class SaveMapCommand extends AbstractCommand {
 
     /**
      * @param inputCommandParts the command line parameters.
-     * @return List of Command Results
      */
     @Override
-    public void runCommand(List<String> inputCommandParts) {
-        phaseLogList.add(WorldMap.getInstance().saveMap(inputCommandParts.get(1)));
+    public void runCommand(List<String> inputCommandParts) throws ValidationException {
+        String fileName = inputCommandParts.get(1);
+        WorldMap.getInstance().saveMap(fileName);
+        phaseLogList.add(String.format("Map with file name \"%s\" has been saved successfully", fileName));
     }
 }
