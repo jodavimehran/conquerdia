@@ -10,6 +10,11 @@ import org.junit.runners.Suite;
 	MapReaderTest.class,
 	MapWriterTest.class
 })
+/**
+ * Test Suite Class for MapReader, MapWriter, FileHelper and cardreader
+ * @author Sadegh Aalizadeh
+ *
+ */
 public class FileTestSuite {
 
 }

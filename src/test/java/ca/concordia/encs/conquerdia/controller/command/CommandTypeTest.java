@@ -8,12 +8,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class CommandTypeTest {
-
+	/**
+	 * Test findCommandTypeByName
+	 */
     @Test
     public void findCommandTypeByName() {
         assertEquals(CommandType.findCommandTypeByName("editcontinent"), CommandType.EDIT_CONTINENT);
     }
-
+    /**
+     * Test Get factory method
+     */
     @Test
     public void getFactory() {
         assertTrue(CommandType.EDIT_CONTINENT.getCommand() instanceof EditContinentCommand);

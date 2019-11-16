@@ -8,12 +8,16 @@ import java.util.List;
 public class EditMapCommand extends AbstractCommand {
 
     private static final String COMMAND_HELP_MSG = "A valid \"editmap\" command is something like \"editmap filename\".";
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected CommandType getCommandType() {
         return CommandType.EDIT_MAP;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getCommandHelpMessage() {
         return COMMAND_HELP_MSG;
