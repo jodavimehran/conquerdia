@@ -313,7 +313,7 @@ public class PhaseModel extends Observable {
      * Phase Types
      */
     public enum PhaseTypes implements Serializable {
-        NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
+        NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP , CommandType.LOAD_GAME , CommandType.SAVE_GAME))),
         EDIT_MAP("Edit Map",
                 new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY,
                         CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP,

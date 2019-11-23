@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -40,11 +41,12 @@ public class GameIO {
         } 
 	}
 	
-	public void LoadGame() throws Exception {
-		gameStateIO.setBuilder(new GameLoaderBuilder("D:\\state.txt"));
+	public List<String> LoadGame(String fileName) throws Exception {
+		gameStateIO.setBuilder(new GameLoaderBuilder(fileName));
 		gameStateIO.constructGameState();
 		GameState gameLoadState = gameStateIO.getGameState();
 		//Assign gameLoadState objects to Game Model elements
+		return null;
 	}
 	
 }
