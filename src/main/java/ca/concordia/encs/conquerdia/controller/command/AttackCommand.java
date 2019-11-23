@@ -98,7 +98,14 @@ public class AttackCommand extends AbstractCommand {
 	 * @throws ValidationException
 	 */
 	private void validateAttackCommand(List<String> inputCommandParts, Player currentPlayer) throws ValidationException {
-
+		if (currentPlayer.canPerformAttackMove()) {
+			throw new ValidationException(AttackMoveCommand.COMMAND_HELP_MSG);
+		}
+		
+		if (currentPlayer.canPerformDefend()) {
+			throw new ValidationException(DefendCommand.COMMAND_HELP_MSG);
+		}
+		
         if (!currentPlayer.canPerformAttack()) {
             throw new ValidationException("Player can perform only one attack at a time.");
         }

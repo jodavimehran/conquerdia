@@ -345,7 +345,11 @@ public class Player implements Serializable {
 			log.add(String.format("%s has attacked %s with %s number of dice(s).", fromCountryName, toCountryName,
 					numdice));
 		} else {
-			log.add(String.format("%s has started an all out attack on %s.", fromCountryName, toCountryName));
+			log.add(String.format("%s(%d) has started an all out attack on %s(%d).",
+					fromCountryName,
+					fromCountry.getNumberOfArmies(),
+					toCountryName,
+					toCountry.getNumberOfArmies()));
 		}
 
 		battle = new Battle(fromCountry, toCountry);
@@ -422,13 +426,13 @@ public class Player implements Serializable {
 		} else if (numDice > (defendingCountry = battle.getToCountry()).getNumberOfArmies()) {
 
 			error = String.format(
-					"Defending country %s has less number of armies %s than the number of dice rolled %s."
+					"Defending country %s has less number of armies (%d) than the number of dice rolled (%s)."
 							+ " The number of dice cannot be more the number of armies in the defending country.",
 					defendingCountry.getName(), defendingCountry.getNumberOfArmies(), numDice);
 		} else if (numDice > (attackingCountry = battle.getFromCountry()).getNumberOfArmies()) {
 
 			error = String.format(
-					"Attacking country %s has less number of armies %s than the number of dice rolled %s."
+					"Attacking country %s has less number of armies (%s) than the number of dice rolled (%s)."
 							+ " The number of dice cannot be more the number of armies in the attacking country.",
 					attackingCountry.getName(), attackingCountry.getNumberOfArmies(), numDice);
 		}
@@ -464,8 +468,13 @@ public class Player implements Serializable {
 			error = String.format("Player %s has not conquered the defending country.", name);
 		} else if (armiesToMove + 1 > battle.getFromCountry().getNumberOfArmies()) {
 			error = String.format(
-					"You must move less armies than what you have in your attacking country."
-							+ " And you must keep atleast one army in your attacking country.");
+					"You must keep atleast one army in your attacking country. Move less army please!");
+		} else if (armiesToMove < battle.getNumberOfAttackerDices()) {
+			error = String.format(
+					"You must move atleast %d armies since you rolled %d dices to conquer %s",
+					battle.getNumberOfAttackerDices(),
+					battle.getNumberOfAttackerDices(),
+					battle.getToCountry().getName());
 		}
 
 		if (error != null) {
