@@ -138,8 +138,11 @@ public class Battle implements Serializable {
 			log.addAll(conquer());
 			log.add(String.format(
 					"Congrats! %s has conquered %s. Please move atleast %s of your armies from %s to the conquered country %s.",
-					fromCountry.getOwner().getName(), toCountry.getName(), 1,
-					fromCountry.getName(), toCountry.getName()));
+					fromCountry.getOwner().getName(),
+					toCountry.getName(),
+					numberOfAttackerDices,
+					fromCountry.getName(),
+					toCountry.getName()));
 		}
 
 		return log;
