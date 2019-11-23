@@ -23,7 +23,9 @@ public enum CommandType {
     ATTACK("attack", new AttackCommand(), 2),
     DEFEND("defend", new DefendCommand(), 2),
     ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2),
-    EXCHANGE_CARDS("exchangecards", new ExchangeCardsCommand(), 2);
+    EXCHANGE_CARDS("exchangecards", new ExchangeCardsCommand(), 2),
+	LOAD_GAME("loadgame" , new LoadGameCommand() , 2),
+	SAVE_GAME("loadgame" , new LoadGameCommand() , 2);
 
     private final String name;
     private final Command command;

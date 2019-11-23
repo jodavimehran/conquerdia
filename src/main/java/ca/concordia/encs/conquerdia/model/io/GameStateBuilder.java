@@ -24,9 +24,7 @@ public abstract class GameStateBuilder implements Serializable {
     public void createNewGameState() {
     	stateProduct = new GameState();
     }
-	abstract void buildMap();
-	abstract void buildPlayers();
-	abstract void buildPhase();
+    abstract void buildPlayersModel();
 	abstract void buildPhaseModel();
 	abstract void buildCards();
 }

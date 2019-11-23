@@ -14,7 +14,7 @@ public class AttackMoveCommand extends AbstractCommand {
 	 */
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		if (hasMinimumNumberofParameters(inputCommandParts)) {
+		if (inputCommandParts.size() == getCommandType().getMinNumberOfParts()) {
 			try {
 				int numOfArmiesToMove = Integer.parseInt(inputCommandParts.get(1));
 				if (numOfArmiesToMove < 0) {
@@ -43,6 +43,6 @@ public class AttackMoveCommand extends AbstractCommand {
 	 */
 	@Override
 	protected CommandType getCommandType() {
-		return CommandType.DEFEND;
+		return CommandType.ATTACK_MOVE;
 	}
 }

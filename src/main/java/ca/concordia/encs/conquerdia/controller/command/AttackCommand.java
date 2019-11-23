@@ -18,13 +18,15 @@ public class AttackCommand extends AbstractCommand {
 
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		isNoAttack = isAllOut = false;
-		fromCountryName = toCountryName = null;
+		isNoAttack = false;
+		isAllOut = false;
+		fromCountryName = null;
+		toCountryName = null;
 		numberOfDices = 0;
 
-		validateAttackCommand(inputCommandParts);
-
 		Player currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
+		validateAttackCommand(inputCommandParts, currentPlayer);
+
 		if (isNoAttack) {
 			handleNoAttack(currentPlayer);
 		} else {
@@ -95,8 +97,19 @@ public class AttackCommand extends AbstractCommand {
 	 * @param inputCommandParts input parameters parts.
 	 * @throws ValidationException
 	 */
-	private void validateAttackCommand(List<String> inputCommandParts) throws ValidationException {
-
+	private void validateAttackCommand(List<String> inputCommandParts, Player currentPlayer) throws ValidationException {
+		if (currentPlayer.canPerformAttackMove()) {
+			throw new ValidationException(AttackMoveCommand.COMMAND_HELP_MSG);
+		}
+		
+		if (currentPlayer.canPerformDefend()) {
+			throw new ValidationException(DefendCommand.COMMAND_HELP_MSG);
+		}
+		
+        if (!currentPlayer.canPerformAttack()) {
+            throw new ValidationException("Player can perform only one attack at a time.");
+        }
+        
 		if (!hasMinimumNumberofParameters(inputCommandParts) || inputCommandParts.size() > 4) {
 			throw new ValidationException(getCommandHelpMessage());
 		}

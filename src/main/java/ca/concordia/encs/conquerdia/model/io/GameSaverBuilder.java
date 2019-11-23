@@ -10,25 +10,18 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
 public class GameSaverBuilder extends GameStateBuilder {
 
 	@Override
-	void buildMap() {
-		//stateProduct.setWorldMap(WorldMap.getInstance());
-	}
-	
-	@Override
-	void buildPlayers() {
-		stateProduct.setPlayers(PlayersModel.getInstance().getPlayers());
-	}
-
-	@Override
-	void buildPhase() {
-		stateProduct.setCurrentPhase(PhaseModel.getInstance().getCurrentPhase());
-	}
-	@Override
 	void buildPhaseModel() {
 		stateProduct.setPhaseModel(PhaseModel.getInstance());
 	}
+	
 	@Override
 	void buildCards() {
 		stateProduct.setCards(CardExchangeModel.getInstance().getCards());
+	}
+
+	@Override
+	void buildPlayersModel() {
+		stateProduct.setPlayersModel(PlayersModel.getInstance());
+		
 	}
 }

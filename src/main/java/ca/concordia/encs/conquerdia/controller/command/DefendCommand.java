@@ -20,7 +20,7 @@ public class DefendCommand extends AbstractCommand {
 	 */
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		if (hasMinimumNumberofParameters(inputCommandParts)) {
+		if (inputCommandParts.size() == getCommandType().getMinNumberOfParts()) {
 			try {
 				int numDice = Integer.parseInt(inputCommandParts.get(1));
 				if (numDice < 0) {
@@ -37,7 +37,6 @@ public class DefendCommand extends AbstractCommand {
 			throw new ValidationException("Invalid input! " + getCommandHelpMessage());
 		}
 	}
-
 
 	/**
 	 * @return Returns the helper message
