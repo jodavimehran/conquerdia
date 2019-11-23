@@ -422,13 +422,13 @@ public class Player implements Serializable {
 		} else if (numDice > (defendingCountry = battle.getToCountry()).getNumberOfArmies()) {
 
 			error = String.format(
-					"Defending country %s has less number of armies %s than the number of dice rolled %s."
+					"Defending country %s has less number of armies (%d) than the number of dice rolled (%s)."
 							+ " The number of dice cannot be more the number of armies in the defending country.",
 					defendingCountry.getName(), defendingCountry.getNumberOfArmies(), numDice);
 		} else if (numDice > (attackingCountry = battle.getFromCountry()).getNumberOfArmies()) {
 
 			error = String.format(
-					"Attacking country %s has less number of armies %s than the number of dice rolled %s."
+					"Attacking country %s has less number of armies (%s) than the number of dice rolled (%s)."
 							+ " The number of dice cannot be more the number of armies in the attacking country.",
 					attackingCountry.getName(), attackingCountry.getNumberOfArmies(), numDice);
 		}

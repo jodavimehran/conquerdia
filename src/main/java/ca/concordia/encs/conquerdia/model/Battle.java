@@ -55,7 +55,8 @@ public class Battle implements Serializable {
 	private BattleState state;
 
 	/**
-	 * The constructor of the battle class. It is assumed that a battle is created when
+	 * The constructor of the battle class. It is assumed that a battle is created
+	 * when
 	 * an attacked command has performed
 	 *
 	 * @param attackingCountry The attacker country
@@ -122,11 +123,15 @@ public class Battle implements Serializable {
 		fromCountry.removeArmy(killedByDefender);
 		toCountry.removeArmy(killedByAttacker);
 
-		log.add(String.format("Attacker rolled %s & killed %s armies. Defender rolled %s and killed %s armies",
+		log.add(String.format("Attacker Rolled:  %s & Defender rolled %s."
+				+ " Attacker killed: %s & Defender killed: %s."
+				+ " Army Count: %s (%d) & %s (%d)",
 				Arrays.toString(attackerDiceRolled),
-				killedByAttacker,
 				Arrays.toString(defenderDiceRolled),
-				killedByDefender));
+				killedByAttacker,
+				killedByDefender,
+				fromCountry.getName(), fromCountry.getNumberOfArmies(),
+				toCountry.getName(), toCountry.getNumberOfArmies()));
 
 		// Check if toCuntry is Conquered
 		if (toCountry.hasNoArmy()) {
@@ -145,27 +150,17 @@ public class Battle implements Serializable {
 	 */
 	private int getMaxDiceCountForAttacker() {
 		int armies = fromCountry.getNumberOfArmies();
-		int count = 0;
-
-		switch (armies) {
-		case 1:
+		if (armies < 2) {
 			return 0;
-		case 2:
-			return 1;
-		case 3:
-			return 2;
-		default:
-			count = Math.min(armies, 3);
 		}
-
-		return count;
+		return Math.min(armies - 1, 3);
 	}
 
 	/**
 	 * @return The maximum dice count of defender for the all out phase
 	 */
 	private int getMaxDiceCountForDefender() {
-		int armies = fromCountry.getNumberOfArmies();// toCountry.getNumberOfArmies();
+		int armies = toCountry.getNumberOfArmies();
 		return Math.min(armies, 2);
 	}
 
