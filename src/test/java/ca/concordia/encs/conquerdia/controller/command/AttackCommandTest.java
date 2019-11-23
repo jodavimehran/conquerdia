@@ -9,18 +9,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.PlayersModel;
 
 public class AttackCommandTest {
 	/**
 	 * Setup the data for attack validations
+	 * 
 	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		
+
 	}
+
 	/**
-	 * test Attack command	validation rules
+	 * test Attack command validation rules
 	 */
 	@Test
 	public void testAttackCOmmand() {
@@ -32,17 +35,19 @@ public class AttackCommandTest {
 		list.add("-5");
 		String message = null;
 		try {
+			PlayersModel.getInstance().addPlayer("p1");
 			attackCommand.runCommand(list);
 		} catch (ValidationException ex) {
 			message = ex.getMessage();
 		}
 		assertTrue(message.contains("must be a positive integer"));
 	}
+
 	/**
 	 * Test validateNoAttack method of AttackCOmmand Class
 	 */
 	@Test
 	public void testValidateNoAttackCommand() {
-		
+
 	}
 }
