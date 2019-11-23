@@ -34,18 +34,6 @@ public class ShowMapCommand extends AbstractCommand {
     @Override
     public void runCommand(List<String> inputCommandParts) {
         resultList.add(WorldMap.getInstance().showMap());
-       
-        GameIO stateIO = new GameIO();
-        stateIO.SaveGame();
-        try {
-        	if(stateIO != null) {
-        		stateIO = null;
-        		stateIO = new GameIO();
-        	}
-			stateIO.LoadGame();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
     }
 
 }
