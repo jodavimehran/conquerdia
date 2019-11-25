@@ -1,18 +1,17 @@
 package ca.concordia.encs.conquerdia.model;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class PlayerTest {
+public class AbstractPlayerTest {
     private final static String PLAYER_NAME = "testPlayer";
     private Player player;
     private Continent testContinent;
@@ -25,7 +24,12 @@ public class PlayerTest {
      */
     @Before
     public void setUp() {
-        player = new Player.Builder(PLAYER_NAME).build();
+
+        try {
+            player = Player.factory(PLAYER_NAME, "human");
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
         testContinent = new Continent.Builder("testContinent").setValue(8).build();
         country1 = new Country.Builder("one", testContinent).build();
         country2 = new Country.Builder("two", testContinent).build();
@@ -34,8 +38,6 @@ public class PlayerTest {
         player.addCountry(country1);
         player.addCountry(country2);
         player.addCountry(country3);
-
-        player.addContinent(testContinent);
 
 
     }
@@ -103,39 +105,13 @@ public class PlayerTest {
     }
 
     /**
-     * Test case for {@link Player#getNumberOfContinent()} method
+     * Test case for {@link Player#getNumberOfContinents()} ()} method
      */
     @Test
     public void getNumberOfContinent() {
-        assertEquals(1, player.getNumberOfContinent());
+        assertEquals(1, player.getNumberOfContinents());
     }
 
-    /**
-     * Test case for {@link Player#addContinent(Continent)} method
-     */
-    @Test
-    public void addContinent() {
-        Continent testContinent2 = new Continent.Builder("testContinent2").build();
-        player.addContinent(testContinent2);
-        assertEquals(2, player.getNumberOfContinent());
-    }
-
-    /**
-     * Test case for {@link Player#removeContinent(String) removeContinent} method
-     */
-    @Test
-    public void removeContinent() {
-        player.removeContinent("testContinent");
-        assertEquals(0, player.getNumberOfContinent());
-    }
-
-    /**
-     * Test case for {@link Player#ownedAll(Set) ownedAll} method
-     */
-    @Test
-    public void ownedAll() {
-        assertTrue(player.ownedAll(new HashSet<>(Arrays.asList("one", "two", "tree"))));
-    }
 
     /**
      * Test case for {@link Player#calculateNumberOfReinforcementArmies() calculateNumberOfReinforcementArmies} method

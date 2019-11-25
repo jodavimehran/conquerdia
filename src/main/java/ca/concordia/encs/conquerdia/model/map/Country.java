@@ -1,6 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map;
 
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class Country implements Serializable{
 	/**
 	 * The player that this county belongs to
 	 */
-	private Player owner;
+	private AbstractPlayer owner;
 
 	/**
 	 * Country class has one and only one private constructor to force the user's of
@@ -68,14 +68,14 @@ public class Country implements Serializable{
 	/**
 	 * @return the owner of this country
 	 */
-	public Player getOwner() {
+	public AbstractPlayer getOwner() {
 		return owner;
 	}
 
 	/**
 	 * @param owner The owner of this country
 	 */
-	public void setOwner(Player owner) {
+	public void setOwner(AbstractPlayer owner) {
 		this.owner = owner;
 	}
 

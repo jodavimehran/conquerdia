@@ -29,7 +29,7 @@ public class FortifyCommand extends AbstractCommand {
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
         if ("-none".equals(inputCommandParts.get(1))) {
-            PhaseModel.getInstance().getCurrentPlayer().fortify();
+            PhaseModel.getInstance().getCurrentPlayer().setFortificationFinished();
             return;
         }
         if (inputCommandParts.size() < 4)

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CardExchangeModel extends Observable {
     private static CardExchangeModel instance;
-    private final List<Player.CardType> cards = new ArrayList<>();
+    private final List<CardType> cards = new ArrayList<>();
     private boolean reinforcementPhaseActive;
 
     private CardExchangeModel() {
@@ -24,7 +24,7 @@ public class CardExchangeModel extends Observable {
         return instance;
     }
 
-    public void addCards(List<Player.CardType> cards) {
+    public void addCards(List<CardType> cards) {
         if (cards != null && !cards.isEmpty()) {
             this.cards.clear();
             this.cards.addAll(cards);
@@ -41,7 +41,7 @@ public class CardExchangeModel extends Observable {
         this.reinforcementPhaseActive = reinforcementPhaseActive;
     }
 
-    public List<Player.CardType> getCards() {
+    public List<CardType> getCards() {
         return cards;
     }
 }

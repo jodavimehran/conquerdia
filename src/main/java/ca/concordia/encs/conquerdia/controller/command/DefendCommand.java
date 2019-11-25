@@ -4,7 +4,7 @@ import java.util.List;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 
 /**
  * Represents a defend move during the attack phase.
@@ -27,7 +27,7 @@ public class DefendCommand extends AbstractCommand {
 					throw new NumberFormatException();
 				}
 
-				Player defender = PhaseModel.getInstance().getCurrentPlayer();
+				AbstractPlayer defender = PhaseModel.getInstance().getCurrentPlayer();
 				phaseLogList.addAll(defender.defend(numDice));
 
 			} catch (NumberFormatException ex) {

@@ -1,7 +1,7 @@
 package ca.concordia.encs.conquerdia.model.map;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.Player;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,14 +34,15 @@ public class MapFormattorTest {
         map.getCountry("Kincardine-shire").placeArmy(4);
         map.getCountry("Northamptonshire_Northamptonshire").placeArmy(15);
 
-        Player p1 = new Player.Builder("John").build();
+        Player p1 = Player.factory("John", "human");
         map.getCountry("Ross-shire").setOwner(p1);
         map.getCountry("Northamptonshire_Northamptonshire").setOwner(p1);
 
-        map.getCountry("Kincardine-shire").setOwner(new Player.Builder("Robert").build());
-        map.getCountry("Ross-shire-and-Chromartyshire").setOwner(new Player.Builder("Doe").build());
+        map.getCountry("Kincardine-shire").setOwner(Player.factory("Robert", "human"));
+        map.getCountry("Ross-shire-and-Chromartyshire").setOwner(Player.factory("Doe", "human"));
 
     }
+
     /**
      * Release all objects after All Test cases are performed in the Test Class
      */
@@ -49,6 +50,7 @@ public class MapFormattorTest {
     public static void cleanup() {
         WorldMap.getInstance().clear();
     }
+
     /**
      * TEst for Default Map formatter
      */
@@ -58,6 +60,7 @@ public class MapFormattorTest {
         String res = formattor.format();
         assertTrue(res.contains("Northamptonshire_Northamptonshire"));
     }
+
     /**
      * Test for DetailMapFormatter
      */
@@ -67,8 +70,10 @@ public class MapFormattorTest {
         String res = formattor.format(MapFormattor.FormatType.Detail);
         assertTrue(res.contains("Northamptonshire_Northamptonshire| 15    | John"));
     }
+
     /**
      * Tests for PresenseOfEmptyContinents()
+     *
      * @throws ValidationException
      */
     @Test

@@ -41,6 +41,7 @@ public class GamePlayerCommand extends AbstractCommand {
             switch (option) {
                 case ("-add"): {
                     try {
+                         String strategy = iterator.next();
                         PlayersModel.getInstance().addPlayer(playerName);
                         phaseLogList.add(String.format("Player with name \"%s\" was added.", playerName));
                     } catch (ValidationException ex) {

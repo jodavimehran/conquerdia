@@ -2,7 +2,7 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class PlaceArmyCommand extends AbstractCommand {
             throw new ValidationException("Before this command you must run \"populatecountries\" command!");
         }
         String countryName = inputCommandParts.get(1);
-        Player currentPlayer = phaseModel.getCurrentPlayer();
+        AbstractPlayer currentPlayer = phaseModel.getCurrentPlayer();
         currentPlayer.placeArmy(countryName);
         phaseLogList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
         PlayersModel.getInstance().giveTurnToAnotherPlayer();

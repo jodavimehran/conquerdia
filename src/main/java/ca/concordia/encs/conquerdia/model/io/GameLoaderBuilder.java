@@ -6,10 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -17,10 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
-import ca.concordia.encs.conquerdia.model.Player.CardType;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
-import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 public class GameLoaderBuilder extends GameStateBuilder {
 	private String gameStateFilePath;

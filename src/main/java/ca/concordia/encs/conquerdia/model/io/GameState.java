@@ -37,7 +37,7 @@ public class GameState implements Serializable {
 	public List<Player.CardType> getCards() {
 		return cards;
 	}
-	public void setCards(List<Player.CardType> cards) {
+	public void setCards(List<AbstractPlayer.CardType> cards) {
 		this.cards = cards;
 	}
 

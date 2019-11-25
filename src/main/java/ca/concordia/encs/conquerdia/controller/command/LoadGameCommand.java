@@ -1,11 +1,8 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import java.nio.file.Path;
 import java.util.List;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
-import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
 import ca.concordia.encs.conquerdia.model.io.GameIO;
 
 /**

@@ -4,7 +4,7 @@ import java.util.List;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 
 public class AttackMoveCommand extends AbstractCommand {
 
@@ -21,7 +21,7 @@ public class AttackMoveCommand extends AbstractCommand {
 					throw new NumberFormatException();
 				}
 
-				Player player = PhaseModel.getInstance().getCurrentPlayer();
+				AbstractPlayer player = PhaseModel.getInstance().getCurrentPlayer();
 				phaseLogList.add(player.attackMove(numOfArmiesToMove));
  
 			} catch (NumberFormatException ex) {

@@ -1,5 +1,9 @@
 package ca.concordia.encs.conquerdia.model;
 
+
+/**
+ * Card Types
+ */
 public enum CardType {
     INFANTRY("Infantry"),
     CAVALRY("Cavalry"),

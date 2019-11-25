@@ -2,7 +2,7 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class ReinforceCommand extends AbstractCommand {
         try {
             String countryName = inputCommandParts.get(1);
             int numberOfArmy = Integer.valueOf(inputCommandParts.get(2));
-            Player currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
+            AbstractPlayer currentPlayer = PhaseModel.getInstance().getCurrentPlayer();
             phaseLogList.add(currentPlayer.reinforce(countryName, numberOfArmy));
         } catch (NumberFormatException ex) {
             throw new ValidationException("Number of armies(latest parameter) must be an integer number.");

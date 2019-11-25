@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 
 public class AttackCommand extends AbstractCommand {
@@ -27,6 +27,7 @@ public class AttackCommand extends AbstractCommand {
 		Player currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
 		validateAttackCommand(inputCommandParts, currentPlayer);
 
+		AbstractPlayer currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
 		if (isNoAttack) {
 			handleNoAttack(currentPlayer);
 		} else {
@@ -41,7 +42,7 @@ public class AttackCommand extends AbstractCommand {
 	 * @param currentPlayer
 	 * @throws ValidationException
 	 */
-	private void handleNoAttack(Player currentPlayer) throws ValidationException {
+	private void handleNoAttack(AbstractPlayer currentPlayer) throws ValidationException {
 
 		if (currentPlayer.canPerformDefend()) {
 			throw new ValidationException(DefendCommand.COMMAND_HELP_MSG);
