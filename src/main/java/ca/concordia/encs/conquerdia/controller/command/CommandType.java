@@ -24,8 +24,8 @@ public enum CommandType {
     DEFEND("defend", new DefendCommand(), 2),
     ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2),
     EXCHANGE_CARDS("exchangecards", new ExchangeCardsCommand(), 2),
-	LOAD_GAME("loadgame" , new LoadGameCommand() , 2),
-	SAVE_GAME("loadgame" , new LoadGameCommand() , 2);
+    LOAD_GAME("loadgame", new LoadGameCommand(), 2),
+    SAVE_GAME("savegame", new SaveGameCommand(), 2);
 
     private final String name;
     private final Command command;
@@ -60,15 +60,15 @@ public enum CommandType {
     public Command getCommand() {
         return command;
     }
+
     /**
-     * 
      * @return Returns the name of the attack.
      */
     public String getName() {
         return name;
     }
+
     /**
-     * 
      * @return the minimum number of valid input parameters
      */
     public int getMinNumberOfParts() {

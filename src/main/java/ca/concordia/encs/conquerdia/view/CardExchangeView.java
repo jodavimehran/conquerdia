@@ -1,7 +1,7 @@
 package ca.concordia.encs.conquerdia.view;
 
 import ca.concordia.encs.conquerdia.model.CardExchangeModel;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.CardType;
 import ca.concordia.encs.conquerdia.util.Observable;
 import ca.concordia.encs.conquerdia.util.Observer;
 
@@ -28,10 +28,10 @@ public class CardExchangeView implements Observer {
         if (cardExchangeModel.isReinforcementPhaseActive() && !cardExchangeModel.getCards().isEmpty()) {
             output.println("****    Card Exchange View     ****************************************************************");
             int i = 0;
-            for (Player.CardType cardType : cardExchangeModel.getCards()) {
+            for (CardType cardType : cardExchangeModel.getCards()) {
                 output.print(++i + "-" + cardType.getName() + ", ");
             }
-            output.println("");
+            output.println();
             output.println("****____________________________________________________________________________________________");
         }
     }

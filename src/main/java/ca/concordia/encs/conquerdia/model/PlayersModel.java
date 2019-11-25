@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.model;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.player.Player;
 import ca.concordia.encs.conquerdia.util.Observable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,12 +10,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
+/**
+ * Players Information
+ */
 public class PlayersModel extends Observable {
     private static PlayersModel instance;
-    private Queue<Player> players = new LinkedList<>();
+    private final Queue<Player> players = new LinkedList<>();
     private final Set<String> playerNames = new HashSet<>();
     private Player firstPlayer;
-    private int numberOfPlayers;
+
     /**
      * private Constructor to implementation of the Singleton Pattern
      */
@@ -36,29 +40,28 @@ public class PlayersModel extends Observable {
         }
         return instance;
     }
+
     /**
      * Get the queue of the game players
-     * @return  A queue of the game players
+     *
+     * @return A queue of the game players
      */
     public Queue<Player> getPlayers() {
         return players;
     }
+
     /**
-     * Sets the players when loading game
-     * @param players
-     */
-    public  void setPlayers(Queue<Player> players) {
-         this.players =  players;
-    }
-    /**Gets the first player of the game.
-     * 
+     * Gets the first player of the game.
+     *
      * @return the first player of the game.
      */
     public Player getFirstPlayer() {
         return firstPlayer;
     }
+
     /**
      * Sets the first player of the game.
+     *
      * @param firstPlayer the first player of the game
      */
     public void setFirstPlayer(Player firstPlayer) {
@@ -72,27 +75,26 @@ public class PlayersModel extends Observable {
         return playerNames.size();
     }
 
-    /**
-     * Set the number of players
-     * @param numberOfPlayers
-     */
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
 
     /**
      * Add a new player to the game if player name will not found in current player
-     * name is
      *
-     * @param playerName name of the plater to add
+     * @param playerName name of the player to be added
+     * @param strategy   strategy of the player to be added
+     * @throws ValidationException when a validation rule is breaking
      */
-    public void addPlayer(String playerName) throws ValidationException {
-        if (StringUtils.isBlank(playerName))
+    public void addPlayer(String playerName, String strategy) throws ValidationException {
+        if (StringUtils.isBlank(playerName)) {
             throw new ValidationException("Player name is not valid!");
-        if (playerNames.contains(playerName))
+        }
+        if (StringUtils.isBlank(strategy)) {
+            throw new ValidationException("Player strategy is not valid!");
+        }
+        if (playerNames.contains(playerName)) {
             throw new ValidationException(String.format("Player with name \"%s\" is already exist.", playerName));
+        }
+        Player player = Player.factory(playerName, strategy);
         playerNames.add(playerName);
-        Player player = new Player.Builder(playerName).build();
         players.add(player);
     }
 
@@ -100,6 +102,7 @@ public class PlayersModel extends Observable {
      * This Method remove a player
      *
      * @param playerName name of the player to remove
+     * @throws ValidationException when a validation rule is breaking
      */
     public void removePlayer(String playerName) throws ValidationException {
         if (!playerNames.contains(playerName))
@@ -139,6 +142,7 @@ public class PlayersModel extends Observable {
     public boolean isThereAnyUnplacedArmy() {
         return PlayersModel.getInstance().getPlayers().stream().filter(player -> player.getUnplacedArmies() > 0).count() > 0;
     }
+
     //
     public void update() {
         setChanged();

@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-	PlayerTest.class,
+	AbstractPlayerTest.class,
 	BattleTest.class
 })
 /**
@@ -14,6 +14,6 @@ import org.junit.runners.Suite;
  * @author Sadegh Aalizadeh
  *
  */
-public class PlayerTestSuite {
+public class AbstractPlayerTestSuite {
 
 }

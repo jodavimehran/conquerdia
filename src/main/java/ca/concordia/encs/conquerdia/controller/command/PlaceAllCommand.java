@@ -2,8 +2,8 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+import ca.concordia.encs.conquerdia.model.player.Player;
 
 import java.security.SecureRandom;
 import java.util.List;

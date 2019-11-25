@@ -4,7 +4,9 @@ import ca.concordia.encs.conquerdia.controller.command.CommandType;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
+import ca.concordia.encs.conquerdia.model.player.Player;
 import ca.concordia.encs.conquerdia.util.Observable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -12,35 +14,17 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * This class represent the phases of the game
  */
 public class PhaseModel extends Observable {
-	private static PhaseModel instance;
-	private final List<String> phaseLog = new ArrayList<>();
-	private PhaseTypes currentPhase = PhaseTypes.NONE;
+    private static PhaseModel instance;
+    private final List<String> phaseLog = new ArrayList<>();
+    private PhaseTypes currentPhase = PhaseTypes.NONE;
 
+    private int numberOfInitialArmies = -1;
+    private boolean allCountriesArePopulated;
 
-	private int numberOfInitialArmies = -1;
-	private boolean allCountriesArePopulated;
-    @JsonIgnore
-
-	/**
-	 * 
-	 * @return The current Phase of the game
-	 */
-	public PhaseTypes getCurrentPhase() {
-		return currentPhase;
-	}
-	/**
-	 * 
-	 * @param currentPhase The current Phase of the game
-	 */
-	public void setCurrentPhase(PhaseTypes currentPhase) {
-		this.currentPhase = currentPhase;
-	}
     /**
      * private Constructor to implementation of the Singleton Pattern
      */
@@ -61,6 +45,23 @@ public class PhaseModel extends Observable {
             }
         }
         return instance;
+    }
+
+    @JsonIgnore
+
+    /**
+     *
+     * @return The current Phase of the game
+     */
+    public PhaseTypes getCurrentPhase() {
+        return currentPhase;
+    }
+
+    /**
+     * @param currentPhase The current Phase of the game
+     */
+    public void setCurrentPhase(PhaseTypes currentPhase) {
+        this.currentPhase = currentPhase;
     }
 
     /**
@@ -146,9 +147,10 @@ public class PhaseModel extends Observable {
                             "You have more than five cards. You must exchange them by using \"exchangecards\" command.");
                 } else {
                     changePhase(PhaseTypes.ATTACK);
-                    currentPlayer.setSuccessfulAttack(false);
                     CardExchangeModel.getInstance().setReinforcementPhaseActive(false);
-                    results.add(String.format("%s, You can declare an attack or use \"attack -noattack\" to skip this phase.", currentPlayer.getName()));
+                    results.add(
+                            String.format("%s, You can declare an attack or use \"attack -noattack\" to skip this phase.",
+                                    currentPlayer.getName()));
                 }
                 break;
             }
@@ -158,20 +160,20 @@ public class PhaseModel extends Observable {
                         currentPlayer.winCard();
                     }
                     changePhase(PhaseTypes.FORTIFICATION);
-                } else if (currentPlayer.canPerformAttack()) {
-                    results.add(String.format("%s, You can declare an attack or use \"attack -noattack\" to skip this phase.", currentPlayer.getName()));
+                } else if (currentPlayer.canMoveAttack()) {
+                    results.add(String.format(
+                            "Congrats! %s, please move your army to your newly conquered country %s. You can use \"attackmove -num\" to move your armies.",
+                            currentPlayer.getName(), currentPlayer.getBattle().getToCountry().getName()));
                 } else if (currentPlayer.canPerformDefend()) {
                     results.add(String.format(
                             "%s!!! \"%s\" is under attack by %s. You have %d army at this country. You must defend by using defend command.",
                             currentPlayer.getBattle().getToCountry().getOwner().getName(),
                             currentPlayer.getBattle().getToCountry().getName(), currentPlayer.getName(),
                             currentPlayer.getBattle().getToCountry().getNumberOfArmies()));
-                } else if (currentPlayer.canPerformAttackMove()) {
-                    results.add(String.format(
-                            "Congrats! %s, please move your army to your newly conquered country %s. You can use \"attackmove -num\" to move your armies.",
-                            currentPlayer.getName(), currentPlayer.getBattle().getToCountry().getName()));
-                } else {
-                    results.add("TODO in Attack phase");
+                } else if (currentPlayer.canPerformAttack()) {
+                    results.add(
+                            String.format("%s, You can declare an attack or use \"attack -noattack\" to skip this phase.",
+                                    currentPlayer.getName()));
                 }
                 break;
             }
@@ -182,8 +184,11 @@ public class PhaseModel extends Observable {
                     changePhase(PhaseTypes.REINFORCEMENT);
                     CardExchangeModel.getInstance().setReinforcementPhaseActive(true);
                     currentPlayer.calculateNumberOfReinforcementArmies();
-                    results.add(String.format("Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.", currentPlayer.getName(), currentPlayer.getUnplacedArmies()));
-                    results.add(String.format("[%s]", currentPlayer.getCountryNames().stream().collect(Collectors.joining(", "))));
+                    results.add(String.format(
+                            "Dear %s, Congratulations! You've got %d armies at this phase! You can place them wherever in your territory.",
+                            currentPlayer.getName(), currentPlayer.getUnplacedArmies()));
+                    results.add(String.format("[%s]",
+                            currentPlayer.getCountryNames().stream().collect(Collectors.joining(", "))));
                 }
                 break;
             }
@@ -278,8 +283,6 @@ public class PhaseModel extends Observable {
             country.setOwner(getCurrentPlayer());
             country.placeOneArmy();
             getCurrentPlayer().addCountry(country);
-            if (getCurrentPlayer().ownedAll(country.getContinent().getCountriesName()))
-                getCurrentPlayer().addContinent(country.getContinent());
             countries.remove(country);
             PlayersModel.getInstance().giveTurnToAnotherPlayer();
         }
@@ -309,11 +312,13 @@ public class PhaseModel extends Observable {
         }
     }
 
+
     /**
      * Phase Types
      */
     public enum PhaseTypes implements Serializable {
-        NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP , CommandType.LOAD_GAME , CommandType.SAVE_GAME))),
+        NONE("None",
+                new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
         EDIT_MAP("Edit Map",
                 new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY,
                         CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP,
@@ -321,11 +326,14 @@ public class PhaseModel extends Observable {
         START_UP("Startup",
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER,
                         CommandType.POPULATE_COUNTRIES, CommandType.PLACE_ARMY, CommandType.PLACE_ALL))),
-        REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS))),
+        REINFORCEMENT("Reinforcement",
+                new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS, CommandType.LOAD_GAME,
+                        CommandType.SAVE_GAME))),
         ATTACK("Attack",
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND,
-                        CommandType.ATTACK_MOVE))),
-        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY)));
+                        CommandType.ATTACK_MOVE,CommandType.LOAD_GAME,CommandType.SAVE_GAME))),
+        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY, CommandType.LOAD_GAME,
+                CommandType.SAVE_GAME)));
 
         private final String name;
         private final Set<CommandType> validCommands;

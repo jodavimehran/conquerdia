@@ -1,14 +1,16 @@
 package ca.concordia.encs.conquerdia.model.io;
-import java.util.Arrays;
 
+import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.CardExchangeModel;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player.CardType;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
-import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 public class GameSaverBuilder extends GameStateBuilder {
-
+	private String gameStateFileName;
+	public GameSaverBuilder(String filenName) throws ValidationException {
+	    this.gameStateFileName = filenName; 
+	}
+	
 	@Override
 	void buildPhaseModel() {
 		stateProduct.setPhaseModel(PhaseModel.getInstance());

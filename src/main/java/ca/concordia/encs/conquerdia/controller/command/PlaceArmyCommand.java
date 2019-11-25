@@ -2,8 +2,8 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+import ca.concordia.encs.conquerdia.model.player.Player;
 
 import java.util.List;
 
@@ -37,11 +37,10 @@ public class PlaceArmyCommand extends AbstractCommand {
         }
         String countryName = inputCommandParts.get(1);
         Player currentPlayer = phaseModel.getCurrentPlayer();
-        currentPlayer.placeArmy(countryName);
-        phaseLogList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
+
+        phaseLogList.add(currentPlayer.placeArmy(countryName));
         PlayersModel.getInstance().giveTurnToAnotherPlayer();
-        boolean thereAnyUnplacedArmy = PlayersModel.getInstance().isThereAnyUnplacedArmy();
-        while (thereAnyUnplacedArmy && currentPlayer.getUnplacedArmies() <= 0) {
+        while (PlayersModel.getInstance().isThereAnyUnplacedArmy() && PlayersModel.getInstance().getCurrentPlayer().getUnplacedArmies() <= 0) {
             PlayersModel.getInstance().giveTurnToAnotherPlayer();
         }
     }

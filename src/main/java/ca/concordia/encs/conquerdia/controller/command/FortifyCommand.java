@@ -10,6 +10,7 @@ public class FortifyCommand extends AbstractCommand {
     private static final String COMMAND_HELP_MSG = "a valid \"fortify\" command is something like \"fortify fromcountry tocountry num\" or \"fortify none\".";
 
     /**
+     *
      */
     @Override
     protected CommandType getCommandType() {
@@ -17,6 +18,7 @@ public class FortifyCommand extends AbstractCommand {
     }
 
     /**
+     *
      */
     @Override
     protected String getCommandHelpMessage() {
@@ -28,17 +30,24 @@ public class FortifyCommand extends AbstractCommand {
      */
     @Override
     public void runCommand(List<String> inputCommandParts) throws ValidationException {
+        boolean noneFortify = false;
+        String fromCountryName = null;
+        String toCountryName = null;
+        int numberOfArmy = -1;
         if ("-none".equals(inputCommandParts.get(1))) {
-            PhaseModel.getInstance().getCurrentPlayer().fortify();
-            return;
+            noneFortify = true;
+        } else {
+            if (inputCommandParts.size() < 4) {
+                throw new ValidationException("Invalid input! " + getCommandHelpMessage());
+            }
+            fromCountryName = inputCommandParts.get(1);
+            toCountryName = inputCommandParts.get(2);
+            try {
+                numberOfArmy = Integer.valueOf(inputCommandParts.get(3));
+            } catch (NumberFormatException ex) {
+                throw new ValidationException("Number of armies(latest parameter) must be an integer number.");
+            }
         }
-        if (inputCommandParts.size() < 4)
-            throw new ValidationException("Invalid input! " + getCommandHelpMessage());
-        try {
-            phaseLogList.add(PhaseModel.getInstance().getCurrentPlayer().fortify(inputCommandParts.get(1), inputCommandParts.get(2), Integer.valueOf(inputCommandParts.get(3))));
-        } catch (NumberFormatException ex) {
-            throw new ValidationException("Number of armies(latest parameter) must be an integer number.");
-        }
-
+        phaseLogList.add(PhaseModel.getInstance().getCurrentPlayer().fortify(fromCountryName, toCountryName, numberOfArmy, noneFortify));
     }
 }

@@ -1,8 +1,8 @@
 package ca.concordia.encs.conquerdia.view;
 
-import ca.concordia.encs.conquerdia.model.Player;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
+import ca.concordia.encs.conquerdia.model.player.Player;
 import ca.concordia.encs.conquerdia.util.Observable;
 import ca.concordia.encs.conquerdia.util.Observer;
 
@@ -27,7 +27,7 @@ public class PlayersWorldDominationView implements Observer {
             int numberOfAllCountries = WorldMap.getInstance().getCountries().size();
             for (Player player : players) {
                 mapPercentage.append(player.getName() + ":" + (player.getNumberOfCountries() * 100) / numberOfAllCountries + "%, ");
-                if (player.getNumberOfContinent() > 0) {
+                if (player.getNumberOfContinents() > 0) {
                     continentControlled.append(player.getName()).append(": ").append(player.getContinentNames().stream().collect(Collectors.joining(","))).append(", ");
                 }
                 totalNumberOfArmies.append(player.getName()).append(": ").append(player.getTotalNumberOfArmies()).append(", ");

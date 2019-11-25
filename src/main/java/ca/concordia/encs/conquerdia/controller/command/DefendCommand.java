@@ -1,10 +1,10 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import java.util.List;
-
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.Player;
+import ca.concordia.encs.conquerdia.model.player.Player;
+
+import java.util.List;
 
 /**
  * Represents a defend move during the attack phase.
@@ -20,7 +20,7 @@ public class DefendCommand extends AbstractCommand {
 	 */
 	@Override
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		if (hasMinimumNumberofParameters(inputCommandParts)) {
+		if (inputCommandParts.size() == getCommandType().getMinNumberOfParts()) {
 			try {
 				int numDice = Integer.parseInt(inputCommandParts.get(1));
 				if (numDice < 0) {
@@ -37,7 +37,6 @@ public class DefendCommand extends AbstractCommand {
 			throw new ValidationException("Invalid input! " + getCommandHelpMessage());
 		}
 	}
-
 
 	/**
 	 * @return Returns the helper message
