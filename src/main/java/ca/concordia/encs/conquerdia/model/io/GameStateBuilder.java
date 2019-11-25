@@ -1,8 +1,6 @@
 package ca.concordia.encs.conquerdia.model.io;
 
-import java.io.Serializable;
-
-public abstract class GameStateBuilder implements Serializable {
+public abstract class GameStateBuilder {
     /**
      * Product to be constructed by the builder
      */

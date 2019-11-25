@@ -318,8 +318,7 @@ public class PhaseModel extends Observable {
      */
     public enum PhaseTypes implements Serializable {
         NONE("None",
-                new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP, CommandType.LOAD_GAME,
-                        CommandType.SAVE_GAME))),
+                new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
         EDIT_MAP("Edit Map",
                 new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY,
                         CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP,
@@ -328,11 +327,13 @@ public class PhaseModel extends Observable {
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER,
                         CommandType.POPULATE_COUNTRIES, CommandType.PLACE_ARMY, CommandType.PLACE_ALL))),
         REINFORCEMENT("Reinforcement",
-                new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS))),
+                new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS, CommandType.LOAD_GAME,
+                        CommandType.SAVE_GAME))),
         ATTACK("Attack",
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND,
-                        CommandType.ATTACK_MOVE))),
-        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY)));
+                        CommandType.ATTACK_MOVE,CommandType.LOAD_GAME,CommandType.SAVE_GAME))),
+        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY, CommandType.LOAD_GAME,
+                CommandType.SAVE_GAME)));
 
         private final String name;
         private final Set<CommandType> validCommands;

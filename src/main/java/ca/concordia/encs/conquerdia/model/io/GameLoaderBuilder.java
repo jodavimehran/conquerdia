@@ -6,23 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 
 public class GameLoaderBuilder extends GameStateBuilder {
-	private String gameStateFilePath;
+	private String gameStateFileName;
 	private FileInputStream file ;
 //	private Queue<Player> players = new LinkedList<>();
 //	private Player firstPlayer;
 	private int numPlayers;
-	public GameLoaderBuilder(String newGameStateFilePath) throws ValidationException {
-	    this.gameStateFilePath = newGameStateFilePath; 
+	public GameLoaderBuilder(String fileName) throws ValidationException {
+	    this.gameStateFileName = fileName; 
         parseGameStateFile();            
 //        stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
 //        stateProduct.getPlayersModel().setPlayers(players);
@@ -31,7 +26,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
 	private void parseGameStateFile() throws ValidationException {
 		BufferedReader reader;
         try {
-        	reader = new BufferedReader(new FileReader(gameStateFilePath));
+        	reader = new BufferedReader(new FileReader(gameStateFileName + ".state"));
         	String line = reader.readLine();
         	while(line != null) {
         		if(line.startsWith("$$PlayerModel")) {
@@ -45,7 +40,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
                 			
                 			String[] csvPlayer = line.split(",");
                 		}
-                		if(line.startsWith("PhaseModel")) {
+                		if(line.startsWith("$$PhaseModel")) {
                 			
                 		}
             		}
@@ -53,7 +48,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
         	}
         	reader.close();
         } catch(IOException ex) {
-        	throw new ValidationException(gameStateFilePath + ex.getMessage());
+        	throw new ValidationException(gameStateFileName + ex.getMessage());
         }
 	}
 	@Override
