@@ -58,7 +58,7 @@ abstract class AbstractPlayer implements Player {
     /**
      * This Attribute shows the Attack is finished.
      */
-    private boolean attackFinished;
+    protected boolean attackFinished;
 
     /**
      * This Attribute shows that during the attack phase of the current player there
@@ -566,7 +566,7 @@ abstract class AbstractPlayer implements Player {
      * @return true if player can perform attack
      */
     public boolean canPerformAttack() {
-        return battle == null;
+        return battle == null && hasAttackOpportunities();
     }
 
     /**
@@ -600,7 +600,7 @@ abstract class AbstractPlayer implements Player {
     public boolean hasAttackOpportunities() {
         return countries.values()
                 .stream()
-                .anyMatch(country -> country.getNumberOfArmies() >= 1 && country.isAdjacentToOtherPlayerCountries());
+                .anyMatch(country -> country.getNumberOfArmies() > 1 && country.isAdjacentToOtherPlayerCountries());
     }
 
 

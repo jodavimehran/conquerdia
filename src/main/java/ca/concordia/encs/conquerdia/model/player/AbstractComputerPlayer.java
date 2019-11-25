@@ -1,6 +1,5 @@
 package ca.concordia.encs.conquerdia.model.player;
 
-import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
 
 import java.security.SecureRandom;
@@ -53,25 +52,17 @@ abstract class AbstractComputerPlayer extends AbstractPlayer {
     protected Country findMyCountry(boolean weakest, Set<String> exclude) {
         Map.Entry<String, Country> foundCountry = null;
         for (Map.Entry<String, Country> entry : countries.entrySet()) {
-            if (exclude != null && exclude.contains(entry.getKey())) {
+            if ((exclude != null && exclude.contains(entry.getKey())) || !entry.getValue().isAdjacentToOtherPlayerCountries()) {
                 continue;
             }
-            boolean adjacentWithEnemy = false;
-            for (Country adjacent : entry.getValue().getAdjacentCountries()) {
-                if (!adjacent.getOwner().getName().equals(name)) {
-                    adjacentWithEnemy = true;
-                    break;
-                }
-            }
-            if (adjacentWithEnemy) {
-                if (foundCountry == null) {
+            if (foundCountry == null) {
+                foundCountry = entry;
+            } else {
+                if (weakest ? foundCountry.getValue().getNumberOfArmies() > entry.getValue().getNumberOfArmies() : foundCountry.getValue().getNumberOfArmies() < entry.getValue().getNumberOfArmies()) {
                     foundCountry = entry;
-                } else {
-                    if (weakest ? foundCountry.getValue().getNumberOfArmies() > entry.getValue().getNumberOfArmies() : foundCountry.getValue().getNumberOfArmies() < entry.getValue().getNumberOfArmies()) {
-                        foundCountry = entry;
-                    }
                 }
             }
+
         }
         return foundCountry != null ? foundCountry.getValue() : null;
     }

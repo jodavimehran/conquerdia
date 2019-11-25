@@ -1,7 +1,9 @@
 package ca.concordia.encs.conquerdia.model.player;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.map.Country;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,10 +41,13 @@ class Cheater extends AbstractComputerPlayer {
 
     @Override
     public List<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException {
+        List<Country> toAddCountries = new ArrayList<>();
         countries.entrySet().stream().forEach(entry -> entry.getValue().getAdjacentCountries().stream().forEach(country -> {
             country.getOwner().removeCountry(country.getName());
-            addCountry(country);
+            toAddCountries.add(country);
         }));
+        toAddCountries.stream().forEach(country -> addCountry(country));
+        attackFinished = true;
         return Arrays.asList(String.format("%s conquers all the neighbors of all its countries!!!!"));
     }
 }
