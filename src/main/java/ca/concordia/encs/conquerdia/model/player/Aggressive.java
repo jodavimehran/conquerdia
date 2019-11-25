@@ -39,6 +39,15 @@ class Aggressive extends AbstractComputerPlayer {
         return super.placeArmy(findMyStrongestCountry().getName());
     }
 
+    /**
+     * @param fromCountryName The attacker country
+     * @param toCountryName   That country that has been attacked
+     * @param numdice         Number of dices used to perform attack.
+     * @param isAllOut        The option to attack with all possible armies
+     * @param noAttack
+     * @return
+     * @throws ValidationException
+     */
     @Override
     public List<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException {
         if (!hasAttackOpportunities()) {

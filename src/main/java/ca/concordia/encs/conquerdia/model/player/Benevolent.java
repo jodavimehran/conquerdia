@@ -20,13 +20,27 @@ class Benevolent extends AbstractComputerPlayer {
         super(name);
     }
 
+    /**
+     * @param countryName  name of the country
+     * @param numberOfArmy number of army
+     * @return
+     * @throws ValidationException
+     */
     @Override
     public String reinforce(String countryName, int numberOfArmy) throws ValidationException {
         return super.reinforce(findMyWeakestCountry().getName(), 1);
     }
 
+    /**
+     * @param fromCountryName source country
+     * @param toCountryName   destination country
+     * @param numberOfArmy    number of army
+     * @param noneFortify     true if you want to skip fortification phase
+     * @return
+     * @throws ValidationException
+     */
     @Override
-    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) throws ValidationException {
+    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy, boolean noneFortify) throws ValidationException {
         Country weakest = null;
         {
             HashSet<String> exclude = new HashSet<>();
@@ -59,9 +73,18 @@ class Benevolent extends AbstractComputerPlayer {
             }
         }
         numberOfArmy = (strongest.getNumberOfArmies() - weakest.getNumberOfArmies()) / 2;
-        return super.fortify(fromCountryName, toCountryName, numberOfArmy);
+        return super.fortify(fromCountryName, toCountryName, numberOfArmy, numberOfArmy <= 0);
     }
 
+    /**
+     * @param fromCountryName The attacker country
+     * @param toCountryName   That country that has been attacked
+     * @param numdice         Number of dices used to perform attack.
+     * @param isAllOut        The option to attack with all possible armies
+     * @param noAttack
+     * @return
+     * @throws ValidationException
+     */
     @Override
     public List<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException {
         return super.attack(fromCountryName, toCountryName, numdice, isAllOut, true);

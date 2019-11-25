@@ -160,7 +160,7 @@ public class PhaseModel extends Observable {
                         currentPlayer.winCard();
                     }
                     changePhase(PhaseTypes.FORTIFICATION);
-                } else if (currentPlayer.getBattle().isConquered()) {
+                } else if (currentPlayer.canMoveAttack()) {
                     results.add(String.format(
                             "Congrats! %s, please move your army to your newly conquered country %s. You can use \"attackmove -num\" to move your armies.",
                             currentPlayer.getName(), currentPlayer.getBattle().getToCountry().getName()));
@@ -174,8 +174,6 @@ public class PhaseModel extends Observable {
                     results.add(
                             String.format("%s, You can declare an attack or use \"attack -noattack\" to skip this phase.",
                                     currentPlayer.getName()));
-                } else {
-                    results.add("TODO in Attack phase");
                 }
                 break;
             }
@@ -313,6 +311,7 @@ public class PhaseModel extends Observable {
                 return 20;
         }
     }
+
 
     /**
      * Phase Types

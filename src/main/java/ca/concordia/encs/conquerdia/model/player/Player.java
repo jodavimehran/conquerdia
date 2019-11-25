@@ -80,6 +80,11 @@ public interface Player {
     boolean canPerformDefend();
 
     /**
+     * @return true if this player can move armies to the country has been conquered after attack
+     */
+    boolean canMoveAttack();
+
+    /**
      * Determines if the player can do a attack
      *
      * @return true when this player can do a attack
@@ -206,18 +211,13 @@ public interface Player {
 
 
     /**
-     * This method is called when a player use none in fortification phase
-     */
-    void setFortificationFinished();
-
-
-    /**
      * @param fromCountryName source country
      * @param toCountryName   destination country
      * @param numberOfArmy    number of army
-     * @throws ValidationException
+     * @param noneFortify     true if you want to skip fortification phase
+     * @throws ValidationException validation exception
      */
-    String fortify(String fromCountryName, String toCountryName, int numberOfArmy) throws ValidationException;
+    String fortify(String fromCountryName, String toCountryName, int numberOfArmy, boolean noneFortify) throws ValidationException;
 
     /**
      * Exchange Card

@@ -84,7 +84,7 @@ public class Battle implements Serializable {
             numberOfAttackerDices = getMaxDiceCountForAttacker();
             if (numberOfAttackerDices < 1) {
                 continueAttack = false;
-                log.add(String.format("%s does not have anymore army to attack", fromCountry.getOwner().getName()));
+                log.add(String.format("%s does not have anymore army to attack!!!", fromCountry.getOwner().getName()));
             } else {
                 numberOfDefenderDices = getMaxDiceCountForDefender();
                 state = BattleState.Attacked;

@@ -260,20 +260,20 @@ abstract class AbstractPlayer implements Player {
         return unplacedArmies;
     }
 
-    /**
-     * This method is called when a player use none in fortification phase
-     */
-    public void setFortificationFinished() {
-        fortificationFinished = true;
-    }
 
     /**
      * @param fromCountryName source country
      * @param toCountryName   destination country
      * @param numberOfArmy    number of army
-     * @throws ValidationException
+     * @param noneFortify     true if you want to skip fortification phase
+     * @throws ValidationException validation exception
      */
-    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) throws ValidationException {
+    @Override
+    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy, boolean noneFortify) throws ValidationException {
+        if (noneFortify) {
+            fortificationFinished = true;
+            return String.format("%s choose to not do a move during the fortification phase.", name);
+        }
         Country fromCountry = WorldMap.getInstance().getCountry(fromCountryName);
         if (fromCountry == null) {
             throw new ValidationException(String.format("Country with name \"%s\" was not found!", fromCountryName));
@@ -292,18 +292,19 @@ abstract class AbstractPlayer implements Player {
         if (toCountry.getOwner() == null || !toCountry.getOwner().getName().equals(name))
             throw new ValidationException(
                     String.format("Country with name \"%s\" does not belong to you!", toCountryName));
+        if (fromCountry.equals(toCountry)) {
+            throw new ValidationException("From and To countries are the same!!");
+        }
         if (!WorldMap.isTherePath(fromCountry, toCountry))
-            throw new ValidationException(
-                    "There is no path between these two countries that is composed of countries that you owns.");
+            throw new ValidationException("There is no path between these two countries that is composed of countries that you owns.");
 
         int realNumberOfArmies = numberOfArmy > fromCountry.getNumberOfArmies() - 1
                 ? fromCountry.getNumberOfArmies() - 1
                 : numberOfArmy;
         fromCountry.removeArmy(realNumberOfArmies);
         toCountry.placeArmy(realNumberOfArmies);
-        setFortificationFinished();
-        return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName,
-                toCountryName);
+        fortificationFinished = true;
+        return String.format("%d army/armies was/were moved from %s to %s.", realNumberOfArmies, fromCountryName, toCountryName);
     }
 
     /**
@@ -355,24 +356,17 @@ abstract class AbstractPlayer implements Player {
             if (numdice >= fromCountry.getNumberOfArmies()) {
                 throw new ValidationException(String.format("Number of dice rolled (%d) should be less than the number of armies (%d) in \"%s\")", numdice, fromCountry.getNumberOfArmies(), fromCountry.getName()));
             }
-
+            battle = new Battle(fromCountry, toCountry);
+            battle.setNumberOfAttackerDices(numdice);
             result.add(String.format("%s has attacked %s with %s number of dice(s).", fromCountryName, toCountryName, numdice));
         } else {
+            battle = new Battle(fromCountry, toCountry);
             result.add(String.format("%s(%d) has started an all out attack on %s(%d).", fromCountryName, fromCountry.getNumberOfArmies(), toCountryName, toCountry.getNumberOfArmies()));
-        }
-
-        battle = new Battle(fromCountry, toCountry);
-        if (isAllOut) {
             result.addAll(battle.allOutAttack());
-            successfulAttack = battle.isConquered();
-            battle = null;
-            if (!hasAttackOpportunities()) {
-                this.attackFinished = true;
+            if (!battle.isConquered()) {
+                battle = null;
             }
-        } else {
-            battle.setNumberOfAttackerDices(numdice);
         }
-
         return result;
     }
 
@@ -419,15 +413,14 @@ abstract class AbstractPlayer implements Player {
         if (!isInBattle()) {
             throw new ValidationException("There is no attack to defend!");
         }
-        if (!battle.isConquered()) {
+        if (!canMoveAttack()) {
             throw new ValidationException("AttackMove Command is not valid at this phase!");
         }
-
         if (armiesToMove + 1 > battle.getFromCountry().getNumberOfArmies()) {
             throw new ValidationException("You must move less armies than what you have in your attacking country.");
         }
         String fromCountryName = battle.getFromCountry().getName();
-        String toCountryName = battle.getFromCountry().getName();
+        String toCountryName = battle.getToCountry().getName();
         battle.getFromCountry().removeArmy(armiesToMove);
         battle.getToCountry().placeArmy(armiesToMove);
         successfulAttack = battle.isConquered();
@@ -579,12 +572,18 @@ abstract class AbstractPlayer implements Player {
     /**
      * Determines if the player can do a defend command
      *
-     * @return
+     * @return true if the player can do a defend command
      */
     public boolean canPerformDefend() {
         return battle != null && (battle.getState() == BattleState.Attacked);
     }
 
+    /**
+     * @return true if this player can move armies to the country has been conquered after attack
+     */
+    public boolean canMoveAttack() {
+        return battle != null && (battle.isConquered());
+    }
 
     /**
      * @return true if the battle is not Null; otherwise false;
