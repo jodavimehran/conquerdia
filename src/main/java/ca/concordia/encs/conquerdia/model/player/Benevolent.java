@@ -2,16 +2,16 @@ package ca.concordia.encs.conquerdia.model.player;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * A benevolent computer player strategy that focuses on protecting its weak countries (reinforces its weakest
  * countries, never attacks, then fortifies in order to move armies to weaker countries).
  */
-public class Benevolent extends AbstractComputerPlayer {
+class Benevolent extends AbstractComputerPlayer {
 
     /**
      * @param name The name of a player that must be determined when you want to create a player
@@ -27,59 +27,54 @@ public class Benevolent extends AbstractComputerPlayer {
 
     @Override
     public String fortify(String fromCountryName, String toCountryName, int numberOfArmy) throws ValidationException {
-        Country weakest = findMyCountry(true);
-        Country strongest = findMyCountry(false);
-
+        Country weakest = null;
+        {
+            HashSet<String> exclude = new HashSet<>();
+            while (weakest == null) {
+                weakest = findMyWeakestCountry(exclude);
+                boolean adjacentWithFriend = false;
+                for (Country adjacent : weakest.getAdjacentCountries()) {
+                    if (adjacent.getOwner().getName().equals(name)) {
+                        adjacentWithFriend = true;
+                        break;
+                    }
+                }
+                if (adjacentWithFriend) {
+                    break;
+                } else {
+                    exclude.add(weakest.getName());
+                    weakest = null;
+                }
+            }
+        }
+        Country strongest = null;
+        {
+            HashSet<String> exclude = new HashSet<>();
+            while (strongest == null) {
+                strongest = findMyStrongestCountry(exclude);
+                if (!WorldMap.isTherePath(strongest, weakest)) {
+                    exclude.add(strongest.getName());
+                    strongest = null;
+                }
+            }
+        }
         numberOfArmy = (strongest.getNumberOfArmies() - weakest.getNumberOfArmies()) / 2;
         return super.fortify(fromCountryName, toCountryName, numberOfArmy);
     }
 
     @Override
-    public ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut) throws ValidationException {
-        //TODO
-        return null;
+    public List<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException {
+        return super.attack(fromCountryName, toCountryName, numdice, isAllOut, true);
     }
 
-    protected Country findMyStrongestCountry() {
-        return findMyCountry(false, null);
-    }
-
-    protected Country findMyWeakestCountry() {
-        return findMyCountry(false, null);
-    }
-
-    protected Country findMyStrongestCountry(Set<String> exclude) {
-        return findMyCountry(false, exclude);
-    }
-
-    protected Country findMyWeakestCountry(Set<String> exclude) {
-        return findMyCountry(false, exclude);
-    }
-
-    protected Country findMyCountry(boolean weakest, Set<String> exclude) {
-        Map.Entry<String, Country> foundCountry = null;
-        for (Map.Entry<String, Country> entry : countries.entrySet()) {
-            if (exclude != null && exclude.contains(entry.getKey())) {
-                continue;
-            }
-            boolean adjacentWithEnemy = false;
-            for (Country adjacent : entry.getValue().getAdjacentCountries()) {
-                if (!adjacent.getOwner().getName().equals(name)) {
-                    adjacentWithEnemy = true;
-                    break;
-                }
-            }
-            if (adjacentWithEnemy) {
-                if (foundCountry == null) {
-                    foundCountry = entry;
-                } else {
-                    if (weakest ? foundCountry.getValue().getNumberOfArmies() > entry.getValue().getNumberOfArmies() : foundCountry.getValue().getNumberOfArmies() < entry.getValue().getNumberOfArmies()) {
-                        foundCountry = entry;
-                    }
-                }
-            }
-        }
-        return foundCountry != null ? foundCountry.getValue() : null;
+    /**
+     * @param countryName Name of the country that one army be placed on it
+     * @return result of command
+     * @throws ValidationException when a validation exception happen
+     */
+    @Override
+    public String placeArmy(String countryName) throws ValidationException {
+        return super.placeArmy(findMyWeakestCountry().getName());
     }
 
 }

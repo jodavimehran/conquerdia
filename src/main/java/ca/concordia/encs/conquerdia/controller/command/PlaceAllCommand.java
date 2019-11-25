@@ -2,8 +2,8 @@ package ca.concordia.encs.conquerdia.controller.command;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+import ca.concordia.encs.conquerdia.model.player.Player;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -39,7 +39,7 @@ public class PlaceAllCommand extends AbstractCommand {
         SecureRandom randomNumber = new SecureRandom();
 
         while (PlayersModel.getInstance().isThereAnyUnplacedArmy()) {
-            AbstractPlayer currentPlayer = phaseModel.getCurrentPlayer();
+            Player currentPlayer = phaseModel.getCurrentPlayer();
             if (currentPlayer.getUnplacedArmies() > 0) {
                 Set<String> countryNames = currentPlayer.getCountryNames();
                 String[] countriesArray = new String[countryNames.size()];

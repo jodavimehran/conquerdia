@@ -18,15 +18,15 @@ import ca.concordia.encs.conquerdia.model.PlayersModel;
 public class GameLoaderBuilder extends GameStateBuilder {
 	private String gameStateFilePath;
 	private FileInputStream file ;
-	private Queue<Player> players = new LinkedList<>();
-	private Player firstPlayer;
+//	private Queue<Player> players = new LinkedList<>();
+//	private Player firstPlayer;
 	private int numPlayers;
 	public GameLoaderBuilder(String newGameStateFilePath) throws ValidationException {
 	    this.gameStateFilePath = newGameStateFilePath; 
         parseGameStateFile();            
-        stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
-        stateProduct.getPlayersModel().setPlayers(players);
-        stateProduct.getPlayersModel().setNumberOfPlayers(numPlayers);               
+//        stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
+//        stateProduct.getPlayersModel().setPlayers(players);
+//        stateProduct.getPlayersModel().setNumberOfPlayers(numPlayers);
 	}
 	private void parseGameStateFile() throws ValidationException {
 		BufferedReader reader;
@@ -59,8 +59,8 @@ public class GameLoaderBuilder extends GameStateBuilder {
 	@Override
 	void buildPlayersModel() {	
 		PlayersModel.getInstance().setFirstPlayer(stateProduct.getPlayersModel().getFirstPlayer());
-		PlayersModel.getInstance().setPlayers(stateProduct.getPlayersModel().getPlayers());
-		PlayersModel.getInstance().setNumberOfPlayers(stateProduct.getPlayersModel().getNumberOfPlayers());
+//		PlayersModel.getInstance().setPlayers(stateProduct.getPlayersModel().getPlayers());
+//		PlayersModel.getInstance().setNumberOfPlayers(stateProduct.getPlayersModel().getNumberOfPlayers());
 	}
 
 	@Override

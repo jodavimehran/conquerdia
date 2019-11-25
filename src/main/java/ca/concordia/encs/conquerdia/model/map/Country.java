@@ -1,6 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map;
 
-import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
+import ca.concordia.encs.conquerdia.model.player.Player;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -13,212 +13,208 @@ import java.util.stream.Collectors;
  * <p>
  * A country can place on a Continent A country has a set of adjacent countries
  */
-public class Country implements Serializable{
+public class Country implements Serializable {
 
-	/**
-	 * name of the country
-	 */
-	private final String name;
-	/**
-	 * state of the country that is true if an attack is declared on it.
-	 */
-	private boolean attackDeclared;
+    /**
+     * name of the country
+     */
+    private final String name;
+    /**
+     * Represents the borders of a country. All neighbor countries of a country must
+     * add to this set.
+     */
+    private final Map<String, Country> adjacentCountries = new HashMap<>();
+    /**
+     * Represents the continent that this country is placed on
+     */
+    private final Continent continent;
+    /**
+     * state of the country that is true if an attack is declared on it.
+     */
+    private boolean attackDeclared;
+    /**
+     * Number of armies that are placed in this country
+     */
+    private int numberOfArmies;
+    /**
+     * The player that this county belongs to
+     */
+    private Player owner;
 
-	/**
-	 * Sets the state of the COuntry to attackDeclared
-	 * 
-	 */
-	public void setAttackDeclared() {
-		this.attackDeclared = true;
-	}
+    /**
+     * Country class has one and only one private constructor to force the user's of
+     * this class to use the Builder {@link Country.Builder}
+     *
+     * @param name      name
+     * @param continent continent
+     */
+    public Country(String name, Continent continent) {
+        this.name = name;
+        this.continent = continent;
+        this.attackDeclared = false;
+    }
 
-	/**
-	 * Represents the borders of a country. All neighbor countries of a country must
-	 * add to this set.
-	 */
-	private final Map<String, Country> adjacentCountries = new HashMap<>();
-	/**
-	 * Represents the continent that this country is placed on
-	 */
-	private final Continent continent;
+    /**
+     * Sets the state of the COuntry to attackDeclared
+     */
+    public void setAttackDeclared() {
+        this.attackDeclared = true;
+    }
 
-	/**
-	 * Number of armies that are placed in this country
-	 */
-	private int numberOfArmies;
+    /**
+     * @return the owner of this country
+     */
+    public Player getOwner() {
+        return owner;
+    }
 
-	/**
-	 * The player that this county belongs to
-	 */
-	private AbstractPlayer owner;
+    /**
+     * @param owner The owner of this country
+     */
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
 
-	/**
-	 * Country class has one and only one private constructor to force the user's of
-	 * this class to use the Builder {@link Country.Builder}
-	 *
-	 * @param name      name
-	 * @param continent continent
-	 */
-	public Country(String name, Continent continent) {
-		this.name = name;
-		this.continent = continent;
-		this.attackDeclared = false;
-	}
+    /**
+     * Add the specified country to this country's adjacency list This implies that
+     * this country has a an edge / border to the specified country
+     *
+     * @param adjacentCountry A country which should have a border to this country
+     */
+    public void addNeighbour(Country adjacentCountry) {
+        adjacentCountries.put(adjacentCountry.getName(), adjacentCountry);
+    }
 
-	/**
-	 * @return the owner of this country
-	 */
-	public AbstractPlayer getOwner() {
-		return owner;
-	}
+    /**
+     * remove an adjacent country
+     *
+     * @param adjacentCountryName adjacent
+     * @return <tt>true</tt> if the adjacent country was successfully removed, else
+     * return <tt>false</tt>
+     */
+    public boolean removeNeighbour(String adjacentCountryName) {
+        return adjacentCountries.remove(adjacentCountryName) != null;
+    }
 
-	/**
-	 * @param owner The owner of this country
-	 */
-	public void setOwner(AbstractPlayer owner) {
-		this.owner = owner;
-	}
+    /**
+     * This getter method return the name of this country
+     *
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Add the specified country to this country's adjacency list This implies that
-	 * this country has a an edge / border to the specified country
-	 *
-	 * @param adjacentCountry A country which should have a border to this country
-	 */
-	public void addNeighbour(Country adjacentCountry) {
-		adjacentCountries.put(adjacentCountry.getName(), adjacentCountry);
-	}
+    /**
+     * @return The number of armies that are placed in this country
+     */
+    public int getNumberOfArmies() {
+        return numberOfArmies;
+    }
 
-	/**
-	 * remove an adjacent country
-	 *
-	 * @param adjacentCountryName adjacent
-	 * @return <tt>true</tt> if the adjacent country was successfully removed, else
-	 *         return <tt>false</tt>
-	 */
-	public boolean removeNeighbour(String adjacentCountryName) {
-		return adjacentCountries.remove(adjacentCountryName) != null;
-	}
+    /**
+     * This method place one army to this country
+     */
+    public void placeOneArmy() {
+        numberOfArmies++;
+    }
 
-	/**
-	 * This getter method return the name of this country
-	 *
-	 * @return name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * This method place a number of aries to this country
+     *
+     * @param numberOfArmiesToBePlaces The number of armies to be places in this
+     *                                 country
+     */
+    public void placeArmy(int numberOfArmiesToBePlaces) {
+        if (numberOfArmiesToBePlaces > 0)
+            numberOfArmies += numberOfArmiesToBePlaces;
+    }
 
-	/**
-	 * @return The number of armies that are placed in this country
-	 */
-	public int getNumberOfArmies() {
-		return numberOfArmies;
-	}
+    /**
+     * This method remove armies from this country.
+     *
+     * @param numberOfArmiesToRemove The number of armies to remove from this
+     *                               county.
+     */
+    public void removeArmy(int numberOfArmiesToRemove) {
+        this.numberOfArmies -= numberOfArmiesToRemove;
+        if (this.numberOfArmies < 0)
+            this.numberOfArmies = 0;
+    }
 
-	/**
-	 * This method place one army to this country
-	 */
-	public void placeOneArmy() {
-		numberOfArmies++;
-	}
+    /**
+     * This method returns the name of the country.
+     *
+     * @return returns the name of the country.
+     */
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 
-	/**
-	 * This method place a number of aries to this country
-	 *
-	 * @param numberOfArmiesToBePlaces The number of armies to be places in this
-	 *                                 country
-	 */
-	public void placeArmy(int numberOfArmiesToBePlaces) {
-		if (numberOfArmiesToBePlaces > 0)
-			numberOfArmies += numberOfArmiesToBePlaces;
-	}
+    /**
+     * This getter method return the continent object that this country is placed on
+     *
+     * @return the continent object that this country is placed on
+     */
+    public Continent getContinent() {
+        return continent;
+    }
 
-	/**
-	 * This method remove armies from this country.
-	 *
-	 * @param numberOfArmiesToRemove The number of armies to remove from this
-	 *                               county.
-	 */
-	public void removeArmy(int numberOfArmiesToRemove) {
-		this.numberOfArmies -= numberOfArmiesToRemove;
-		if (this.numberOfArmies < 0)
-			this.numberOfArmies = 0;
-	}
+    /**
+     * @return return all adjacent countries
+     */
+    public Set<Country> getAdjacentCountries() {
+        return adjacentCountries.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
+    }
 
-	/**
-	 * This method returns the name of the country.
-	 *
-	 * @return returns the name of the country.
-	 */
-	@Override
-	public String toString() {
-		return this.getName();
-	}
+    /**
+     * @param countryName countryName
+     * @return true they are adjacent
+     */
+    public boolean isAdjacentTo(String countryName) {
+        return adjacentCountries.containsKey(countryName);
+    }
 
-	/**
-	 * This getter method return the continent object that this country is placed on
-	 *
-	 * @return the continent object that this country is placed on
-	 */
-	public Continent getContinent() {
-		return continent;
-	}
+    /**
+     * @return true if the country has no army
+     */
+    public boolean hasNoArmy() {
+        return numberOfArmies < 1;
+    }
 
-	/**
-	 * @return return all adjacent countries
-	 */
-	public Set<Country> getAdjacentCountries() {
-		return adjacentCountries.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
-	}
+    /**
+     * @return True if there exists one neighbor country that is owned by other
+     * players otherwise false
+     */
+    public boolean isAdjacentToOtherPlayerCountries() {
+        return adjacentCountries.values()
+                .stream()
+                .anyMatch(country -> country.getOwner() != owner);
+    }
 
-	/**
-	 * @param countryName countryName
-	 * @return true they are adjacent
-	 */
-	public boolean isAdjacentTo(String countryName) {
-		return adjacentCountries.containsKey(countryName);
-	}
+    /**
+     * The Builder for {@link Country}
+     */
+    public static class Builder {
+        private final Country country;
 
-	/**
-	 * @return true if the country has no army
-	 */
-	public boolean hasNoArmy() {
-		return numberOfArmies < 1;
-	}
+        /**
+         * Country-Builder's constructor has two parameter because name and continent
+         * for a country is required.
+         *
+         * @param name      The name of a country
+         * @param continent continent
+         */
+        public Builder(String name, Continent continent) {
+            country = new Country(name, continent);
+        }
 
-	/**
-	 * The Builder for {@link Country}
-	 */
-	public static class Builder {
-		private final Country country;
-
-		/**
-		 * Country-Builder's constructor has two parameter because name and continent
-		 * for a country is required.
-		 *
-		 * @param name      The name of a country
-		 * @param continent continent
-		 */
-		public Builder(String name, Continent continent) {
-			country = new Country(name, continent);
-		}
-
-		/**
-		 * @return return built country
-		 */
-		public Country build() {
-			return this.country;
-		}
-	}
-
-	/**
-	 * @return True if there exists one neighbor country that is owned by other
-	 *         players otherwise false
-	 */
-	public boolean isAdjacentToOtherPlayerCountries() {
-		return adjacentCountries.values()
-				.stream()
-				.anyMatch(country -> country.getOwner() != owner);
-	}
+        /**
+         * @return return built country
+         */
+        public Country build() {
+            return this.country;
+        }
+    }
 }

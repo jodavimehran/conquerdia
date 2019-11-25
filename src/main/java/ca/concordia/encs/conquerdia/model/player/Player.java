@@ -202,7 +202,7 @@ public interface Player {
      * @return Message log returned about the status of the attack.
      * @throws ValidationException
      */
-    ArrayList<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException;
+    List<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException;
 
 
     /**

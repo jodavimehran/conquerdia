@@ -1,140 +1,55 @@
 package ca.concordia.encs.conquerdia.controller.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.concordia.encs.conquerdia.exception.ValidationException;
-import ca.concordia.encs.conquerdia.model.player.AbstractPlayer;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 
+import java.util.List;
+
 public class AttackCommand extends AbstractCommand {
-	public final static String COMMAND_HELP_MSG = "A valid \"attack\" command format is: \"attack fromcountry tocountry numdice -allout\" or \"attack -noattack\".";
+    public final static String COMMAND_HELP_MSG = "A valid \"attack\" command format is: \"attack fromcountry tocountry numdice\", or \"attack fromcountry tocountry -allout\" or \"attack -noattack\".";
 
-	private boolean isNoAttack;
-	private String fromCountryName;
-	private String toCountryName;
-	private boolean isAllOut;
-	private int numberOfDices;
-
-	@Override
-	protected void runCommand(List<String> inputCommandParts) throws ValidationException {
-		isNoAttack = false;
-		isAllOut = false;
-		fromCountryName = null;
-		toCountryName = null;
-		numberOfDices = 0;
-
-		Player currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
-		validateAttackCommand(inputCommandParts, currentPlayer);
-
-		AbstractPlayer currentPlayer = PlayersModel.getInstance().getCurrentPlayer();
-		if (isNoAttack) {
-			handleNoAttack(currentPlayer);
-		} else {
-			ArrayList<String> logs = currentPlayer.attack(fromCountryName, toCountryName,
-					isAllOut ? -1 : numberOfDices, isAllOut);
-			phaseLogList.addAll(logs);
-		}
-	}
-
-	/**
-	 * 
-	 * @param currentPlayer
-	 * @throws ValidationException
-	 */
-	private void handleNoAttack(AbstractPlayer currentPlayer) throws ValidationException {
-
-		if (currentPlayer.canPerformDefend()) {
-			throw new ValidationException(DefendCommand.COMMAND_HELP_MSG);
-		}
-
-		if (!currentPlayer.canPerformAttackMove()) {
-			currentPlayer.setAttackFinished();
-			phaseLogList.add(String.format("\"-noattack\" is selected by %s.", currentPlayer.getName()));
-		} else {
-			throw new ValidationException(String.format(
-					"Cannot finish attack since you have to place armies in your newly conquered country %s",
-					currentPlayer.getBattle().getToCountry().getName()));
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String getCommandHelpMessage() {
-		return COMMAND_HELP_MSG;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected CommandType getCommandType() {
-		return CommandType.ATTACK;
-	}
-
-	/**
-	 * Validating the -noAttack command options in input parameters
-	 * 
-	 * @param inputCommandParts input parameters of attack command.
-	 * @return true if the noAtatck command is valid; otherwise return false.
-	 * @throws ValidationException
-	 */
-	private boolean validateNoAttackCommand(List<String> inputCommandParts) throws ValidationException {
-		if (inputCommandParts.contains("-noattack")) {
-			if ((inputCommandParts.size() == 2 || inputCommandParts.size() == 4)) {
-				return true;
-			} else {
-				throw new ValidationException(getCommandHelpMessage());
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Validates the attack command input parameters
-	 * 
-	 * @param inputCommandParts input parameters parts.
-	 * @throws ValidationException
-	 */
-	private void validateAttackCommand(List<String> inputCommandParts, Player currentPlayer) throws ValidationException {
-		if (currentPlayer.canPerformAttackMove()) {
-			throw new ValidationException(AttackMoveCommand.COMMAND_HELP_MSG);
-		}
-		
-		if (currentPlayer.canPerformDefend()) {
-			throw new ValidationException(DefendCommand.COMMAND_HELP_MSG);
-		}
-		
-        if (!currentPlayer.canPerformAttack()) {
-            throw new ValidationException("Player can perform only one attack at a time.");
+    @Override
+    protected void runCommand(List<String> inputCommandParts) throws ValidationException {
+        boolean isNoAttack = false;
+        boolean isAllOut = false;
+        String countryNameFrom = "";
+        String countyNameTo = "";
+        int numberOfDices = -1;
+        if ("–noattack".equals(inputCommandParts.get(1))) {
+            isNoAttack = true;
+        } else {
+            countryNameFrom = inputCommandParts.get(1);
+            countyNameTo = inputCommandParts.get(2);
+            if ("-allout".equals(inputCommandParts.get(3))) {
+                isAllOut = true;
+            } else {
+                try {
+                    numberOfDices = Integer.valueOf(inputCommandParts.get(3));
+                    if (numberOfDices < 1) {
+                        throw new ValidationException("Number of dices (3rd parameter) must be a positive integer number.");
+                    }
+                } catch (NumberFormatException ex) {
+                    throw new ValidationException("Number of dices (3rd parameter) must be a positive integer number.");
+                }
+            }
         }
-        
-		if (!hasMinimumNumberofParameters(inputCommandParts) || inputCommandParts.size() > 4) {
-			throw new ValidationException(getCommandHelpMessage());
-		}
+        phaseLogList.addAll(PlayersModel.getInstance().getCurrentPlayer().attack(countryNameFrom, countyNameTo, numberOfDices, isAllOut, isNoAttack));
+    }
 
-		if (validateNoAttackCommand(inputCommandParts)) {
-			isNoAttack = true;
-		} else {
-			fromCountryName = inputCommandParts.get(1);
-			toCountryName = inputCommandParts.get(2);
-			String thirdParam = inputCommandParts.get(3);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getCommandHelpMessage() {
+        return COMMAND_HELP_MSG;
+    }
 
-			if ("-allout".equals(thirdParam)) {
-				isAllOut = true;
-			} else {
-				try {
-					numberOfDices = Integer.valueOf(thirdParam);
-					if (numberOfDices < 1) {
-						throw new NumberFormatException();
-					}
-				} catch (NumberFormatException ex) {
-					throw new ValidationException(
-							"Number of dices(3rd parameter) must be a positive integer number or -allout or -noattack.");
-				}
-			}
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.ATTACK;
+    }
+
 }
