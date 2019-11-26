@@ -22,6 +22,7 @@ public class LoadGameCommand extends AbstractCommand {
 	protected void runCommand(List<String> inputCommandParts) throws ValidationException{
 		if ( inputCommandParts.size() == 2) {
 			String fileName = inputCommandParts.get(1);
+			
 			try {
 				GameIO gameIO = new GameIO();
 				phaseLogList.addAll(gameIO.LoadGame(fileName));

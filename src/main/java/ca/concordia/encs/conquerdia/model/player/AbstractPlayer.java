@@ -35,8 +35,17 @@ abstract class AbstractPlayer implements Player {
     /**
      * Continents owned by this player
      */
-    protected final HashMap<String, Continent> continents = new HashMap<>();
+    protected  HashMap<String, Continent> continents = new HashMap<>();
     /**
+     * Player's continents.
+     * @param continents
+     */
+    public void setContinents(HashMap<String, Continent> continents) {
+		this.continents = continents;
+	}
+
+
+	/**
      * List of the card that this player has
      */
     protected final List<CardType> cards = new ArrayList<>();
@@ -106,14 +115,26 @@ abstract class AbstractPlayer implements Player {
     public boolean isFortificationFinished() {
         return fortificationFinished;
     }
-
+    /**
+     * boolean value of ffortificationFinished.
+     */
+    public void setFortificationFinished(boolean isFortificationFinished) {
+         fortificationFinished = isFortificationFinished;
+    }
     /**
      * @return true if attack is down
      */
     public boolean isAttackFinished() {
         return attackFinished;
     }
-
+    /**
+     * Sets the attackFinished
+     * @param isAttackFinished attackFinished boolean value
+     */
+    public void setAttackFinished(boolean isAttackFinished) {
+         attackFinished = isAttackFinished;
+    }
+    
     /**
      * @return the name of this player
      */
@@ -609,4 +630,5 @@ abstract class AbstractPlayer implements Player {
     public int getNumberOfContinents() {
         return continents.size();
     }
+    
 }

@@ -45,25 +45,26 @@ public class GameIO {
         StringBuilder sb = new StringBuilder();
         sb.append("$$PlayersModel").append("\n");
         sb.append("$$Players").append("\n");
-        sb.append("[PlayerName,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames]").append("\n");
+        sb.append("[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames]").append("\n");
         for(Player player: players ) {
-        	sb.append(player.getName()).append(",");
-        	sb.append(player.getNumberOfContinents()).append(",");
-        	sb.append(player.getNumberOfCountries()).append(",");
-        	sb.append(player.getTotalNumberOfArmies()).append(",");
-        	sb.append(player.getUnplacedArmies()).append(",");
+        	sb.append(player.getName()).append("|");
+        	sb.append("human").append("|");
+        	sb.append(player.getNumberOfContinents()).append("|");
+        	sb.append(player.getNumberOfCountries()).append("|");
+        	sb.append(player.getTotalNumberOfArmies()).append("|");
+        	sb.append(player.getUnplacedArmies()).append("|");
         	List<CardType> playerCards = player.getCards();
         	for(CardType cardType : playerCards) {
         		if(playerCards.isEmpty()) {
-        			sb.append(",");
+        			sb.append("|");
         			break;
         		}
-        		sb.append(cardType.getName()).append(",");
+        		sb.append(cardType.getName()).append("|");
         	}
-        	sb.append(player.isFortificationFinished()).append(",");
-        	sb.append(player.isAttackFinished()).append(",");
-        	sb.append(player.hasSuccessfulAttack()).append(",");
-        	sb.append(player.getContinentNames()).append(",");
+        	sb.append(player.isFortificationFinished()).append("|");
+        	sb.append(player.isAttackFinished()).append("|");
+        	sb.append(player.hasSuccessfulAttack()).append("|");
+        	sb.append(player.getContinentNames()).append("|");
         	sb.append(player.getCountryNames()).append("\n");
         }
         sb.append("$$CurrentPlayer").append("\n");
@@ -74,11 +75,11 @@ public class GameIO {
         Battle currentPlayerBattle = playersModel.getCurrentPlayer().getBattle();
         sb.append("[FromCountry,ToCountry,winner, #AttackerDice,#DefenderDice,state]").append("\n");
         if(currentPlayerBattle != null) {
-        	sb.append( currentPlayerBattle.getFromCountry().getName()).append(",");
-            sb.append( currentPlayerBattle.getToCountry().getName()).append(",");
-            sb.append( currentPlayerBattle.getWinner().getName()).append(",");
-            sb.append( currentPlayerBattle.getNumberOfAttackerDices()).append(",");
-            sb.append( currentPlayerBattle.getNumberOfDefenderDices()).append(",");
+        	sb.append( currentPlayerBattle.getFromCountry().getName()).append("|");
+            sb.append( currentPlayerBattle.getToCountry().getName()).append("|");
+            sb.append( currentPlayerBattle.getWinner().getName()).append("|");
+            sb.append( currentPlayerBattle.getNumberOfAttackerDices()).append("|");
+            sb.append( currentPlayerBattle.getNumberOfDefenderDices()).append("|");
             sb.append( currentPlayerBattle.getState()).append("\n");	
         }else {
         	sb.append("\n");

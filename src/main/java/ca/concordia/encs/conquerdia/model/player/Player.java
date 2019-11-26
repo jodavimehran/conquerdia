@@ -3,9 +3,11 @@ package ca.concordia.encs.conquerdia.model.player;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.Battle;
 import ca.concordia.encs.conquerdia.model.CardType;
+import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -153,17 +155,33 @@ public interface Player {
      * @return number of continents this player owns
      */
     int getNumberOfContinents();
+    /**
+     * Player's continents
+     * @param continents
+     */
+    public void setContinents(HashMap<String, Continent> continents);
 
     /**
      * @param successfulAttack
      */
     void setSuccessfulAttack(boolean successfulAttack);
-
+    /**
+     * 
+     * @param isAttackFinished attackfinished boolean value
+     */
+    public void setAttackFinished(boolean isAttackFinished);
+    /**
+     * set fortificationFinished
+     * @param isFortificationFinished boolean value of fortificationFinished
+     */
+    public void setFortificationFinished(boolean isFortificationFinished);
+    
     /**
      * Move armies after conquering another country during a battle
      *
      * @param armiesToMove
      */
+    
     String attackMove(int armiesToMove) throws ValidationException;
 
     /**
