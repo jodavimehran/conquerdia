@@ -194,6 +194,15 @@ public class Country implements Serializable {
     }
 
     /**
+     * @return True if there no neighbor country that is owned by the owner of this country
+     */
+    public boolean isSurroundedByEnemies() {
+        return adjacentCountries.values()
+                .stream()
+                .allMatch(country -> !country.getOwner().equals(owner));
+    }
+
+    /**
      * The Builder for {@link Country}
      */
     public static class Builder {

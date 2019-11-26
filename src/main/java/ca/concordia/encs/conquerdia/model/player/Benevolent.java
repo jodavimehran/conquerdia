@@ -41,10 +41,11 @@ class Benevolent extends AbstractComputerPlayer {
      */
     @Override
     public String fortify(String fromCountryName, String toCountryName, int numberOfArmy, boolean noneFortify) throws ValidationException {
+        numberOfArmy = -1;
         Country weakest = null;
         {
             HashSet<String> exclude = new HashSet<>();
-            while (weakest == null) {
+            while (weakest == null && exclude.size() < countries.size()) {
                 weakest = findMyWeakestCountry(exclude);
                 boolean adjacentWithFriend = false;
                 for (Country adjacent : weakest.getAdjacentCountries()) {
@@ -61,18 +62,25 @@ class Benevolent extends AbstractComputerPlayer {
                 }
             }
         }
-        Country strongest = null;
-        {
-            HashSet<String> exclude = new HashSet<>();
-            while (strongest == null) {
-                strongest = findMyStrongestCountry(exclude);
-                if (!WorldMap.isTherePath(strongest, weakest)) {
-                    exclude.add(strongest.getName());
-                    strongest = null;
+        if (weakest != null) {
+            Country strongest = null;
+            {
+                HashSet<String> exclude = new HashSet<>();
+                exclude.add(weakest.getName());
+                while (strongest == null && exclude.size() < countries.size()) {
+                    strongest = findMyStrongestCountry(exclude);
+                    if (!WorldMap.isTherePath(strongest, weakest)) {
+                        exclude.add(strongest.getName());
+                        strongest = null;
+                    }
                 }
             }
+            if (strongest != null) {
+                numberOfArmy = (strongest.getNumberOfArmies() - weakest.getNumberOfArmies()) / 2;
+                fromCountryName = strongest.getName();
+                toCountryName = weakest.getName();
+            }
         }
-        numberOfArmy = (strongest.getNumberOfArmies() - weakest.getNumberOfArmies()) / 2;
         return super.fortify(fromCountryName, toCountryName, numberOfArmy, numberOfArmy <= 0);
     }
 

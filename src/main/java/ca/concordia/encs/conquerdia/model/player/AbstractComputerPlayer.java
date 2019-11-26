@@ -52,7 +52,7 @@ abstract class AbstractComputerPlayer extends AbstractPlayer {
     protected Country findMyCountry(boolean weakest, Set<String> exclude) {
         Map.Entry<String, Country> foundCountry = null;
         for (Map.Entry<String, Country> entry : countries.entrySet()) {
-            if ((exclude != null && exclude.contains(entry.getKey())) || !entry.getValue().isAdjacentToOtherPlayerCountries()) {
+            if ((exclude != null && exclude.contains(entry.getKey()))) {
                 continue;
             }
             if (foundCountry == null) {
