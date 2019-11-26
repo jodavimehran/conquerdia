@@ -49,17 +49,15 @@ abstract class AbstractPlayer implements Player {
     /**
      * true if fortification phase for the current turn has down by player
      */
-    private boolean fortificationFinished;
-
-    /**
-     * This Class performs the simulation for Attack
-     */
-    private Battle battle;
+    protected boolean fortificationFinished;
     /**
      * This Attribute shows the Attack is finished.
      */
     protected boolean attackFinished;
-
+    /**
+     * This Class performs the simulation for Attack
+     */
+    private Battle battle;
     /**
      * This Attribute shows that during the attack phase of the current player there
      * has been a successful attack

@@ -2,8 +2,12 @@ package ca.concordia.encs.conquerdia.model.player;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An aggressive computer player strategy that focuses on attack (reinforces its strongest country, then always attack
@@ -53,7 +57,15 @@ class Aggressive extends AbstractComputerPlayer {
         if (!hasAttackOpportunities()) {
             noAttack = true;
         } else {
-            Country myStrongestCountry = findMyStrongestCountry();
+            Set<String> exclude = new HashSet<>();
+            Country myStrongestCountry = null;
+            while (myStrongestCountry == null) {
+                myStrongestCountry = findMyStrongestCountry(exclude);
+                if (!myStrongestCountry.isAdjacentToOtherPlayerCountries()) {
+                    exclude.add(myStrongestCountry.getName());
+                    myStrongestCountry = null;
+                }
+            }
             Country weakestAdjacent = null;
             for (Country adjacent : myStrongestCountry.getAdjacentCountries()) {
                 if ((weakestAdjacent == null || adjacent.getNumberOfArmies() < weakestAdjacent.getNumberOfArmies()) && !adjacent.getOwner().equals(this)) {
@@ -67,6 +79,60 @@ class Aggressive extends AbstractComputerPlayer {
             noAttack = false;
         }
         return super.attack(fromCountryName, toCountryName, numdice, isAllOut, noAttack);
+    }
+
+    @Override
+    public String fortify(String fromCountryName, String toCountryName, int numberOfArmy, boolean noneFortify) throws ValidationException {
+        Country strongest = findMyStrongestCountry();
+        if (strongest.isAdjacentToOtherPlayerCountries()) {
+            if (!strongest.isSurroundedByEnemies()) {
+                Country secondStrongest = null;
+                HashSet<String> exclude = new HashSet<>();
+                exclude.add(strongest.getName());
+                while (secondStrongest == null) {
+                    secondStrongest = findMyStrongestCountry(exclude);
+                    if (!WorldMap.isTherePath(strongest, secondStrongest)) {
+                        exclude.add(secondStrongest.getName());
+                        secondStrongest = null;
+                    }
+                }
+                numberOfArmy = secondStrongest.getNumberOfArmies() - 1;
+                return super.fortify(secondStrongest.getName(), strongest.getName(), numberOfArmy, numberOfArmy <= 0);
+            }
+        } else {
+            HashSet<Country> visited = new HashSet<>();
+            Set<Country> collect = visitCountries(strongest, visited);
+            if (collect.size() > 0) {
+                int max = collect.stream().mapToInt(Country::getNumberOfArmies).max().orElse(-1);
+                Country toCountry = null;
+                for (Country country : collect) {
+                    if (country.getNumberOfArmies() >= max) {
+                        toCountry = country;
+                        break;
+                    }
+                }
+                numberOfArmy = strongest.getNumberOfArmies() - 1;
+                return super.fortify(strongest.getName(), toCountry.getName(), numberOfArmy, numberOfArmy <= 0);
+            }
+        }
+        return super.fortify(null, null, -1, true);
+
+    }
+
+    private Set<Country> visitCountries(Country from, Set<Country> visited) {
+        HashSet<Country> countries = new HashSet<>();
+        for (Country country : from.getAdjacentCountries().stream().filter(country -> !visited.contains(country)).filter(this::isMine).collect(Collectors.toSet())) {
+            visited.add(country);
+            if (country.isAdjacentToOtherPlayerCountries()) {
+                countries.add(country);
+            }
+            countries.addAll(visitCountries(country, visited));
+        }
+        return countries;
+    }
+
+    private boolean isMine(Country country) {
+        return country.getOwner().equals(this);
     }
 }
 
