@@ -23,18 +23,39 @@ public class Battle implements Serializable {
      * Winner country if the defending country is conquered
      */
     private Country winner;
-
     /**
+     * 
+     * @param winner Winner Country
+     */
+    public void setWinner(Country winner) {
+		this.winner = winner;
+	}
+
+	/**
      * The country from which the attack is performed
      */
     private Country fromCountry;
-
     /**
+     * 
+     * @param fromCountry fromCountry
+     */
+    public void setFromCountry(Country fromCountry) {
+		this.fromCountry = fromCountry;
+	}
+
+	/**
      * Country where the defending will be performed
      */
     private Country toCountry;
-
     /**
+     * 
+     * @param toCountry toCountry
+     */
+    public void setToCountry(Country toCountry) {
+		this.toCountry = toCountry;
+	}
+
+	/**
      * Dices used by the attacker
      */
     private int numberOfAttackerDices;
@@ -54,8 +75,15 @@ public class Battle implements Serializable {
      * defend or attack
      */
     private BattleState state;
-
     /**
+     * 
+     * @param state BattleState
+     */
+    public void setState(BattleState state) {
+		this.state = state;
+	}
+
+	/**
      * The constructor of the battle class. It is assumed that a battle is created
      * when
      * an attacked command has performed

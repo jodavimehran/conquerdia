@@ -2,24 +2,17 @@ package ca.concordia.encs.conquerdia.model.io;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.Battle;
 import ca.concordia.encs.conquerdia.model.CardType;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PhaseModel.PhaseTypes;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.player.Player;
 
 public class GameIO {
@@ -27,7 +20,7 @@ public class GameIO {
 	public GameIO() {
 		this.gameStateIO = new GameStateIO();
 	}
-	public String SaveGame(String fileName) throws ValidationException {
+	public String saveGame(String fileName) throws ValidationException {
 		gameStateIO.setBuilder(new GameSaverBuilder(fileName));
 		gameStateIO.constructGameState();
 		GameState gameSaveState = gameStateIO.getGameState();
@@ -77,10 +70,21 @@ public class GameIO {
         if(currentPlayerBattle != null) {
         	sb.append( currentPlayerBattle.getFromCountry().getName()).append("|");
             sb.append( currentPlayerBattle.getToCountry().getName()).append("|");
-            sb.append( currentPlayerBattle.getWinner().getName()).append("|");
+            Country winner = currentPlayerBattle.getWinner();
+            if(winner != null) {
+                sb.append( winner.getName()).append("|");
+            }else {
+                sb.append("").append("|");
+            }
             sb.append( currentPlayerBattle.getNumberOfAttackerDices()).append("|");
             sb.append( currentPlayerBattle.getNumberOfDefenderDices()).append("|");
-            sb.append( currentPlayerBattle.getState()).append("\n");	
+            
+            if(currentPlayerBattle.getState() != null) {
+                sb.append( currentPlayerBattle.getState()).append("\n");	
+            }else {
+                sb.append("").append("\n");	
+
+            }
         }else {
         	sb.append("\n");
         }
@@ -89,6 +93,7 @@ public class GameIO {
         sb.append(currentPhase).append("\n");
         sb.append("$$PhaseStatus").append("\n");
         sb.append(phaseStatus).append("\n");
+        sb.append("$$End");
         
         BufferedWriter writer = null;
         try {
@@ -108,7 +113,7 @@ public class GameIO {
         return saveGameLog;
 	}
 	
-	public List<String> LoadGame(String fileName) throws Exception {
+	public List<String> loadGame(String fileName) throws Exception {
 		gameStateIO.setBuilder(new GameLoaderBuilder(fileName));
 		gameStateIO.constructGameState();
 		GameState gameLoadState = gameStateIO.getGameState();

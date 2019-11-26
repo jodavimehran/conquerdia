@@ -13,6 +13,7 @@ import java.util.Queue;
 import com.google.common.base.CharMatcher;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.Battle.BattleState;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.Continent;
@@ -24,6 +25,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
 	private String gameStateFileName;
 	private FileInputStream file ;
 	private Queue<Player> players = new LinkedList<>();
+	Player currentPlayer ;
 //	private Player firstPlayer;
 	private int numPlayers;
 	public GameLoaderBuilder(String fileName) throws ValidationException {
@@ -38,7 +40,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
         try {
         	reader = new BufferedReader(new FileReader(gameStateFileName + ".state"));
         	String line = reader.readLine();
-        	while(line != null) {
+        	while(!line.equals("$$End") ) {
         		if(line.equals("$$PlayersModel")) {
             		line = reader.readLine();
             		if(line.startsWith("$$Players")) {
@@ -83,11 +85,51 @@ public class GameLoaderBuilder extends GameStateBuilder {
                     				 }        				 
                     			 }                			  
                 			 }
-                			 
+                			 players.add(player);
                 			 line = reader.readLine();
                 		}
+                		if(line.startsWith("$$CurrentPlayer")) {
+                			line = reader.readLine();
+                			while (line != null && !line.startsWith("$$")) {
+                				line = reader.readLine();
+                			}
+                		}
+                		if(line.startsWith("$$FirstPlayer")) {
+                			line = reader.readLine();
+                			while (line != null && !line.startsWith("$$")) {
+                    			line = reader.readLine();
+                			}
+                		}
+                		if(line.startsWith("$$Battle")) {
+                    		line = reader.readLine();
+                    		if(line.startsWith("[")) {
+                    			line = reader.readLine();
+                    		}
+                    		String[] csvBattle = {};
+                    		while (line != null && !line.startsWith("$$")) {		
+                    			csvBattle = line.split("\\|");
+                    			if(currentPlayer != null) {
+                    				currentPlayer.getBattle().setToCountry(WorldMap.getInstance().getCountry(csvBattle[0]));
+                    				currentPlayer.getBattle().setFromCountry(WorldMap.getInstance().getCountry(csvBattle[1]));
+                    				currentPlayer.getBattle().setWinner(WorldMap.getInstance().getCountry(csvBattle[2]));
+                    				currentPlayer.getBattle().setNumberOfAttackerDices(Integer.parseInt(csvBattle[3]));
+                    				currentPlayer.getBattle().setNumberOfDefenderDices(Integer.parseInt(csvBattle[4]));
+                    				if(csvBattle[5].equals("Attacked")){
+                    					currentPlayer.getBattle().setState(BattleState.Attacked);
+                    				}else if(csvBattle[5].equals("Defended")){
+                    					currentPlayer.getBattle().setState(BattleState.Defended);
+                    				}else if(csvBattle[5].equals("Conquered")){
+                     					currentPlayer.getBattle().setState(BattleState.Conquered);
+                    				}
+                    			}
+                    		}
+                		}
+                		
                 		if(line.startsWith("$$PhaseModel")) {
-                			
+                			line = reader.readLine();
+                			if(line.equals("$$CurrentPhase")) {
+                				
+                			}
                 		}
             		}
         		}       		

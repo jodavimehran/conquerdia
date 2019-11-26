@@ -24,7 +24,7 @@ public class SaveGameCommand extends AbstractCommand {
 			String fileName = inputCommandParts.get(1);
 			try {
 				GameIO gameIO = new GameIO();
-				resultList.add(gameIO.SaveGame(fileName));
+				resultList.add(gameIO.saveGame(fileName));
 			} catch (Exception e) {
 				throw new ValidationException(e.getMessage());
 			}
