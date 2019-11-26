@@ -107,4 +107,12 @@ class Random extends AbstractComputerPlayer {
         return fromCountry;
     }
 
+    /**
+     * @return the Strategy of this player
+     */
+    @Override
+    public String getStrategy() {
+        return "random";
+    }
+
 }

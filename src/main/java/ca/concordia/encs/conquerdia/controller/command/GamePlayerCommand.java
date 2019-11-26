@@ -10,7 +10,7 @@ import java.util.List;
  * Implementation of the <i>gameplayer</i> command
  */
 public class GamePlayerCommand extends AbstractCommand {
-    public final static String COMMAND_HELP_MSG = "The \"gameplayer\" command must has at least one option like \"-add\" or \"-remove\".";
+    public final static String COMMAND_HELP_MSG = "The \"gameplayer\" command is somthing like \"gameplayer -add playername strategy -remove playername\".";
 
     /**
      * {@inheritDoc}

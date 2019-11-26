@@ -31,16 +31,22 @@ public class CommandController {
                         }
                         break;
                     case REINFORCEMENT:
-                        commandStr = "reinforce countryname 1";
+                        if (PhaseModel.getInstance().getCurrentPlayer().canExchangeCard()) {
+                            commandStr = "exchangecards 1 2 3";
+                        } else {
+                            commandStr = "reinforce countryname 1";
+                        }
                         break;
                     case FORTIFICATION:
                         commandStr = "fortify fromcountry tocountry 1";
                         break;
                     case ATTACK:
-                        if (PhaseModel.getInstance().getCurrentPlayer().canPerformAttack()) {
-                            commandStr = "attack countrynamefrom countynameto 1";
-                        } else if (PhaseModel.getInstance().getCurrentPlayer().getBattle() != null && PhaseModel.getInstance().getCurrentPlayer().getBattle().isConquered()) {
+                        if (PhaseModel.getInstance().getCurrentPlayer().getBattle() != null && PhaseModel.getInstance().getCurrentPlayer().getBattle().isConquered()) {
                             commandStr = "attackmove " + PhaseModel.getInstance().getCurrentPlayer().getBattle().getNumberOfAttackerDices();
+                        } else if (PhaseModel.getInstance().getCurrentPlayer().canPerformAttack()) {
+                            commandStr = "attack countrynamefrom countynameto 1";
+                        } else {
+                            commandStr = "attack –noattack";
                         }
                         break;
                 }
@@ -62,14 +68,15 @@ public class CommandController {
             if (currentPlayer != null) {
                 CardExchangeModel.getInstance().addCards(currentPlayer.getCards());
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         } while (PhaseModel.getInstance().getCurrentPlayer() != null &&
                 PhaseModel.getInstance().isAllCountriesArePopulated() &&
-                PhaseModel.getInstance().getCurrentPlayer().isComputer()
+                PhaseModel.getInstance().getCurrentPlayer().isComputer() &&
+                !PhaseModel.getInstance().isFinished()
         );
     }
 

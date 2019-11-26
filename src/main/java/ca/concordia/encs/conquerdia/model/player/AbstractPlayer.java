@@ -33,28 +33,18 @@ abstract class AbstractPlayer implements Player {
      */
     protected final HashMap<String, Country> countries = new HashMap<>();
     /**
-     * Continents owned by this player
-     */
-    protected  HashMap<String, Continent> continents = new HashMap<>();
-    /**
-     * Player's continents.
-     * @param continents
-     */
-    public void setContinents(HashMap<String, Continent> continents) {
-		this.continents = continents;
-	}
-
-
-	/**
      * List of the card that this player has
      */
     protected final List<CardType> cards = new ArrayList<>();
+    /**
+     * Continents owned by this player
+     */
+    protected HashMap<String, Continent> continents = new HashMap<>();
     /**
      * The number of armies that belong to this player and are not placed on any
      * country.
      */
     protected int unplacedArmies = 0;
-
     /**
      * true if fortification phase for the current turn has down by player
      */
@@ -73,7 +63,6 @@ abstract class AbstractPlayer implements Player {
      */
     private boolean successfulAttack;
 
-
     /**
      * @param name The name of a player that must be determined when you want to create a player
      */
@@ -85,6 +74,15 @@ abstract class AbstractPlayer implements Player {
     private static int getNumberOfArmiesForExchangeCard() {
         NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD += 5;
         return NUMBER_OF_ARMIES_FOR_EXCHANGE_CARD;
+    }
+
+    /**
+     * Player's continents.
+     *
+     * @param continents
+     */
+    public void setContinents(HashMap<String, Continent> continents) {
+        this.continents = continents;
     }
 
     /**
@@ -115,26 +113,30 @@ abstract class AbstractPlayer implements Player {
     public boolean isFortificationFinished() {
         return fortificationFinished;
     }
+
     /**
      * boolean value of ffortificationFinished.
      */
     public void setFortificationFinished(boolean isFortificationFinished) {
-         fortificationFinished = isFortificationFinished;
+        fortificationFinished = isFortificationFinished;
     }
+
     /**
      * @return true if attack is down
      */
     public boolean isAttackFinished() {
         return attackFinished;
     }
+
     /**
      * Sets the attackFinished
+     *
      * @param isAttackFinished attackFinished boolean value
      */
     public void setAttackFinished(boolean isAttackFinished) {
-         attackFinished = isAttackFinished;
+        attackFinished = isAttackFinished;
     }
-    
+
     /**
      * @return the name of this player
      */
@@ -524,17 +526,23 @@ abstract class AbstractPlayer implements Player {
             throw new ValidationException(
                     String.format("Card numbers must be unique and positive numbers between 1 and %d", cards.size()));
         }
-        CardType firstCard = cards.get(first);
-        CardType secondCard = cards.get(second);
-        CardType thirdCard = cards.get(third);
+        if (!canExchangeCard()) {
+            throw new ValidationException(
+                    "A player can exchange a set of three cards of the same kind, or a set of three cards of all different kinds");
+        }
+        CardType firstCard = cards.get(first - 1);
+        CardType secondCard = cards.get(second - 1);
+        CardType thirdCard = cards.get(third - 1);
         if ((!firstCard.equals(secondCard) || !firstCard.equals(thirdCard) || !secondCard.equals(thirdCard))
                 && (firstCard.equals(secondCard) || firstCard.equals(thirdCard) || secondCard.equals(thirdCard))) {
             throw new ValidationException(
                     "A player can exchange a set of three cards of the same kind, or a set of three cards of all different kinds");
         }
-        cards.remove(firstCard);
-        cards.remove(secondCard);
-        cards.remove(thirdCard);
+        Integer[] indexes = {first - 1, second - 1, third - 1};
+        Arrays.sort(indexes, Collections.reverseOrder());
+        for (int i = 0; i < indexes.length; i++) {
+            cards.remove(indexes[i].intValue());
+        }
         int numberOfArmiesForExchangeCard = getNumberOfArmiesForExchangeCard();
         unplacedArmies += numberOfArmiesForExchangeCard;
         return String.format("Player %s exchanges %s, %s, %s cards with %d armies.", name, firstCard.getName(),
@@ -630,5 +638,16 @@ abstract class AbstractPlayer implements Player {
     public int getNumberOfContinents() {
         return continents.size();
     }
-    
+
+    /**
+     * @return true if this player can exchange cards
+     */
+    public boolean canExchangeCard() {
+        HashMap<CardType, Integer> cardTypes = new HashMap<>();
+        cards.stream().forEach(cardType -> cardTypes.merge(cardType, 1, Integer::sum));
+        if (cardTypes.keySet().size() == 3) {
+            return true;
+        }
+        return cardTypes.values().stream().anyMatch(numberOfCard -> numberOfCard >= 3);
+    }
 }

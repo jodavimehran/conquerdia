@@ -23,6 +23,14 @@ class Aggressive extends AbstractComputerPlayer {
     }
 
     /**
+     * @return the Strategy of this player
+     */
+    @Override
+    public String getStrategy() {
+        return "aggressive";
+    }
+
+    /**
      * @param countryName  name of the country
      * @param numberOfArmy number of army
      * @return

@@ -23,6 +23,14 @@ class Cheater extends AbstractComputerPlayer {
     }
 
     /**
+     * @return the Strategy of this player
+     */
+    @Override
+    public String getStrategy() {
+        return "cheater";
+    }
+
+    /**
      * @param country doubles the number of armies on this country
      */
     private static void doubleNumberOfArmy(Country country) {

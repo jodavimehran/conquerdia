@@ -25,6 +25,8 @@ public class PhaseModel extends Observable {
     private int numberOfInitialArmies = -1;
     private boolean allCountriesArePopulated;
 
+    private boolean finished;
+
     /**
      * private Constructor to implementation of the Singleton Pattern
      */
@@ -45,6 +47,10 @@ public class PhaseModel extends Observable {
             }
         }
         return instance;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     @JsonIgnore
@@ -156,10 +162,14 @@ public class PhaseModel extends Observable {
             }
             case ATTACK: {
                 if (currentPlayer.isAttackFinished()) {
-                    if (currentPlayer.hasSuccessfulAttack()) {
-                        currentPlayer.winCard();
+                    if (PlayersModel.getInstance().getPlayers().size() <= 1) {
+                        finished = true;
+                    } else {
+                        if (currentPlayer.hasSuccessfulAttack()) {
+                            currentPlayer.winCard();
+                        }
+                        changePhase(PhaseTypes.FORTIFICATION);
                     }
-                    changePhase(PhaseTypes.FORTIFICATION);
                 } else if (currentPlayer.canMoveAttack()) {
                     results.add(String.format(
                             "Congrats! %s, please move your army to your newly conquered country %s. You can use \"attackmove -num\" to move your armies.",
@@ -331,7 +341,7 @@ public class PhaseModel extends Observable {
                         CommandType.SAVE_GAME))),
         ATTACK("Attack",
                 new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND,
-                        CommandType.ATTACK_MOVE,CommandType.LOAD_GAME,CommandType.SAVE_GAME))),
+                        CommandType.ATTACK_MOVE, CommandType.LOAD_GAME, CommandType.SAVE_GAME))),
         FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY, CommandType.LOAD_GAME,
                 CommandType.SAVE_GAME)));
 

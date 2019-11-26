@@ -42,14 +42,19 @@ public class Starter extends JFrame {
         PhaseModel.getInstance().addObserver(new PhaseView(output));
         CardExchangeModel.getInstance().addObserver(new CardExchangeView(output));
         PlayersModel.getInstance().addObserver(new PlayersWorldDominationView(output));
-        while (true) {
+        while (!PhaseModel.getInstance().isFinished()) {
             output.print("> ");
             String commandStr = scanner.nextLine();
             if ("exit".equals(commandStr)) {
-                break;
+                return;
             } else {
                 commandController.executeCommand(commandStr);
             }
         }
+        output.println("************************************************************************************************");
+        output.println("************************************************************************************************");
+        output.println("************************************************************************************************");
+        output.println("Game Over!");
+        output.println(String.format("Congratulations %s you win the game.", PlayersModel.getInstance().getCurrentPlayer().getName()));
     }
 }

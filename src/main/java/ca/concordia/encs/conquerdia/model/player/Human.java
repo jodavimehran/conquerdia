@@ -19,4 +19,12 @@ class Human extends AbstractPlayer {
     public boolean isComputer() {
         return false;
     }
+
+    /**
+     * @return the Strategy of this player
+     */
+    @Override
+    public String getStrategy() {
+        return "human";
+    }
 }

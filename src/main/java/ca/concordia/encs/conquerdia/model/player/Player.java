@@ -54,6 +54,11 @@ public interface Player {
     boolean isAttackFinished();
 
     /**
+     * @param isAttackFinished attackfinished boolean value
+     */
+    void setAttackFinished(boolean isAttackFinished);
+
+    /**
      * @return true if the player has successful attack
      */
     boolean hasSuccessfulAttack();
@@ -67,7 +72,6 @@ public interface Player {
      * Add a card randomly to the list of the cards that this player have
      */
     void winCard();
-
 
     /**
      * @return the name of the player
@@ -94,9 +98,21 @@ public interface Player {
     boolean canPerformAttack();
 
     /**
+     * @return true if this player can exchange cards
+     */
+    boolean canExchangeCard();
+
+    /**
      * @return true if fortification is down
      */
     boolean isFortificationFinished();
+
+    /**
+     * set fortificationFinished
+     *
+     * @param isFortificationFinished boolean value of fortificationFinished
+     */
+    void setFortificationFinished(boolean isFortificationFinished);
 
     /**
      * @return number of reinforcement armies according to the Risk rules.
@@ -155,33 +171,25 @@ public interface Player {
      * @return number of continents this player owns
      */
     int getNumberOfContinents();
+
     /**
      * Player's continents
+     *
      * @param continents
      */
-    public void setContinents(HashMap<String, Continent> continents);
+    void setContinents(HashMap<String, Continent> continents);
 
     /**
      * @param successfulAttack
      */
     void setSuccessfulAttack(boolean successfulAttack);
-    /**
-     * 
-     * @param isAttackFinished attackfinished boolean value
-     */
-    public void setAttackFinished(boolean isAttackFinished);
-    /**
-     * set fortificationFinished
-     * @param isFortificationFinished boolean value of fortificationFinished
-     */
-    public void setFortificationFinished(boolean isFortificationFinished);
-    
+
     /**
      * Move armies after conquering another country during a battle
      *
      * @param armiesToMove
      */
-    
+
     String attackMove(int armiesToMove) throws ValidationException;
 
     /**
@@ -256,4 +264,9 @@ public interface Player {
      * @return true if this player is a computer
      */
     boolean isComputer();
+
+    /**
+     * @return the Strategy of this player
+     */
+    String getStrategy();
 }

@@ -21,6 +21,14 @@ class Benevolent extends AbstractComputerPlayer {
     }
 
     /**
+     * @return the Strategy of this player
+     */
+    @Override
+    public String getStrategy() {
+        return "benevolent";
+    }
+
+    /**
      * @param countryName  name of the country
      * @param numberOfArmy number of army
      * @return
