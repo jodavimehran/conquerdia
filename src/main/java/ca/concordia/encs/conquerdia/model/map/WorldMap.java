@@ -1,19 +1,20 @@
 package ca.concordia.encs.conquerdia.model.map;
 
-import ca.concordia.encs.conquerdia.exception.ValidationException;
-import ca.concordia.encs.conquerdia.model.PhaseModel;
-import ca.concordia.encs.conquerdia.model.map.io.IMapReader;
-import ca.concordia.encs.conquerdia.model.map.io.IMapWriter;
-import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.PhaseModel;
+import ca.concordia.encs.conquerdia.model.map.io.GameMap;
+import ca.concordia.encs.conquerdia.model.map.io.IGameMap;
 
 /**
  * Represents the world map of the game.
@@ -29,8 +30,12 @@ public class WorldMap implements Serializable {
     private boolean mapLoaded;
     private boolean connectedGraph;
     private boolean connectedSubGraph;
-    @JsonIgnore
+    
+   private final IGameMap gameMap;
+    
+   @JsonIgnore
     private WorldMap() {
+	   gameMap = new GameMap(this);
     }
 
     /**
@@ -124,7 +129,7 @@ public class WorldMap implements Serializable {
             throw new ValidationException(String.format(NO_MAP_TO_EDIT_ERROR, "save"));
         }
         if (checkAllMapValidationRules()) {
-            IMapWriter.createMapWriter(this).writeMap(fileName);
+            gameMap.saveTo(fileName);
         } else {
             throw new ValidationException(validateMap());
         }
@@ -134,7 +139,7 @@ public class WorldMap implements Serializable {
      * @return return true if load a map from an existing “domination” map file successfully. return false if the file does not exist.
      */
     private boolean openMapFile() {
-        return IMapReader.createMapReader(this).readMap(fileName);
+        return gameMap.loadFrom(fileName);
     }
 
     /**
