@@ -17,7 +17,7 @@ import java.util.Set;
 class MapWriter extends MapIO implements IMapWriter {
 
 	static final String CONTINENT_ROW_FORMAT = "%s" + TOKENS_DELIMETER + "%s" + TOKENS_DELIMETER + "%s";
-	private final WorldMap worldMap;
+	protected final WorldMap worldMap;
 	protected BufferedWriter writer;
 
 	/**
