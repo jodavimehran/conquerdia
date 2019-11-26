@@ -40,7 +40,7 @@ class ConquestMapReader extends ConquestMapIO{
 	 *         occurred
 	 *         during reading
 	 */
-	public boolean readMap(String filename) {
+	public boolean read(String filename) {
 		try {
 			final String path = getMapFilePath(filename);
 			final File file = new File(path);

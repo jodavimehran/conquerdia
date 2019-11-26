@@ -15,26 +15,24 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
  */
 class ConquestMapWriter extends ConquestMapIO {
 
+	/**
+	 * Format of each continent
+	 */
 	static final String CONTINENT_ROW_FORMAT = "%s" + CONTINENTS_DELIMETER + "%d";
-	private final WorldMap worldMap;
-	protected BufferedWriter writer;
 
 	/**
-	 * Constructor takes the world map to be written
-	 * 
-	 * @param worldMap WorldMap to be written
+	 * Writer for the file
 	 */
-	public ConquestMapWriter(WorldMap worldMap) {
-		this.worldMap = worldMap;
-	}
+	protected BufferedWriter writer;
 
 	/**
 	 * Writes the world map to the specified file
 	 * 
 	 * @param filename of the map in which the world map has to be saved
+	 * @param worldMap Map to be saved
 	 * @return True if save is successful otherwise false
 	 */
-	public boolean writeMap(String filename) {
+	public boolean write(String filename, WorldMap worldMap) {
 		ArrayList<Country> countries;
 
 		try {
