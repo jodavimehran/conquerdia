@@ -67,7 +67,8 @@ public interface Player {
      * Gets the battle of the player
      */
     Battle getBattle();
-
+    
+    void setBattle(Battle battle);
     /**
      * Add a card randomly to the list of the cards that this player have
      */

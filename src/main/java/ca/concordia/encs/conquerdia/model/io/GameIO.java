@@ -60,24 +60,22 @@ public class GameIO {
         	sb.append(player.getContinentNames()).append("|");
         	sb.append(player.getCountryNames()).append("\n");
         }
-        sb.append("$$CurrentPlayer").append("\n");
-        sb.append(currentPlayer.getName()).append("\n");
         sb.append("$$FirstPlayer").append("\n");
         sb.append(firstPlayers.getName()).append("\n"); 
         sb.append("$$Battle").append("\n");
         Battle currentPlayerBattle = playersModel.getCurrentPlayer().getBattle();
         sb.append("[FromCountry,ToCountry,winner, #AttackerDice,#DefenderDice,state]").append("\n");
         if(currentPlayerBattle != null) {
-        	sb.append( currentPlayerBattle.getFromCountry().getName()).append("|");
-            sb.append( currentPlayerBattle.getToCountry().getName()).append("|");
+        	sb.append(currentPlayerBattle.getFromCountry().getName()).append("|");
+            sb.append(currentPlayerBattle.getToCountry().getName()).append("|");
             Country winner = currentPlayerBattle.getWinner();
             if(winner != null) {
                 sb.append( winner.getName()).append("|");
             }else {
                 sb.append("").append("|");
             }
-            sb.append( currentPlayerBattle.getNumberOfAttackerDices()).append("|");
-            sb.append( currentPlayerBattle.getNumberOfDefenderDices()).append("|");
+            sb.append(currentPlayerBattle.getNumberOfAttackerDices()).append("|");
+            sb.append(currentPlayerBattle.getNumberOfDefenderDices()).append("|");
             
             if(currentPlayerBattle.getState() != null) {
                 sb.append( currentPlayerBattle.getState()).append("\n");	

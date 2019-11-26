@@ -103,10 +103,18 @@ abstract class AbstractPlayer implements Player {
      * Gets the battle of the player
      */
     public Battle getBattle() {
-        return battle;
+        if(battle != null) {
+        	return battle;	
+        }else {
+        	return new Battle(null, null);
+        }
     }
-
-
+    /**
+     * Sets the battle of the current player for loadgame
+     */
+    public void setBattle(Battle battle) {
+        this.battle = battle;
+    }
     /**
      * @return true if fortification is down
      */
