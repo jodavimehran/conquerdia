@@ -1,13 +1,17 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
-import ca.concordia.encs.conquerdia.model.map.Continent;
-import ca.concordia.encs.conquerdia.model.map.Country;
-import ca.concordia.encs.conquerdia.model.map.WorldMap;
-import org.junit.Before;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import ca.concordia.encs.conquerdia.model.map.Continent;
+import ca.concordia.encs.conquerdia.model.map.Country;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 /**
  * This class contains junit tests to test the map loading validity of
@@ -18,87 +22,97 @@ import static org.junit.Assert.*;
  *
  * @author Mosabbir
  */
+
 @Ignore
 public class MapReaderTest {
 
-    private WorldMap worldMap;
-    private IMapReader reader;
-    private boolean isReadSuccessful;
+	private static WorldMap worldMap;
+	private static IMapReader reader;
+	private static boolean isReadSuccessful;
 
-    /**
-     * Creates and loads a new {@link WorldMap} object with the help of a new
-     * {@link MapReader} instance. This method is run before every junit tests in
-     * this class
-     */
-    @Before
-    public void beforeTests() {
-        worldMap = WorldMap.getInstance();
-        reader = new MapReader(worldMap);
-        isReadSuccessful = reader.readMap("uk.map");
-    }
+	/**
+	 * Uses {@link WorldMap} object with the help of a new {@link MapReader}
+	 * instance. This method is run once before tests
+	 */
+	@BeforeClass
+	public static void setup() {
 
-    /**
-     * Test to check if the map is read successfully in the setup phase
-     */
-    @Test
-    public void testReadMap() {
-        assertTrue(isReadSuccessful);
-    }
+		worldMap = WorldMap.getInstance();
+		reader = new MapReader(worldMap);
+		isReadSuccessful = reader.readMap("uk.map");
+	}
 
-    /**
-     * Tests if the loaded map contains the same number of continents in the map
-     * file
-     */
-    @Test
-    public void testContinentCount() {
-        // uk map has 6 continents,
-        assertEquals(worldMap.getContinents().size(), 6);
-    }
+	/**
+	 * Clear {@link WorldMap} object with instance. This method is run after all the
+	 * tests are run
+	 */
+	@AfterClass
+	public static void dispose() {
+		WorldMap.clear();
+	}
 
-    /**
-     * Tests if the loaded map contains the same number of countries in the map file
-     */
-    @Test
-    public void testCountryCount() {
-        // uk map has 75 countries,
-        assertEquals(worldMap.getCountries().size(), 75);
-    }
+	/**
+	 * Test to check if the map is read successfully in the setup phase
+	 */
+	@Test
+	public void testReadMap() {
+		assertTrue(isReadSuccessful);
+	}
 
-    /**
-     * Tests if a country holds the correct adjacent neighbors as in the map
-     */
-    @Test
-    public void testNeighbors() {
-        // uk map's last border row is 75 73 74 71
-        // i.e. country kent is adjacent to Surrey, Sussex, Essex
-        Country kent = worldMap.getCountry("Kent");
-        assertTrue(kent.isAdjacentTo("Surrey"));
-        assertTrue(kent.isAdjacentTo("Sussex"));
-        assertTrue(kent.isAdjacentTo("Essex"));
-    }
+	/**
+	 * Tests if the loaded map contains the same number of continents in the map
+	 * file
+	 */
+	@Test
+	public void testContinentCount() {
+		// uk map has 6 continents,
+		assertEquals(worldMap.getContinents().size(), 6);
+	}
 
-    /**
-     * Tests if a Continent is loaded and have the same control value as in the file
-     */
-    @Test
-    public void testContinentDetail() {
-        // Uk map has a continent row like: North-Scotland 2 blue
-        Continent continent = worldMap.getContinent("North-Scotland");
-        assertNotNull(continent);
-        assertEquals(continent.getValue(), 2);
-    }
+	/**
+	 * Tests if the loaded map contains the same number of countries in the map file
+	 */
+	@Test
+	public void testCountryCount() {
+		// uk map has 75 countries,
+		assertEquals(worldMap.getCountries().size(), 75);
+	}
 
-    /**
-     * Tests if a Country is loaded and is associated with the correct continent as
-     * in the file
-     */
-    @Test
-    public void testCountryDetail() {
-        // Uk map has a country row like: 18 Ayrshire 2 423 136
-        Country country = worldMap.getCountry("Ayrshire");
-        assertNotNull(country);
+	/**
+	 * Tests if a country holds the correct adjacent neighbors as in the map
+	 */
+	@Test
+	public void testNeighbors() {
+		// uk map's last border row is 75 73 74 71
+		// i.e. country kent is adjacent to Surrey, Sussex, Essex
+		Country kent = worldMap.getCountry("Kent");
+		assertTrue(kent.isAdjacentTo("Surrey"));
+		assertTrue(kent.isAdjacentTo("Sussex"));
+		assertTrue(kent.isAdjacentTo("Essex"));
+	}
 
-        // Ayshire belongs to continent 2 South-Scotland
-        assertEquals(country.getContinent().getName(), "South-Scotland");
-    }
+	/**
+	 * Tests if a Continent is loaded and have the same control value as in the file
+	 */
+	@Test
+	public void testContinentDetail() {
+		// Uk map has a continent row like: North-Scotland 2 blue
+		Continent continent = worldMap.getContinent("North-Scotland");
+		assertNotNull(continent);
+		assertEquals(continent.getValue(), 2);
+	}
+
+	/**
+	 * Tests if a Country is loaded and is associated with the correct continent as
+	 * in the file
+	 */
+	@Test
+	public void testCountryDetail() {
+		// Uk map has a country row like: 18 Ayrshire 2 423 136
+		Country country = worldMap.getCountry("Ayrshire");
+		assertNotNull(country);
+
+		// Ayshire belongs to continent 2 South-Scotland
+		assertEquals(country.getContinent().getName(), "South-Scotland");
+	}
 }

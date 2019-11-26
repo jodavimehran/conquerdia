@@ -418,9 +418,8 @@ public class WorldMap implements Serializable {
     /**
      * Clears the data of the map and resets it
      */
-    public void clear() {
-        continents.clear();
-        countries.clear();
+    public static void clear() {
+        instance = null;
     }
 
     public boolean isNewMapFromScratch() {
