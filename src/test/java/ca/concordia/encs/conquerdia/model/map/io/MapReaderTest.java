@@ -3,10 +3,10 @@ package ca.concordia.encs.conquerdia.model.map.io;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.concordia.encs.conquerdia.model.map.Continent;
@@ -23,7 +23,6 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
  * @author Mosabbir
  */
 
-@Ignore
 public class MapReaderTest {
 
 	private static WorldMap worldMap;
@@ -39,7 +38,9 @@ public class MapReaderTest {
 
 		worldMap = WorldMap.getInstance();
 		reader = new MapReader(worldMap);
-		isReadSuccessful = reader.readMap("uk.map");
+		String map = "uk.map";
+		assumeTrue(FileHelper.exists(MapIO.getMapFilePath(map)));
+		isReadSuccessful = reader.readMap(map);
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class MapReaderTest {
 	 * tests are run
 	 */
 	@AfterClass
-	public static void dispose() {
+	public static void end() {
 		WorldMap.clear();
 	}
 
