@@ -15,9 +15,9 @@ import java.util.Set;
  */
 public class PlayersModel extends Observable {
     private static PlayersModel instance;
-    private  Queue<Player> players = new LinkedList<>();
 
-	private final Set<String> playerNames = new HashSet<>();
+    private final Set<String> playerNames = new HashSet<>();
+    private Queue<Player> players = new LinkedList<>();
     private Player firstPlayer;
 
     /**
@@ -43,6 +43,13 @@ public class PlayersModel extends Observable {
     }
 
     /**
+     * Clear this model
+     */
+    public static void clear() {
+        instance = null;
+    }
+
+    /**
      * Get the queue of the game players
      *
      * @return A queue of the game players
@@ -50,14 +57,14 @@ public class PlayersModel extends Observable {
     public Queue<Player> getPlayers() {
         return players;
     }
-    
+
     /**
-     * 
      * @param players
      */
     public void setPlayers(Queue<Player> players) {
-		this.players = players;
-	}
+        this.players = players;
+    }
+
     /**
      * Gets the first player of the game.
      *

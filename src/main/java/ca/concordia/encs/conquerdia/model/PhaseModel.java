@@ -49,6 +49,13 @@ public class PhaseModel extends Observable {
         return instance;
     }
 
+    /**
+     * Clear this model
+     */
+    public static void clear() {
+        instance = null;
+    }
+
     public boolean isFinished() {
         return finished;
     }
@@ -269,8 +276,11 @@ public class PhaseModel extends Observable {
             throw new ValidationException("All countries are populated before!");
         }
         int numberOfPlayers = PlayersModel.getInstance().getNumberOfPlayers();
-        if (numberOfPlayers < 3) {
-            throw new ValidationException("The game need at least Three players to start.");
+        if (numberOfPlayers < 2) {
+            throw new ValidationException("The game need at least Two players to start.");
+        }
+        if (numberOfPlayers > 6) {
+            throw new ValidationException("Too Many Players! The Maximum number of player is 6.");
         }
         Set<Country> countries = WorldMap.getInstance().getCountries();
         int numberOfCountries = countries.size();
@@ -311,6 +321,8 @@ public class PhaseModel extends Observable {
      */
     private int calculateNumberOfInitialArmies(int numberOfPlayers) {
         switch (numberOfPlayers) {
+            case 2:
+                return 40;
             case 3:
                 return 35;
             case 4:
@@ -327,23 +339,12 @@ public class PhaseModel extends Observable {
      * Phase Types
      */
     public enum PhaseTypes implements Serializable {
-        NONE("None",
-                new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_MAP))),
-        EDIT_MAP("Edit Map",
-                new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY,
-                        CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP,
-                        CommandType.VALIDATE_MAP))),
-        START_UP("Startup",
-                new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER,
-                        CommandType.POPULATE_COUNTRIES, CommandType.PLACE_ARMY, CommandType.PLACE_ALL))),
-        REINFORCEMENT("Reinforcement",
-                new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS, CommandType.LOAD_GAME,
-                        CommandType.SAVE_GAME))),
-        ATTACK("Attack",
-                new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND,
-                        CommandType.ATTACK_MOVE, CommandType.LOAD_GAME, CommandType.SAVE_GAME))),
-        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY, CommandType.LOAD_GAME,
-                CommandType.SAVE_GAME)));
+        NONE("None", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.LOAD_GAME, CommandType.EDIT_MAP))),
+        EDIT_MAP("Edit Map", new HashSet<>(Arrays.asList(CommandType.LOAD_MAP, CommandType.EDIT_CONTINENT, CommandType.EDIT_COUNTRY, CommandType.EDIT_NEIGHBOR, CommandType.SHOW_MAP, CommandType.SAVE_MAP, CommandType.VALIDATE_MAP))),
+        START_UP("Startup", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.GAME_PLAYER, CommandType.POPULATE_COUNTRIES, CommandType.PLACE_ARMY, CommandType.PLACE_ALL, CommandType.SAVE_GAME))),
+        REINFORCEMENT("Reinforcement", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.REINFORCE, CommandType.EXCHANGE_CARDS, CommandType.SAVE_GAME))),
+        ATTACK("Attack", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND, CommandType.ATTACK_MOVE, CommandType.SAVE_GAME))),
+        FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY, CommandType.SAVE_GAME)));
 
         private final String name;
         private final Set<CommandType> validCommands;

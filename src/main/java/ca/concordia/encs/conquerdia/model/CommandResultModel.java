@@ -16,8 +16,8 @@ public class CommandResultModel extends Observable {
      */
     private CommandResultModel() {
     }
+
     /**
-     * 
      * @return The instance of the result model Singleton class.
      */
     public static CommandResultModel getInstance() {
@@ -32,11 +32,20 @@ public class CommandResultModel extends Observable {
     }
 
     /**
-     * Clear the model
+     * Clear this model
+     */
+    public static void clearModel() {
+        instance = null;
+    }
+
+
+    /**
+     * Clear this model
      */
     public void clear() {
         resultList.clear();
     }
+
 
     /**
      * @param resultList The list of result to be added to this model
