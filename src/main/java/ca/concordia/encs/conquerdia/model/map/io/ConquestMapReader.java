@@ -140,16 +140,4 @@ public class ConquestMapReader extends ConquestMapIO {
 			}
 		}
 	}
-
-	/**
-	 * Capitalize the first character of the string if not all uppercase
-	 * 
-	 * @param word The word which may or may not have spaces
-	 * @return if all uppercase the same string
-	 */
-	private String formatNames(String word) {
-		if (StringUtils.isAllUpperCase(word))
-			return word;
-		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' });
-	}
 }

@@ -1,5 +1,8 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Represents the common properties and functionalities of Conquest map files
  *
@@ -12,7 +15,7 @@ public class ConquestMapIO {
 	 * Represents the start of a comment in the map file
 	 */
 	public static final String COMMENT_SYMBOL = ";";
-	
+
 	/**
 	 * Represents the Map section in the file
 	 */
@@ -99,5 +102,17 @@ public class ConquestMapIO {
 	 */
 	protected static boolean isTerritoriesIdentifier(String line) {
 		return line.equalsIgnoreCase(TERRITORIES_SECTION_IDENTIFIER);
+	}
+
+	/**
+	 * Capitalize the first character of the string if not all uppercase
+	 * 
+	 * @param word The word which may or may not have spaces
+	 * @return if all uppercase the same string
+	 */
+	protected static String formatNames(String word) {
+		if (StringUtils.isAllUpperCase(word))
+			return word;
+		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' });
 	}
 }

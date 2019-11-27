@@ -1,7 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
@@ -26,8 +25,14 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 public class ConquestMapReaderTest {
 
+	/**
+	 * Worldmap to work on
+	 */
 	private static WorldMap worldMap;
-	private static ConquestMapReader reader;
+
+	/**
+	 * Checks if map read is sucessful
+	 */
 	private static boolean isReadSuccessful;
 
 	/**
@@ -38,7 +43,7 @@ public class ConquestMapReaderTest {
 	public static void setup() {
 		WorldMap.clear();
 		worldMap = WorldMap.getInstance();
-		reader = new ConquestMapReader(worldMap);
+		ConquestMapReader reader = new ConquestMapReader(worldMap);
 		String map = "Montreal.map";
 		assumeTrue(FileHelper.exists(MapIO.getMapFilePath(map)));
 		isReadSuccessful = reader.read(map);

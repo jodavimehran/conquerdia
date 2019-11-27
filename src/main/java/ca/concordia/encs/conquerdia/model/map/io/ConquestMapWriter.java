@@ -61,6 +61,7 @@ class ConquestMapWriter extends ConquestMapIO {
 					writer.flush();
 					writer.close();
 				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -79,6 +80,7 @@ class ConquestMapWriter extends ConquestMapIO {
 
 		// Each Territory has this format Kittson,67,77,Minnesota,Roseau,Marshall
 		for (Country country : countries) {
+			rowBuilder.setLength(0);
 			rowBuilder.append(country.getName());
 
 			// Save the unused coordinates
@@ -125,8 +127,10 @@ class ConquestMapWriter extends ConquestMapIO {
 	 */
 	private void writeSection(String sectionIdentifier, String[] rows) throws IOException {
 		writeLine(sectionIdentifier);
-		for (String row : rows) {
-			writeLine(row);
+		if (rows != null) {
+			for (String row : rows) {
+				writeLine(row);
+			}
 		}
 	}
 
