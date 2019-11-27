@@ -35,7 +35,7 @@ public class MapReaderTest {
 	 */
 	@BeforeClass
 	public static void setup() {
-
+		WorldMap.clear();
 		worldMap = WorldMap.getInstance();
 		reader = new MapReader(worldMap);
 		String map = "uk.map";

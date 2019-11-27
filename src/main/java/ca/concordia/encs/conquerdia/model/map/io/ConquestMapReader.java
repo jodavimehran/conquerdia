@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
@@ -18,7 +21,7 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
  *
  * @author Mosabbir
  */
-class ConquestMapReader extends ConquestMapIO{
+public class ConquestMapReader extends ConquestMapIO {
 
 	private final WorldMap worldMap;
 	private BufferedReader reader;
@@ -50,13 +53,21 @@ class ConquestMapReader extends ConquestMapIO{
 
 			while ((line = reader.readLine()) != null) {
 				if (isContientsIdentifier(line)) {
-					readContinents();
-				} else if (isTerritoriesIdentifier(line)) {
-					readTerritories();
+					break;
 				}
 			}
+
+			readContinents();
+
+			while ((line = reader.readLine()) != null) {
+				if (isTerritoriesIdentifier(line)) {
+					break;
+				}
+			}
+			readTerritories();
 			return true;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			return false;
 		} finally {
 			try {
@@ -71,12 +82,13 @@ class ConquestMapReader extends ConquestMapIO{
 	 * Reads all continents which are under the continent section in file add them
 	 * to the map instance
 	 */
-	protected void readContinents() throws IOException, ValidationException {
+	private void readContinents() throws IOException, ValidationException {
 		String line;
 		String[] tokens;
 		while ((line = reader.readLine()) != null && line.length() > 0) {
-			tokens = line.split(CONTINENTS_DELIMETER);
-			String continentName = tokens[0];
+			tokens = StringUtils.stripAll(StringUtils.normalizeSpace(line)
+					.split(CONTINENTS_DELIMETER));
+			String continentName = formatNames(tokens[0]);
 			int continentValue = Integer.parseInt(tokens[1]);
 			worldMap.addContinent(continentName, continentValue);
 		}
@@ -86,7 +98,7 @@ class ConquestMapReader extends ConquestMapIO{
 	 * Reads all countries which are under the Territories section in file add them
 	 * to the map instance
 	 */
-	protected void readTerritories()
+	private void readTerritories()
 			throws IOException, ValidationException {
 		String line;
 		String[] tokens;
@@ -95,17 +107,24 @@ class ConquestMapReader extends ConquestMapIO{
 		HashMap<String, ArrayList<String>> countryNeighborsMap = new HashMap<>();
 		ArrayList<String> neighbors;
 
-		while ((line = reader.readLine()) != null && line.length() > 0) {
-			tokens = line.split(TERRITORIES_DELIMETER);
-			countryName = tokens[0];
-			contientName = tokens[3];
+		while ((line = reader.readLine()) != null) {
+
+			if (line.equals("")) {
+				continue;
+			}
+
+			tokens = StringUtils.stripAll(StringUtils.normalizeSpace(line)
+					.split(TERRITORIES_DELIMETER));
+
+			countryName = formatNames(tokens[0]);
+			contientName = formatNames(tokens[3]);
 
 			worldMap.addCountry(countryName, contientName);
 
 			// Traverse and save neighbors
 			neighbors = new ArrayList<String>();
 			for (int i = 4; i < tokens.length; i++) {
-				neighbors.add(tokens[i]);
+				neighbors.add(formatNames(tokens[i]));
 			}
 			countryNeighborsMap.put(countryName, neighbors);
 		}
@@ -114,8 +133,23 @@ class ConquestMapReader extends ConquestMapIO{
 		for (Entry<String, ArrayList<String>> entry : countryNeighborsMap.entrySet()) {
 			countryName = entry.getKey();
 			for (String neighbor : entry.getValue()) {
-				worldMap.addNeighbour(countryName, neighbor);
+				if (!worldMap.getCountry(countryName)
+						.isAdjacentTo(neighbor)) {
+					worldMap.addNeighbour(countryName, neighbor);
+				}
 			}
 		}
+	}
+
+	/**
+	 * Capitalize the first character of the string if not all uppercase
+	 * 
+	 * @param word The word which may or may not have spaces
+	 * @return if all uppercase the same string
+	 */
+	private String formatNames(String word) {
+		if (StringUtils.isAllUpperCase(word))
+			return word;
+		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' });
 	}
 }
