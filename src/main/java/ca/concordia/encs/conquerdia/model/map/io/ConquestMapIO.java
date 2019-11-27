@@ -1,5 +1,12 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Represents the common properties and functionalities of Conquest map files
  *
@@ -12,7 +19,7 @@ public class ConquestMapIO {
 	 * Represents the start of a comment in the map file
 	 */
 	public static final String COMMENT_SYMBOL = ";";
-	
+
 	/**
 	 * Represents the Map section in the file
 	 */
@@ -99,5 +106,34 @@ public class ConquestMapIO {
 	 */
 	protected static boolean isTerritoriesIdentifier(String line) {
 		return line.equalsIgnoreCase(TERRITORIES_SECTION_IDENTIFIER);
+	}
+
+	/**
+	 * Capitalize the first character of the string if not all uppercase
+	 * 
+	 * @param word The word which may or may not have spaces
+	 * @return if all uppercase the same string
+	 */
+	protected static String formatNames(String word) {
+		if (StringUtils.isAllUpperCase(word))
+			return word;
+		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' });
+	}
+
+	/**
+	 * Checks if the supplied file is a conquest map or not
+	 * 
+	 * @param mapName Name of the map file
+	 * @return true if the map is a conquest map (i.e. contains
+	 *         [Territories]
+	 */
+	public static boolean isConquestMap(String mapName) {
+		try {
+
+			List<String> lines = Files.readAllLines(Paths.get(getMapFilePath(mapName)));
+			return lines.contains(TERRITORIES_SECTION_IDENTIFIER);
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 }

@@ -23,10 +23,16 @@ import ca.concordia.encs.conquerdia.model.map.WorldMap;
  * @author Mosabbir
  */
 
-public class MapReaderTest {
+public class ConquestMapReaderTest {
 
+	/**
+	 * Worldmap to work on
+	 */
 	private static WorldMap worldMap;
-	private static IMapReader reader;
+
+	/**
+	 * Checks if map read is sucessful
+	 */
 	private static boolean isReadSuccessful;
 
 	/**
@@ -37,10 +43,10 @@ public class MapReaderTest {
 	public static void setup() {
 		WorldMap.clear();
 		worldMap = WorldMap.getInstance();
-		reader = new MapReader(worldMap);
-		String map = "uk.map";
+		ConquestMapReader reader = new ConquestMapReader(worldMap);
+		String map = "Montreal.map";
 		assumeTrue(FileHelper.exists(MapIO.getMapFilePath(map)));
-		isReadSuccessful = reader.readMap(map);
+		isReadSuccessful = reader.read(map);
 	}
 
 	/**
@@ -67,7 +73,7 @@ public class MapReaderTest {
 	@Test
 	public void testContinentCount() {
 		// uk map has 6 continents,
-		assertEquals(worldMap.getContinents().size(), 6);
+		assertEquals(worldMap.getContinents().size(), 5);
 	}
 
 	/**
@@ -75,8 +81,7 @@ public class MapReaderTest {
 	 */
 	@Test
 	public void testCountryCount() {
-		// uk map has 75 countries,
-		assertEquals(worldMap.getCountries().size(), 75);
+		assertEquals(worldMap.getCountries().size(), 28);
 	}
 
 	/**
@@ -84,12 +89,16 @@ public class MapReaderTest {
 	 */
 	@Test
 	public void testNeighbors() {
-		// uk map's last border row is 75 73 74 71
-		// i.e. country kent is adjacent to Surrey, Sussex, Essex
-		Country kent = worldMap.getCountry("Kent");
-		assertTrue(kent.isAdjacentTo("Surrey"));
-		assertTrue(kent.isAdjacentTo("Sussex"));
-		assertTrue(kent.isAdjacentTo("Essex"));
+		// Villeray,265,150,Montreal Centre-Est,Ahuntsic,Montreal
+		// Nord,St-Leonard,Rosemont,Mont-ROyal,Outremont
+		Country country = worldMap.getCountry("Villeray");
+		assertTrue(country.getAdjacentCountries().size() == 6);
+		assertTrue(country.isAdjacentTo("Ahuntsic"));
+		assertTrue(country.isAdjacentTo("Montreal Nord"));
+		assertTrue(country.isAdjacentTo("St-Leonard"));
+		assertTrue(country.isAdjacentTo("Rosemont"));
+		assertTrue(country.isAdjacentTo("Mont-Royal"));
+		assertTrue(country.isAdjacentTo("Outremont"));
 	}
 
 	/**
@@ -97,10 +106,9 @@ public class MapReaderTest {
 	 */
 	@Test
 	public void testContinentDetail() {
-		// Uk map has a continent row like: North-Scotland 2 blue
-		Continent continent = worldMap.getContinent("North-Scotland");
+		Continent continent = worldMap.getContinent("Montreal Centre-Ouest");
 		assertNotNull(continent);
-		assertEquals(continent.getValue(), 2);
+		assertEquals(continent.getValue(), 4);
 	}
 
 	/**
@@ -109,11 +117,8 @@ public class MapReaderTest {
 	 */
 	@Test
 	public void testCountryDetail() {
-		// Uk map has a country row like: 18 Ayrshire 2 423 136
-		Country country = worldMap.getCountry("Ayrshire");
+		Country country = worldMap.getCountry("Mont-Royal");
 		assertNotNull(country);
-
-		// Ayshire belongs to continent 2 South-Scotland
-		assertEquals(country.getContinent().getName(), "South-Scotland");
+		assertEquals(country.getContinent().getName(), "Montreal Centre-Ouest");
 	}
 }
