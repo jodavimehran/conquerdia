@@ -25,7 +25,7 @@ public class LoadGameCommand extends AbstractCommand {
 			
 			try {
 				GameIO gameIO = new GameIO();
-				phaseLogList.addAll(gameIO.LoadGame(fileName));
+				phaseLogList.addAll(gameIO.loadGame(fileName));
 
 			} catch (Exception e) {
 				throw new ValidationException("FileName:"+fileName+"Does not Exist.");

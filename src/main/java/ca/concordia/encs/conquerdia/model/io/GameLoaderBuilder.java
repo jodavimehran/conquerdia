@@ -13,6 +13,8 @@ import java.util.Queue;
 import com.google.common.base.CharMatcher;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.Battle;
+import ca.concordia.encs.conquerdia.model.Battle.BattleState;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.Continent;
@@ -22,23 +24,43 @@ import ca.concordia.encs.conquerdia.model.player.Player;
 
 public class GameLoaderBuilder extends GameStateBuilder {
 	private String gameStateFileName;
-	private FileInputStream file ;
 	private Queue<Player> players = new LinkedList<>();
-//	private Player firstPlayer;
-	private int numPlayers;
+	private Player firstPlayer;
+	private Player currentPlayer;
+	private Battle battle;
 	public GameLoaderBuilder(String fileName) throws ValidationException {
 	    this.gameStateFileName = fileName; 
         parseGameStateFile();            
-//        stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
-//        stateProduct.getPlayersModel().setPlayers(players);
-//        stateProduct.getPlayersModel().setNumberOfPlayers(numPlayers);
 	}
+	@Override
+	void buildPlayersModel() {
+		
+		//1.Initial instantiation of state product with PlayersModel object after loading map
+		stateProduct.setPlayersModel(PlayersModel.getInstance());
+		//2.Building the state product saved properties of the game state.
+		stateProduct.getPlayersModel().setPlayers(players);
+		stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
+		stateProduct.getPlayersModel().getCurrentPlayer().setBattle(battle);
+		//3.Updating the PlayersModel with the built state
+		PlayersModel.getInstance().setFirstPlayer(stateProduct.getPlayersModel().getFirstPlayer());
+		PlayersModel.getInstance().setPlayers(stateProduct.getPlayersModel().getPlayers());
+	}
+
+	@Override
+	void buildPhaseModel() {
+		PhaseModel.getInstance();
+	}
+	@Override
+	void buildCards() {	
+		//Load cards interface in build#1 , build #2
+	}
+	
 	private void parseGameStateFile() throws ValidationException {
 		BufferedReader reader;
         try {
         	reader = new BufferedReader(new FileReader(gameStateFileName + ".state"));
         	String line = reader.readLine();
-        	while(line != null) {
+        	while(!line.equals("$$End") ) {
         		if(line.equals("$$PlayersModel")) {
             		line = reader.readLine();
             		if(line.startsWith("$$Players")) {
@@ -83,12 +105,57 @@ public class GameLoaderBuilder extends GameStateBuilder {
                     				 }        				 
                     			 }                			  
                 			 }
-                			 
+                			 players.add(player);
                 			 line = reader.readLine();
                 		}
-                		if(line.startsWith("$$PhaseModel")) {
-                			
+                		currentPlayer = players.peek();
+                		if(line.startsWith("$$FirstPlayer")) {
+                			line = reader.readLine();
+                			while (line != null && !line.startsWith("$$")) {
+                				for(Player player : players) {
+                					if(player.getName().equals(line)) {
+                						firstPlayer = player;
+                						break;
+                					}
+                				}
+                    			line = reader.readLine();
+                			}
                 		}
+                		if(line.startsWith("$$Battle")) {
+                    		line = reader.readLine();
+                    		if(line.startsWith("[")) {
+                    			line = reader.readLine();
+                    		}
+                    		String[] csvBattle = {};
+                    		while (line != null && !line.startsWith("$$")) {		
+                    			csvBattle = line.split("\\|");
+                    			if(currentPlayer != null) {
+                    				WorldMap worldMap = WorldMap.getInstance();
+                    				battle = currentPlayer.getBattle();
+                    				if(battle != null) {
+                        				battle.setToCountry(worldMap.getCountry(csvBattle[0]));
+                        				battle.setFromCountry(worldMap.getCountry(csvBattle[1]));
+                        				battle.setWinner(worldMap.getCountry(csvBattle[2]));
+                        				battle.setNumberOfAttackerDices(Integer.parseInt(csvBattle[3]));
+                        				battle.setNumberOfDefenderDices(Integer.parseInt(csvBattle[4]));
+                        				if(csvBattle[5].equals("Attacked")){
+                        					battle.setState(BattleState.Attacked);
+                        				}else if(csvBattle[5].equals("Defended")){
+                        					battle.setState(BattleState.Defended);
+                        				}else if(csvBattle[5].equals("Conquered")){
+                         					battle.setState(BattleState.Conquered);
+                        				}
+                    				}
+                    			}
+                				line = reader.readLine();
+                    		}
+                		}
+                		if(line.startsWith("$$PhaseModel")) {
+                			line = reader.readLine();
+                			if(line.equals("$$CurrentPhase")) {              				
+                			}
+                		}
+            			break;
             		}
         		}       		
         	}
@@ -96,21 +163,6 @@ public class GameLoaderBuilder extends GameStateBuilder {
         } catch(IOException ex) {
         	throw new ValidationException(gameStateFileName + ex.getMessage());
         }
-	}
-	@Override
-	void buildPlayersModel() {	
-		PlayersModel.getInstance().setFirstPlayer(stateProduct.getPlayersModel().getFirstPlayer());
-		PlayersModel.getInstance().setPlayers(stateProduct.getPlayersModel().getPlayers());
-//		PlayersModel.getInstance().setNumberOfPlayers(stateProduct.getPlayersModel().getNumberOfPlayers());
-	}
-
-	@Override
-	void buildPhaseModel() {
-		PhaseModel.getInstance();
-	}
-	@Override
-	void buildCards() {	
-		//Load cards interface in build#1 , build #2
 	}
 
 }
