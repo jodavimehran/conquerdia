@@ -416,13 +416,26 @@ public class WorldMap implements Serializable {
     }
 
     /**
-     * Clears the data of the map and resets it
-     */
-    public static void clear() {
-        instance = null;
-    }
+	 * Clears the instance of map and resets it
+	 */
+	public static void clear() {
+		instance = null;
+	}
 
-    public boolean isNewMapFromScratch() {
-        return newMapFromScratch;
-    }
+	/**
+	 * Clear data and states such as continent, countries etc.
+	 */
+	public void clearData() {
+		continents.clear();
+		countries.clear();
+	}
+
+	/**
+	 * Checks if the map is from scratch
+	 * 
+	 * @return true if from scratch
+	 */
+	public boolean isNewMapFromScratch() {
+		return newMapFromScratch;
+	}
 }

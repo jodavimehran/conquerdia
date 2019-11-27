@@ -22,6 +22,7 @@ public class GameMap implements IGameMap {
 			reader = new MapReader(worldMap);
 		}
 
+		worldMap.clearData();
 		return reader.readMap(filename);
 	}
 
