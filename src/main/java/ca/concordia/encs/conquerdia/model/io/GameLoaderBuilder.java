@@ -15,6 +15,7 @@ import com.google.common.base.CharMatcher;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.Battle;
 import ca.concordia.encs.conquerdia.model.Battle.BattleState;
+import ca.concordia.encs.conquerdia.model.PhaseModel.PhaseTypes;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.Continent;
@@ -28,9 +29,11 @@ public class GameLoaderBuilder extends GameStateBuilder {
 	private Player firstPlayer;
 	private Player currentPlayer;
 	private Battle battle;
+	private PhaseTypes currentPhase;
+	private String phaseStatus = new String("");
 	public GameLoaderBuilder(String fileName) throws ValidationException {
 	    this.gameStateFileName = fileName; 
-        parseGameStateFile();            
+        parseGameStateFile();
 	}
 	@Override
 	void buildPlayersModel() {
@@ -48,7 +51,12 @@ public class GameLoaderBuilder extends GameStateBuilder {
 
 	@Override
 	void buildPhaseModel() {
-		PhaseModel.getInstance();
+		//1.Initial instantiation of state product with PhaseModel object after loading map
+		stateProduct.setPhaseModel(PhaseModel.getInstance());
+		//2.Building the state product saved properties of the game state.
+		stateProduct.getPhaseModel().setCurrentPhase(currentPhase);
+		stateProduct.getPhaseModel().getPhaseLog().clear();
+		stateProduct.getPhaseModel().getPhaseLog().add(phaseStatus);
 	}
 	@Override
 	void buildCards() {	
@@ -152,10 +160,33 @@ public class GameLoaderBuilder extends GameStateBuilder {
                 		}
                 		if(line.startsWith("$$PhaseModel")) {
                 			line = reader.readLine();
-                			if(line.equals("$$CurrentPhase")) {              				
+                			if(line.equals("$$CurrentPhase")) {
+                    			line = reader.readLine();
+                				switch(line) {
+                				case "REINFORCEMENT":
+                					currentPhase = PhaseTypes.REINFORCEMENT;
+                					break;
+                				case "ATTACK":
+                					currentPhase = PhaseTypes.ATTACK;
+                					break;
+                				case "FORTIFICATION":
+                					currentPhase = PhaseTypes.FORTIFICATION;
+                					break;
+                				default:
+                					break;		
+                				}
+                    			line = reader.readLine();
                 			}
                 		}
-            			break;
+            			if(line.startsWith("$$PhaseStatus")) {
+                			line = reader.readLine();
+            				while (line != null && !line.startsWith("$$")) {
+            	  				if(phaseStatus != null) {
+            	  					phaseStatus = phaseStatus.concat(line).concat("\n");
+            	  				}
+                    			line = reader.readLine();
+            				}
+            			}
             		}
         		}       		
         	}

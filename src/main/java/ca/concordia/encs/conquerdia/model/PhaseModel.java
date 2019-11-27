@@ -20,7 +20,16 @@ import java.util.stream.Collectors;
 public class PhaseModel extends Observable {
     private static PhaseModel instance;
     private final List<String> phaseLog = new ArrayList<>();
-    private PhaseTypes currentPhase = PhaseTypes.NONE;
+    /**
+     * Gets PhaseLog
+     * @return PhaseLog
+     */
+    public List<String> getPhaseLog() {
+		return phaseLog;
+	}
+
+
+	private PhaseTypes currentPhase = PhaseTypes.NONE;
 
     private int numberOfInitialArmies = -1;
     private boolean allCountriesArePopulated;
