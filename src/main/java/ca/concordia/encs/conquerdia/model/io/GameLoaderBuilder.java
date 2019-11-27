@@ -157,7 +157,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
                     			if(currentPlayer != null) {
                     				WorldMap worldMap = WorldMap.getInstance();
                     				battle = currentPlayer.getBattle();
-                    				if(battle != null) {
+                    				if(battle != null && battle.getToCountry() != null && battle.getFromCountry() != null) {
                         				battle.setToCountry(worldMap.getCountry(csvBattle[0]));
                         				battle.setFromCountry(worldMap.getCountry(csvBattle[1]));
                         				battle.setWinner(worldMap.getCountry(csvBattle[2]));
@@ -180,6 +180,9 @@ public class GameLoaderBuilder extends GameStateBuilder {
                 			if(line.equals("$$CurrentPhase")) {
                     			line = reader.readLine();
                 				switch(line) {
+                				case "START_UP":
+                					currentPhase = PhaseTypes.START_UP;
+                					break;
                 				case "REINFORCEMENT":
                 					currentPhase = PhaseTypes.REINFORCEMENT;
                 					break;

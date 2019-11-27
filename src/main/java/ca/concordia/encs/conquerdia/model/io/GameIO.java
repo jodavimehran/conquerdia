@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+
+import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
+
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.Battle;
 import ca.concordia.encs.conquerdia.model.CardType;
@@ -84,11 +87,15 @@ public class GameIO {
 			sb.append(player.getCountryNames()).append("\n");
 		}
 		sb.append("$$FirstPlayer").append("\n");
-		sb.append(firstPlayers.getName()).append("\n"); 
+		if(firstPlayers != null) {
+			sb.append(firstPlayers.getName()).append("\n"); 
+		}else {
+			sb.append("").append("\n"); 
+		}
 		sb.append("$$Battle").append("\n");
 		Battle currentPlayerBattle = playersModel.getCurrentPlayer().getBattle();
 		sb.append("[FromCountry,ToCountry,winner, #AttackerDice,#DefenderDice,state]").append("\n");
-		if(currentPlayerBattle != null) {
+		if(currentPlayerBattle != null && currentPlayerBattle.getFromCountry() != null && currentPlayerBattle.getToCountry()!= null) {
 			sb.append(currentPlayerBattle.getFromCountry().getName()).append("|");
 			sb.append(currentPlayerBattle.getToCountry().getName()).append("|");
 			Country winner = currentPlayerBattle.getWinner();
