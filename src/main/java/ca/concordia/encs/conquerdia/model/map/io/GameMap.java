@@ -40,7 +40,6 @@ public class GameMap implements IGameMap {
 	}
 
 	private boolean isConquestMapFile(String filename) {
-		// TODO check file type
-		return false;
+		return ConquestMapIO.isConquestMap(filename);
 	}
 }

@@ -1,5 +1,9 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -114,5 +118,22 @@ public class ConquestMapIO {
 		if (StringUtils.isAllUpperCase(word))
 			return word;
 		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' });
+	}
+
+	/**
+	 * Checks if the supplied file is a conquest map or not
+	 * 
+	 * @param mapName Name of the map file
+	 * @return true if the map is a conquest map (i.e. contains
+	 *         [Territories]
+	 */
+	public static boolean isConquestMap(String mapName) {
+		try {
+
+			List<String> lines = Files.readAllLines(Paths.get(getMapFilePath(mapName)));
+			return lines.contains(TERRITORIES_SECTION_IDENTIFIER);
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 }
