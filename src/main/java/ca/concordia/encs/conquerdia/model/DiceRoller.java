@@ -20,7 +20,12 @@ public class DiceRoller {
 		}
 		return instance;
 	}
-
+	/**
+	 * Clear this model
+	 */
+	public static void clear() {
+		instance = null;
+	}
 	private DiceRoller() {
 		rand = new SecureRandom();
 	}

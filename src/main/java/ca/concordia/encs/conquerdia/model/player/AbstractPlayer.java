@@ -275,8 +275,9 @@ abstract class AbstractPlayer implements Player {
         for (Map.Entry<String, Continent> entry : continents.entrySet()) {
             numberOfReinforcementArmies += entry.getValue().getValue();
         }
-        if (numberOfReinforcementArmies < 3)
+        if (numberOfReinforcementArmies < 3) {
             numberOfReinforcementArmies = 3;
+        }
         unplacedArmies = numberOfReinforcementArmies;
         return numberOfReinforcementArmies;
     }

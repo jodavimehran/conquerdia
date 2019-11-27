@@ -25,7 +25,8 @@ public enum CommandType {
     ATTACK_MOVE("attackmove", new AttackMoveCommand(), 2),
     EXCHANGE_CARDS("exchangecards", new ExchangeCardsCommand(), 2),
     LOAD_GAME("loadgame", new LoadGameCommand(), 2),
-    SAVE_GAME("savegame", new SaveGameCommand(), 2);
+    SAVE_GAME("savegame", new SaveGameCommand(), 2),
+    ;
 
     private final String name;
     private final Command command;
