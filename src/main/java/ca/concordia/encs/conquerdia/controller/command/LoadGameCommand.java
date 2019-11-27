@@ -25,10 +25,10 @@ public class LoadGameCommand extends AbstractCommand {
 			
 			try {
 				GameIO gameIO = new GameIO();
-				phaseLogList.addAll(gameIO.loadGame(fileName));
+				resultList.addAll(gameIO.loadGame(fileName));
 
 			} catch (Exception e) {
-				throw new ValidationException("FileName:"+fileName+"Does not Exist.");
+				throw new ValidationException("FileName:"+fileName+"does not Exist.");
 			}
 		} else {
 			throw new ValidationException("Invalid input! " + getCommandHelpMessage());

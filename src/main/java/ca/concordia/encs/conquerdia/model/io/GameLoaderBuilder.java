@@ -31,6 +31,9 @@ public class GameLoaderBuilder extends GameStateBuilder {
 	private Battle battle;
 	private PhaseTypes currentPhase;
 	private String phaseStatus = new String("");
+    private int numberOfInitialArmies = -1;
+    private boolean allCountriesArePopulated;
+    private String mapFileName;
 	public GameLoaderBuilder(String fileName) throws ValidationException {
 	    this.gameStateFileName = fileName; 
         parseGameStateFile();
@@ -41,7 +44,13 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		//1.Initial instantiation of state product with PlayersModel object after loading map
 		stateProduct.setPlayersModel(PlayersModel.getInstance());
 		//2.Building the state product saved properties of the game state.
-		stateProduct.getPlayersModel().setPlayers(players);
+		for(Player player: players) {
+			try {
+				stateProduct.getPlayersModel().addPlayer(player.getName(), player.getStrategy());
+			} catch (ValidationException e) {
+				e.printStackTrace();
+			}
+		}
 		stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
 		stateProduct.getPlayersModel().getCurrentPlayer().setBattle(battle);
 		//3.Updating the PlayersModel with the built state
@@ -69,6 +78,14 @@ public class GameLoaderBuilder extends GameStateBuilder {
         	reader = new BufferedReader(new FileReader(gameStateFileName + ".state"));
         	String line = reader.readLine();
         	while(!line.equals("$$End") ) {
+    			if(line.startsWith("$$MapFileName")) {
+        			line = reader.readLine();
+     				while (line != null && !line.startsWith("$$")) {
+    	  				mapFileName = line;
+            			line = reader.readLine();
+    				}
+    			}
+        		WorldMap.getInstance().loadMap(mapFileName);
         		if(line.equals("$$PlayersModel")) {
             		line = reader.readLine();
             		if(line.startsWith("$$Players")) {
@@ -184,6 +201,20 @@ public class GameLoaderBuilder extends GameStateBuilder {
             	  				if(phaseStatus != null) {
             	  					phaseStatus = phaseStatus.concat(line).concat("\n");
             	  				}
+                    			line = reader.readLine();
+            				}
+            			}
+            			if(line.startsWith("$$NumberOfInitialArmies")) {
+                			line = reader.readLine();
+             				while (line != null && !line.startsWith("$$")) {
+            	  				numberOfInitialArmies = Integer.parseInt(line);
+                    			line = reader.readLine();
+            				}
+            			}
+            			if(line.startsWith("$$AllCountriesArePopulated")) {
+                			line = reader.readLine();
+             				while (line != null && !line.startsWith("$$")) {
+            	  				allCountriesArePopulated = line.equals("true") ? true : false;
                     			line = reader.readLine();
             				}
             			}

@@ -25,7 +25,15 @@ public class WorldMap implements Serializable {
     private final Map<String, Continent> continents = new HashMap<>();
     private final Map<String, Country> countries = new HashMap<>();
     private String fileName;
-    private boolean newMapFromScratch;
+    /**
+     * Get fileName of the Map
+     * @return the MapFileName
+     */
+    public String getFileName() {
+		return fileName;
+	}
+
+	private boolean newMapFromScratch;
     private boolean readyForEdit;
     private boolean mapLoaded;
     private boolean connectedGraph;
