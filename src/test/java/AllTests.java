@@ -5,13 +5,13 @@ import org.junit.runners.Suite.SuiteClasses;
 import ca.concordia.encs.conquerdia.controller.command.CommandTestSuite;
 import ca.concordia.encs.conquerdia.model.AbstractPlayerTestSuite;
 import ca.concordia.encs.conquerdia.model.map.MapTestSuite;
-import ca.concordia.encs.conquerdia.model.map.io.FileTestSuite;
+import ca.concordia.encs.conquerdia.model.map.io.MapIOTestSuite;
 
 @RunWith(Suite.class)
 @SuiteClasses({CommandTestSuite.class,
 	AbstractPlayerTestSuite.class,
 	MapTestSuite.class,
-	FileTestSuite.class})
+	MapIOTestSuite.class})
 public class AllTests {
 
 }
