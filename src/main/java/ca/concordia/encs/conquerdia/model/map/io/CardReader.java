@@ -15,18 +15,37 @@ import ca.concordia.encs.conquerdia.model.map.Card;
  *
  */
 public class CardReader implements ICardReader {
-
+	/**
+	 * Comment symbol
+	 */
 	public static final String COMMENT_SYMBOL = ";";
+	/**
+	 * Card section
+	 */
 	public static final String CARDS_SECTION_IDENTIFIER = "[cards]";
+	/**
+	 * Tokens separator
+	 */
 	public static final String TOKENS_DELIMETER = " ";
+
+	/**
+	 * Folder name
+	 */
 	public static final String CARDS_FOLDER = "cards";
+	/**
+	 * File extensions
+	 */
 	public static final String CARDS_FILE_EXTENSION = ".cards";
+	/**
+	 * Types
+	 */
 	public static final String SUPPORTED_TYPES = "INFANTRY,CAVALRY,CANNON";
 
 	/**
-	 * Reads cards from the card file and returns all the cards 
+	 * Reads cards from the card file and returns all the cards
+	 * 
 	 * @param filename Card File name
-	 * @return list of cards 
+	 * @return list of cards
 	 */
 	public ArrayList<Card> loadCards(String filename) throws IOException {
 		final String path = getCardsFilePath(filename);
@@ -50,8 +69,10 @@ public class CardReader implements ICardReader {
 
 		return cards;
 	}
+
 	/**
 	 * Reads the cards in the map.
+	 * 
 	 * @param reader the BufferReaser for the cards
 	 * @return List of cards read.
 	 * @throws IOException
@@ -76,25 +97,31 @@ public class CardReader implements ICardReader {
 
 		return cardList;
 	}
+
 	/**
 	 * CHecks if the CardType is supported.
+	 * 
 	 * @param cardType the card Type that is being checked.
 	 * @return true if the Card Type is supported; false otherwise.
 	 */
 	private boolean isSupprotedCardType(String cardType) {
 		return SUPPORTED_TYPES.contains(cardType.toUpperCase());
 	}
+
 	/**
 	 * CHecks the line to see if it is a Card identifier.
+	 * 
 	 * @param line line of the map.
 	 * @return true if it is a card identifier; otherwise false.
 	 */
 	private static boolean isCardsIdentifier(String line) {
 		return line.equalsIgnoreCase(CARDS_SECTION_IDENTIFIER);
 	}
+
 	/**
 	 * gets the cards file path
-	 * @param filename the file name 
+	 * 
+	 * @param filename the file name
 	 * @return The path to card files
 	 */
 	private static String getCardsFilePath(String filename) {

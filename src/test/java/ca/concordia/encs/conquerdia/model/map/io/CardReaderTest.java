@@ -13,19 +13,28 @@ import org.junit.Test;
 
 import ca.concordia.encs.conquerdia.model.map.Card;
 
+/**
+ * Test class for card reader
+ */
 @Ignore
 public class CardReaderTest {
 
-	private ICardReader reader;
 	/**
-	 * Setup All tests 
+	 * Reader instance
+	 */
+	private ICardReader reader;
+
+	/**
+	 * Setup All tests
 	 */
 	@Before
 	public void beforeTests() {
 		reader = new CardReader();
 	}
+
 	/**
 	 * Test the loadcards method
+	 * 
 	 * @throws IOException
 	 */
 	@Test

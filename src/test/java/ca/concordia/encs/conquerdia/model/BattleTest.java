@@ -8,20 +8,33 @@ import org.junit.Test;
 import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
 
+/**
+ * Test for the {@link Battle} class
+ * 
+ * @author Mosabbir
+ *
+ */
 public class BattleTest {
 
-
+	/**
+	 * Attacking country
+	 */
 	Country attackingCountry;
+
+	/**
+	 * Defending country
+	 */
 	Country defendingCountry;
-    /**
-     * All common activities are placed here
-     */
-    @Before
-    public void setUp() {
-    	attackingCountry = new Country.Builder("Greece", new Continent.Builder("Europe").build()).build();
+
+	/**
+	 * All common activities are placed here
+	 */
+	@Before
+	public void setUp() {
+		attackingCountry = new Country.Builder("Greece", new Continent.Builder("Europe").build()).build();
 		defendingCountry = new Country.Builder("Iran", new Continent.Builder("Asia").build()).build();
-    }
-    
+	}
+
 	/**
 	 * Test dice count generation for attacker
 	 */
