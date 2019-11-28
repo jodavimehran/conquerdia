@@ -140,8 +140,7 @@ public class MapWriterTest {
 		if (Files.isReadable(mapFullPath)) {
 			try {
 				String mapStr = new String(Files.readAllBytes(mapFullPath));
-				assertTrue(mapStr.contains("[borders]\r\n" +
-						"1"));
+				assertTrue(mapStr.contains("[borders]"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
