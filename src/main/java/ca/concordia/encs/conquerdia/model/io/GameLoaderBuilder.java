@@ -68,6 +68,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		stateProduct.setPhaseModel(PhaseModel.getInstance());
 		//2.Building the state product saved properties of the game state.
 		stateProduct.getPhaseModel().setCurrentPhase(currentPhase);
+		stateProduct.getPhaseModel().addPhaseLogs(phaseLog);
 		stateProduct.getPhaseModel().setNumberOfInitialArmies(numberOfInitialArmies);
 		stateProduct.getPhaseModel().setAllCountriesArePopulated(allCountriesArePopulated);
 		//3.Updating the PlayersModel with the built state
