@@ -72,7 +72,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		stateProduct.getPhaseModel().setAllCountriesArePopulated(allCountriesArePopulated);
 		//3.Updating the PlayersModel with the built state
 		PhaseModel.getInstance().setCurrentPhase(stateProduct.getPhaseModel().getCurrentPhase());
-		PhaseModel.getInstance().getPhaseLog().clear();
+		PhaseModel.getInstance().getPhaseLog().add("\n");
 		PhaseModel.getInstance().getPhaseLog().addAll(stateProduct.getPhaseModel().getPhaseLog());
 	}
 	@Override
