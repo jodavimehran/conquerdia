@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
@@ -37,6 +41,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
     private int numberOfInitialArmies = -1;
     private boolean allCountriesArePopulated;
     private String mapFileName;
+    private Map<String , List<String>> countriesProperties = new HashMap<String, List<String>>();
 	public GameLoaderBuilder(String fileName) throws ValidationException {
 	    this.gameStateFileName = fileName; 
         parseGameStateFile();
@@ -63,8 +68,6 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		stateProduct.setPhaseModel(PhaseModel.getInstance());
 		//2.Building the state product saved properties of the game state.
 		stateProduct.getPhaseModel().setCurrentPhase(currentPhase);
-		//stateProduct.getPhaseModel().getPhaseLog().clear();
-		//stateProduct.getPhaseModel().getPhaseLog().add(phaseStatus);
 		stateProduct.getPhaseModel().setNumberOfInitialArmies(numberOfInitialArmies);
 		stateProduct.getPhaseModel().setAllCountriesArePopulated(allCountriesArePopulated);
 		//3.Updating the PlayersModel with the built state
@@ -73,9 +76,32 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		PhaseModel.getInstance().getPhaseLog().addAll(stateProduct.getPhaseModel().getPhaseLog());
 	}
 	@Override
-	void buildCards() {	
-		//Load cards interface in build#1 , build #2
-	}
+	void buildCountries() {	
+		//1.Initial instantiation of state product with Countries object after loading map
+		stateProduct.setCountries(WorldMap.getInstance().getCountries());
+		//2.Building the state product saved properties of the game state.
+		for(Country country :stateProduct.getCountries()) {
+			if(countriesProperties.keySet().contains(country.getName())) {
+				List<String> properties = countriesProperties.get(country.getName());
+				country.setNumberOfArmies(Integer.parseInt(properties.get(0)));
+				for(Player player: PlayersModel.getInstance().getPlayers()) {
+					if(player.getName().equals(properties.get(1))) {
+						country.setOwner(player); 
+						break;
+					}
+				}
+				boolean attackDeclared = properties.get(2).equals("true")?true:false;
+				country.setAttackDeclared(attackDeclared);
+				}
+			}
+		//3.Updating the Countries with the built state
+		for(Country country :stateProduct.getCountries()) {
+			
+			WorldMap.getInstance().getCountriesHashMap().get(country.getName()).setNumberOfArmies(country.getNumberOfArmies());
+			WorldMap.getInstance().getCountriesHashMap().get(country.getName()).setOwner(country.getOwner());
+			WorldMap.getInstance().getCountriesHashMap().get(country.getName()).setAttackDeclared(country.isAttackDeclared());
+			}
+		}
 	
 	private void parseGameStateFile() throws ValidationException {
 		BufferedReader reader;
@@ -90,7 +116,23 @@ public class GameLoaderBuilder extends GameStateBuilder {
             			line = reader.readLine();
     				}
     			}
-        		WorldMap.getInstance().loadMap(mapFileName);
+    			WorldMap.getInstance().loadMap(mapFileName);
+    			if(line.startsWith("$$CountryProperties")) {
+    				line = reader.readLine();
+    				if(line.startsWith("[")) {
+    					line = reader.readLine();
+    				}
+    				String[] csvCountryProperties = {};
+    				while (line != null && !line.startsWith("$$")) {
+    					csvCountryProperties = line.split("\\|");
+    					List<String> properties = new ArrayList<String>();
+    					properties.add(csvCountryProperties[1]);
+    					properties.add(csvCountryProperties[2]);
+    					properties.add(csvCountryProperties[3]);
+    					countriesProperties.put(csvCountryProperties[0], properties);
+    					line = reader.readLine();
+    				}
+    			}
         		if(line.equals("$$PlayersModel")) {
             		line = reader.readLine();
             		if(line.startsWith("$$Players")) {
@@ -137,6 +179,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
                 			 }
                 			 
                 			 player.setUnplacedArmies(Integer.parseInt(csvPlayer[11]));
+                			 player.setTotalNumberOfArmies(Integer.parseInt(csvPlayer[12]));
                 			 players.add(player);
                 			 line = reader.readLine();
                 		}

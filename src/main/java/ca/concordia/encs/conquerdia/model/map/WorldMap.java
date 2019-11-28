@@ -295,6 +295,9 @@ public class WorldMap implements Serializable {
     public Set<Country> getCountries() {
         return countries.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
     }
+    public Map<String,Country> getCountriesHashMap() {
+        return countries;
+    }
 
     /**
      * Find a continent by name and return it

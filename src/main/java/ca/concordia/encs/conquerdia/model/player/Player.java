@@ -222,7 +222,12 @@ public interface Player {
      * @return the total number of armies owned by this player
      */
     int getTotalNumberOfArmies();
-
+    
+    /**
+     * Set totalNumber of Armies 
+     * @param totalNumberOfArmies total number of armies
+     */
+    void setTotalNumberOfArmies(int totalNumberOfArmies);
     /**
      * @param countryName  name of the country
      * @param numberOfArmy number of army

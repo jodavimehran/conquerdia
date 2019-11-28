@@ -24,5 +24,5 @@ public abstract class GameStateBuilder {
     }
     abstract void buildPlayersModel();
 	abstract void buildPhaseModel();
-	abstract void buildCards();
+	abstract void buildCountries();
 }

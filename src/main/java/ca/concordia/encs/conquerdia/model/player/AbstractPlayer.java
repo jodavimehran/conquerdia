@@ -62,8 +62,15 @@ abstract class AbstractPlayer implements Player {
      * has been a successful attack
      */
     private boolean successfulAttack;
-
+    
     /**
+     * This attribute is the total number of armies of the player in the countries he owns;
+     */
+    private int totalNumberOfArmies = 0;
+
+
+
+	/**
      * @param name The name of a player that must be determined when you want to create a player
      */
     public AbstractPlayer(String name) {
@@ -223,8 +230,16 @@ abstract class AbstractPlayer implements Player {
      * @return the total number of armies owned by this player
      */
     public int getTotalNumberOfArmies() {
-        return countries.values().stream().mapToInt(Country::getNumberOfArmies).sum();
+        this.totalNumberOfArmies =  countries.values().stream().mapToInt(Country::getNumberOfArmies).sum();
+        return totalNumberOfArmies;
     }
+    /**
+     * Set totalNumber of Armies 
+     * @param totalNumberOfArmies total number of armies
+     */
+    public void setTotalNumberOfArmies(int totalNumberOfArmies) {
+		this.totalNumberOfArmies = totalNumberOfArmies;
+	}
 
     /**
      * @return the number of continents this player owns

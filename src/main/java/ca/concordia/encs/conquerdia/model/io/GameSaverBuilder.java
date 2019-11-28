@@ -4,6 +4,7 @@ import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.CardExchangeModel;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 public class GameSaverBuilder extends GameStateBuilder {
 	private String gameStateFileName;
@@ -17,8 +18,8 @@ public class GameSaverBuilder extends GameStateBuilder {
 	}
 	
 	@Override
-	void buildCards() {
-		stateProduct.setCards(CardExchangeModel.getInstance().getCards());
+	void buildCountries() {
+		stateProduct.setCountries(WorldMap.getInstance().getCountries());;
 	}
 
 	@Override

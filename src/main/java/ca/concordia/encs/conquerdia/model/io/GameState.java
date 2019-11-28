@@ -3,10 +3,12 @@ package ca.concordia.encs.conquerdia.model.io;
 import ca.concordia.encs.conquerdia.model.CardType;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+import ca.concordia.encs.conquerdia.model.map.Country;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class GameState implements Serializable {
     /**
@@ -16,8 +18,16 @@ public class GameState implements Serializable {
     private List<CardType> cards = new ArrayList<>();
     private PhaseModel phaseModel;
     private PlayersModel playersModel;
+    private Set<Country> countries;
+    public Set<Country> getCountries() {
+		return countries;
+	}
 
-    public PlayersModel getPlayersModel() {
+	public void setCountries(Set<Country> countries) {
+		this.countries = countries;
+	}
+
+	public PlayersModel getPlayersModel() {
         return playersModel;
     }
 

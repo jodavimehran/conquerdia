@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
 
@@ -58,14 +59,24 @@ public class GameIO {
 		PhaseTypes currentPhase = phaseModel.getCurrentPhase();
 		String phaseStatus = phaseModel.getPhaseStatus();
 		List<String> phaseLog = phaseModel.getPhaseLog();
+		Set<Country> countries = gameSaveState.getCountries();
+		
 
 		File file = new File(fileName +".state");
 		StringBuilder sb = new StringBuilder();
 		sb.append("$$MapFileName").append("\n");
 		sb.append(WorldMap.getInstance().getFileName()).append("\n");
+		sb.append("$$CountryProperties").append("\n");
+		sb.append("[CountryName,numberOfArmies,owner,attackDeclared]");
+		for(Country country :countries) {
+			sb.append(country.getName()).append("|");
+			sb.append(country.getNumberOfArmies()).append("|");
+			sb.append(country.getOwner().getName()).append("|");
+			sb.append(country.isAttackDeclared()).append("\n");
+		}
 		sb.append("$$PlayersModel").append("\n");
 		sb.append("$$Players").append("\n");
-		sb.append("[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames, #unplacedArmies]").append("\n");
+		sb.append("[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames, #unplacedArmies, #totalNumberoFArmies]").append("\n");
 		for(Player player: players ) {
 			sb.append(player.getName()).append("|");
 			sb.append(player.getStrategy()).append("|");
@@ -86,7 +97,8 @@ public class GameIO {
 			sb.append(player.hasSuccessfulAttack()).append("|");
 			sb.append(player.getContinentNames()).append("|");
 			sb.append(player.getCountryNames()).append("|");
-			sb.append(player.getUnplacedArmies()).append("\n");
+			sb.append(player.getUnplacedArmies()).append("|");
+			sb.append(player.getTotalNumberOfArmies()).append("\n");
 		}
 		sb.append("$$FirstPlayer").append("\n");
 		if(firstPlayers != null) {

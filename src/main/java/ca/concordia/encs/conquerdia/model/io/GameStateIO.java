@@ -20,9 +20,9 @@ public class GameStateIO implements Serializable{
      */
     public void constructGameState() {
         builder.createNewGameState();
-        builder.buildCards();
         builder.buildPhaseModel();
         builder.buildPlayersModel();
+        builder.buildCountries();
     }
 
     /**

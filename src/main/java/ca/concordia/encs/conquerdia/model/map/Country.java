@@ -18,7 +18,7 @@ public class Country implements Serializable {
     /**
      * name of the country
      */
-    private final String name;
+    private String name;
     /**
      * Represents the borders of a country. All neighbor countries of a country must
      * add to this set.
@@ -33,10 +33,33 @@ public class Country implements Serializable {
      */
     private boolean attackDeclared;
     /**
+     * gets isAttack Declared value
+     * @return true if attack is declared, else false
+     */
+    public boolean isAttackDeclared() {
+		return attackDeclared;
+	}
+
+    /**
+     * Sets the state of the COuntry to attackDeclared
+     */
+    public void setAttackDeclared(boolean attackDeclared) {
+		this.attackDeclared = attackDeclared;
+	}
+
+	/**
      * Number of armies that are placed in this country
      */
     private int numberOfArmies;
     /**
+     * Set NumberoFArmies
+     * @param numberOfArmies
+     */
+    public void setNumberOfArmies(int numberOfArmies) {
+		this.numberOfArmies = numberOfArmies;
+	}
+
+	/**
      * The player that this county belongs to
      */
     private Player owner;
@@ -52,13 +75,6 @@ public class Country implements Serializable {
         this.name = name;
         this.continent = continent;
         this.attackDeclared = false;
-    }
-
-    /**
-     * Sets the state of the COuntry to attackDeclared
-     */
-    public void setAttackDeclared() {
-        this.attackDeclared = true;
     }
 
     /**
@@ -104,7 +120,13 @@ public class Country implements Serializable {
     public String getName() {
         return name;
     }
-
+    /**
+     * Set Country Name
+     * @param name
+     */
+    public void setName(String name) {
+         this.name = name;
+    }
     /**
      * @return The number of armies that are placed in this country
      */
