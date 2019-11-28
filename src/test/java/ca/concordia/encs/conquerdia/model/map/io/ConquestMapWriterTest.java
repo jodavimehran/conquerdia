@@ -100,6 +100,9 @@ public class ConquestMapWriterTest {
 		assertTrue(isWriteSuccessful);
 	}
 
+	/**
+	 * Test if map contains correct territory
+	 */
 	@Test
 	public void testTerritoryName() {
 		if (Files.isReadable(mapFullPath)) {
