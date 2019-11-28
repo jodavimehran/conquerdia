@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -108,8 +107,8 @@ public class MapWriterTest {
 	public void testContinent() {
 		if (Files.isReadable(mapFullPath)) {
 			try {
-				List<String> lines = Files.readAllLines(mapFullPath);
-				assertTrue(lines.contains("Asia 1 Black"));
+				String mapStr = new String(Files.readAllBytes(mapFullPath));
+				assertTrue(mapStr.contains("Asia 1"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -124,8 +123,8 @@ public class MapWriterTest {
 	public void testCountry() {
 		if (Files.isReadable(mapFullPath)) {
 			try {
-				List<String> lines = Files.readAllLines(mapFullPath);
-				assertTrue(lines.contains("1 Armenia 1 0 0"));
+				String mapStr = new String(Files.readAllBytes(mapFullPath));
+				assertTrue(mapStr.contains("Armenia 1"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -140,8 +139,9 @@ public class MapWriterTest {
 	public void testBorder() {
 		if (Files.isReadable(mapFullPath)) {
 			try {
-				List<String> lines = Files.readAllLines(mapFullPath);
-				assertTrue(lines.contains("2 5 3 4"));
+				String mapStr = new String(Files.readAllBytes(mapFullPath));
+				assertTrue(mapStr.contains("[borders]\r\n" +
+						"1"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
