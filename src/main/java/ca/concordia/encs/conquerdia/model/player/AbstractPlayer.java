@@ -289,8 +289,13 @@ abstract class AbstractPlayer implements Player {
     public int getUnplacedArmies() {
         return unplacedArmies;
     }
-
-
+    /**
+     * get Unplaced armies
+     * @param unplacedArmies number of unplaced armies
+     */
+    public void setUnplacedArmies(int unplacedArmies) {
+         this.unplacedArmies = unplacedArmies;
+    }
     /**
      * @param fromCountryName source country
      * @param toCountryName   destination country

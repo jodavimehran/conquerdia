@@ -52,7 +52,7 @@ public interface Player {
      * @return true if the attack is finished
      */
     boolean isAttackFinished();
-
+    
     /**
      * @param isAttackFinished attackfinished boolean value
      */
@@ -125,10 +125,16 @@ public interface Player {
      * any country.
      */
     int getUnplacedArmies();
-
+    /**
+     * Set unplaced Armies
+     * @param unplacedArmies number of Unplaced Armies
+     */
+    void setUnplacedArmies(int unplacedArmies);
+    
     /**
      * @return name of the countries this player owns
      */
+    
     Set<String> getCountryNames();
 
     /**

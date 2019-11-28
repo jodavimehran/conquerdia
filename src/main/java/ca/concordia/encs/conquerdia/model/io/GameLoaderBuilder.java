@@ -6,8 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import com.google.common.base.CharMatcher;
@@ -31,6 +33,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
 	private Battle battle;
 	private PhaseTypes currentPhase;
 	private String phaseStatus = new String("");
+	private List<String> phaseLog = new ArrayList<String>();
     private int numberOfInitialArmies = -1;
     private boolean allCountriesArePopulated;
     private String mapFileName;
@@ -45,11 +48,7 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		stateProduct.setPlayersModel(PlayersModel.getInstance());
 		//2.Building the state product saved properties of the game state.
 		for(Player player: players) {
-			try {
-				stateProduct.getPlayersModel().addPlayer(player.getName(), player.getStrategy());
-			} catch (ValidationException e) {
-				e.printStackTrace();
-			}
+			stateProduct.getPlayersModel().getPlayers().add(player);
 		}
 		stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
 		stateProduct.getPlayersModel().getCurrentPlayer().setBattle(battle);
@@ -64,8 +63,14 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		stateProduct.setPhaseModel(PhaseModel.getInstance());
 		//2.Building the state product saved properties of the game state.
 		stateProduct.getPhaseModel().setCurrentPhase(currentPhase);
-		stateProduct.getPhaseModel().getPhaseLog().clear();
-		stateProduct.getPhaseModel().getPhaseLog().add(phaseStatus);
+		//stateProduct.getPhaseModel().getPhaseLog().clear();
+		//stateProduct.getPhaseModel().getPhaseLog().add(phaseStatus);
+		stateProduct.getPhaseModel().setNumberOfInitialArmies(numberOfInitialArmies);
+		stateProduct.getPhaseModel().setAllCountriesArePopulated(allCountriesArePopulated);
+		//3.Updating the PlayersModel with the built state
+		PhaseModel.getInstance().setCurrentPhase(stateProduct.getPhaseModel().getCurrentPhase());
+		PhaseModel.getInstance().getPhaseLog().clear();
+		PhaseModel.getInstance().getPhaseLog().addAll(stateProduct.getPhaseModel().getPhaseLog());
 	}
 	@Override
 	void buildCards() {	
@@ -130,6 +135,8 @@ public class GameLoaderBuilder extends GameStateBuilder {
                     				 }        				 
                     			 }                			  
                 			 }
+                			 
+                			 player.setUnplacedArmies(Integer.parseInt(csvPlayer[11]));
                 			 players.add(player);
                 			 line = reader.readLine();
                 		}
@@ -204,6 +211,13 @@ public class GameLoaderBuilder extends GameStateBuilder {
             	  				if(phaseStatus != null) {
             	  					phaseStatus = phaseStatus.concat(line).concat("\n");
             	  				}
+                    			line = reader.readLine();
+            				}
+            			}
+            			if(line.startsWith("$$PhaseLog")) {
+                			line = reader.readLine();
+            				while (line != null && !line.startsWith("$$")) {
+            					phaseLog.add(line);
                     			line = reader.readLine();
             				}
             			}

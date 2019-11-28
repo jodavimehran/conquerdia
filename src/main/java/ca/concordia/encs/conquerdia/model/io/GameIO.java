@@ -39,10 +39,10 @@ public class GameIO {
 		List<String> message = new ArrayList<String>();
 		GameState gameLoadState = gameStateIO.getGameState();
 		//Assign gameLoadState objects to Game Model elements
-		PlayersModel playersModel = PlayersModel.getInstance();
-		PhaseModel phaseModel = PhaseModel.getInstance();
-		playersModel = gameLoadState.getPlayersModel();
-		phaseModel = gameLoadState.getPhaseModel();
+		//PlayersModel playersModel = PlayersModel.getInstance();
+		//PhaseModel phaseModel = PhaseModel.getInstance();
+		//playersModel = gameLoadState.getPlayersModel();
+		//phaseModel = gameLoadState.getPhaseModel();
 		message.add(("Game is Loaded Successfuly!"));
 		return message;
 	}
@@ -57,6 +57,7 @@ public class GameIO {
 		PhaseModel phaseModel = gameSaveState.getPhaseModel();
 		PhaseTypes currentPhase = phaseModel.getCurrentPhase();
 		String phaseStatus = phaseModel.getPhaseStatus();
+		List<String> phaseLog = phaseModel.getPhaseLog();
 
 		File file = new File(fileName +".state");
 		StringBuilder sb = new StringBuilder();
@@ -64,7 +65,7 @@ public class GameIO {
 		sb.append(WorldMap.getInstance().getFileName()).append("\n");
 		sb.append("$$PlayersModel").append("\n");
 		sb.append("$$Players").append("\n");
-		sb.append("[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames]").append("\n");
+		sb.append("[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames, #unplacedArmies]").append("\n");
 		for(Player player: players ) {
 			sb.append(player.getName()).append("|");
 			sb.append(player.getStrategy()).append("|");
@@ -84,7 +85,8 @@ public class GameIO {
 			sb.append(player.isAttackFinished()).append("|");
 			sb.append(player.hasSuccessfulAttack()).append("|");
 			sb.append(player.getContinentNames()).append("|");
-			sb.append(player.getCountryNames()).append("\n");
+			sb.append(player.getCountryNames()).append("|");
+			sb.append(player.getUnplacedArmies()).append("\n");
 		}
 		sb.append("$$FirstPlayer").append("\n");
 		if(firstPlayers != null) {
@@ -121,6 +123,10 @@ public class GameIO {
 		sb.append(currentPhase).append("\n");
 		sb.append("$$PhaseStatus").append("\n");
 		sb.append(phaseStatus).append("\n");
+		sb.append("$$PhaseLog").append("\n");
+		for(String log : phaseLog) {
+			sb.append(log).append("\n");		
+		}
 		sb.append("$$NumberOfInitialArmies").append("\n");
 		sb.append(phaseModel.getNumberOfInitialArmies()).append("\n");
 		sb.append("$$AllCountriesArePopulated").append("\n");

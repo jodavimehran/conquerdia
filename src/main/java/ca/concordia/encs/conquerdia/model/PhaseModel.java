@@ -92,6 +92,13 @@ public class PhaseModel extends Observable {
     public boolean isAllCountriesArePopulated() {
         return allCountriesArePopulated;
     }
+    /**
+     * Set the allCountriesArePopulated
+     * @param allCountriesArePopulated
+     */
+     public void setAllCountriesArePopulated(boolean allCountriesArePopulated){
+    	 this.allCountriesArePopulated = allCountriesArePopulated;
+     }
 
     /**
      * @return number of initial armies
@@ -99,7 +106,14 @@ public class PhaseModel extends Observable {
     public int getNumberOfInitialArmies() {
         return numberOfInitialArmies;
     }
-
+    /**
+     * Setter for the numberOfInitialArmies
+     * @param numberOfInitialArmies
+     */
+    public void  setNumberOfInitialArmies(int numberOfInitialArmies ) {
+        this.numberOfInitialArmies = numberOfInitialArmies;
+    }
+    
     /**
      * @return current player
      */
