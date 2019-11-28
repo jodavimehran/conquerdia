@@ -204,11 +204,7 @@ class MapWriter extends MapIO implements IMapWriter {
 		CountryRow countryRow;
 		HashMap<String, Integer> countryNumbers = new HashMap<>();
 		StringBuilder builder;
-
-		for (int i = 0; i < countryRows.size(); i++) {
-			countryRow = countryRows.get(i);
-			countryNumbers.put(countryRow.getName(), countryRow.getNumber());
-		}
+		countryNumbers = getCountryNumbers(countryRows);
 
 		for (int i = 0; i < countryRows.size(); i++) {
 			builder = new StringBuilder();
@@ -221,6 +217,22 @@ class MapWriter extends MapIO implements IMapWriter {
 			borders[i] = builder.toString();
 		}
 		return borders;
+	}
+
+	/**
+	 * Generates country number for each country
+	 * 
+	 * @param countryRows Country rows
+	 * @return country number for each country name in a hashmap
+	 */
+	private HashMap<String, Integer> getCountryNumbers(ArrayList<CountryRow> countryRows) {
+		HashMap<String, Integer> countryNumbers = new HashMap<>();
+		CountryRow countryRow;
+		for (int i = 0; i < countryRows.size(); i++) {
+			countryRow = countryRows.get(i);
+			countryNumbers.put(countryRow.getName(), countryRow.getNumber());
+		}
+		return countryNumbers;
 	}
 
 	/**
