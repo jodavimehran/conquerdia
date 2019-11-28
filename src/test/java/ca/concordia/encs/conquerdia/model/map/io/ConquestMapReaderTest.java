@@ -94,7 +94,7 @@ public class ConquestMapReaderTest {
 		Country country = worldMap.getCountry("Villeray");
 		assertTrue(country.getAdjacentCountries().size() == 6);
 		assertTrue(country.isAdjacentTo("Ahuntsic"));
-		assertTrue(country.isAdjacentTo("Montreal Nord"));
+		assertTrue(country.isAdjacentTo("Montreal_Nord"));
 		assertTrue(country.isAdjacentTo("St-Leonard"));
 		assertTrue(country.isAdjacentTo("Rosemont"));
 		assertTrue(country.isAdjacentTo("Mont-Royal"));
@@ -106,7 +106,7 @@ public class ConquestMapReaderTest {
 	 */
 	@Test
 	public void testContinentDetail() {
-		Continent continent = worldMap.getContinent("Montreal Centre-Ouest");
+		Continent continent = worldMap.getContinent("Montreal_Centre-Ouest");
 		assertNotNull(continent);
 		assertEquals(continent.getValue(), 4);
 	}
@@ -119,6 +119,6 @@ public class ConquestMapReaderTest {
 	public void testCountryDetail() {
 		Country country = worldMap.getCountry("Mont-Royal");
 		assertNotNull(country);
-		assertEquals(country.getContinent().getName(), "Montreal Centre-Ouest");
+		assertEquals(country.getContinent().getName(), "Montreal_Centre-Ouest");
 	}
 }

@@ -117,7 +117,8 @@ public class ConquestMapIO {
 	protected static String formatNames(String word) {
 		if (StringUtils.isAllUpperCase(word))
 			return word;
-		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' });
+		return WordUtils.capitalizeFully(word, new char[] { ' ', '-' })
+				.replaceAll(" ", "_");
 	}
 
 	/**
@@ -129,7 +130,6 @@ public class ConquestMapIO {
 	 */
 	public static boolean isConquestMap(String mapName) {
 		try {
-
 			List<String> lines = Files.readAllLines(Paths.get(getMapFilePath(mapName)));
 			return lines.contains(TERRITORIES_SECTION_IDENTIFIER);
 		} catch (Exception ex) {
