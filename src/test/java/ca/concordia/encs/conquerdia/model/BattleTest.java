@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,9 +36,19 @@ public class BattleTest {
 	 */
 	private static Country defendingCountry;
 
+	/**
+	 * Worldmap
+	 */
 	private static WorldMap worldMap;
+
+	/**
+	 * Playerscontroller
+	 */
 	private static PlayersModel playersController;
 
+	/**
+	 * Players
+	 */
 	private static Player p1, p2;
 
 	/**
@@ -47,25 +59,30 @@ public class BattleTest {
 	@BeforeClass
 	public static void setUp() throws ValidationException {
 		createMap();
-		addPlayers();
-		p1.addCountry(worldMap.getCountry("Iran"));
-		p1.addCountry(worldMap.getCountry("Armenia"));
-		p2.addCountry(worldMap.getCountry("Greece"));
 	}
 
 	/**
 	 * Runs before each tests
+	 * 
+	 * @throws ValidationException
 	 */
 	@Before
-	public void beforeTests() {
+	public void beforeTests() throws ValidationException {
+
+		addPlayers();
+		p1.addCountry(worldMap.getCountry("Iran"));
+		p1.addCountry(worldMap.getCountry("Armenia"));
+		p2.addCountry(worldMap.getCountry("Greece"));
+
 		Player player = playersController.getCurrentPlayer();
 		player.setBattle(null);
+
 		attackingCountry = worldMap.getCountry("Iran");
 		defendingCountry = worldMap.getCountry("Greece");
+
 		worldMap.getCountry("Armenia").setNumberOfArmies(1);
 		attackingCountry.setNumberOfArmies(2);
 		defendingCountry.setNumberOfArmies(1);
-
 	}
 
 	/**
@@ -73,6 +90,20 @@ public class BattleTest {
 	 */
 	@After
 	public void AfterTests() {
+		playersController.getPlayers().clear();
+		Set<String> set = p1.getCountryNames();
+		String[] names = new String[set.size()];
+		set.toArray(names);
+
+		// Remove country from players
+		for (String name : names) {
+			p1.removeCountry(name);
+		}
+
+		p2.getCountryNames().toArray(names);
+		for (String name : names) {
+			p2.removeCountry(name);
+		}
 	}
 
 	/**
@@ -80,7 +111,6 @@ public class BattleTest {
 	 */
 	@Test
 	public void testGetMaxDiceCountForAttacker() {
-
 		Battle battle = new Battle(attackingCountry, defendingCountry);
 		attackingCountry.setNumberOfArmies(1);
 		assertEquals(0, battle.getNumberOfAttackerDices());
@@ -165,27 +195,31 @@ public class BattleTest {
 	 */
 	@Test
 	public void testEndOfGame() throws ValidationException {
-		/*
-		 * Player player = playersController.getCurrentPlayer(); boolean isConquerd =
-		 * false;
-		 * 
-		 * // Do 100 times to increase the chances of winning for (int i = 0; i < 100;
-		 * i++) { attackingCountry.setNumberOfArmies(Integer.MAX_VALUE);
-		 * player.attack("Iran", "Greece", 1, true, false);
-		 * 
-		 * isConquerd = player.getBattle().isConquered(); if (isConquerd) {
-		 * assertTrue(isConquerd); break; } }
-		 * 
-		 * if (isConquerd) { // Check valid move int lastNumDice =
-		 * player.getBattle().getNumberOfAttackerDices();
-		 * attackingCountry.setNumberOfArmies(lastNumDice + 1);
-		 * 
-		 * try { player.attackMove(lastNumDice - 1); } catch (Exception ex) { // Cannot
-		 * move less army than last dices count rolled by the attacker
-		 * assertNotNull(ex); }
-		 * 
-		 * player.attackMove(lastNumDice); }
-		 */
+
+		Player player = playersController.getCurrentPlayer();
+		boolean isConquerd = false;
+
+		// Do 100 times to increase the chances of conquering
+		for (int i = 0; i < 100; i++) {
+			attackingCountry.setNumberOfArmies(Integer.MAX_VALUE);
+			player.attack("Iran", "Greece", 1, true, false);
+
+			isConquerd = player.getBattle().isConquered();
+			if (isConquerd) {
+				assertTrue(isConquerd);
+				break;
+			}
+		}
+
+		assertTrue(isConquerd);
+
+		int lastNumDice = player.getBattle().getNumberOfAttackerDices();
+		attackingCountry.setNumberOfArmies(lastNumDice + 1);
+		player.attackMove(lastNumDice);
+
+		boolean isGameEnd = player.getNumberOfCountries() == 3
+				&& player.getNumberOfContinents() == 2;
+		assertTrue(isGameEnd);
 	}
 
 	/**
