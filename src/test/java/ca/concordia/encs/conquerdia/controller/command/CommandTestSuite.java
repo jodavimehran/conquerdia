@@ -10,7 +10,9 @@ import org.junit.runners.Suite;
 	CommandTypeTest.class,
 	AttackPhaseCommandTest.class,
 	AttackMoveCommandTest.class,
-	AttackCommandTest.class
+	AttackCommandTest.class,
+	SaveGameCommandTest.class,
+	LoadGameCommandTest.class
 })
 /**
  * 
