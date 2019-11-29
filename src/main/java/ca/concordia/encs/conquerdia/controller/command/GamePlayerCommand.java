@@ -10,6 +10,9 @@ import java.util.List;
  * Implementation of the <i>gameplayer</i> command
  */
 public class GamePlayerCommand extends AbstractCommand {
+	/**
+	 * Helper message for the command
+	 */
     public final static String COMMAND_HELP_MSG = "The \"gameplayer\" command is somthing like \"gameplayer -add playername strategy -remove playername\".";
 
     /**

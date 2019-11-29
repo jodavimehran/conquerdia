@@ -11,7 +11,7 @@ import ca.concordia.encs.conquerdia.model.player.Player;
 import java.util.Arrays;
 
 /**
- *
+ * Handles commands
  */
 public class CommandController {
 

@@ -5,9 +5,18 @@ import ca.concordia.encs.conquerdia.model.PlayersModel;
 
 import java.util.List;
 
+/**
+ * Class for attack command
+ */
 public class AttackCommand extends AbstractCommand {
+	/**
+	 * Helper message for command
+	 */
     public final static String COMMAND_HELP_MSG = "A valid \"attack\" command format is: \"attack fromcountry tocountry numdice\", or \"attack fromcountry tocountry -allout\" or \"attack -noattack\".";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void runCommand(List<String> inputCommandParts) throws ValidationException {
         boolean isNoAttack = false;

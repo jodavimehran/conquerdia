@@ -9,64 +9,78 @@ import java.util.List;
  * Card Exchange Model
  */
 public class CardExchangeModel extends Observable {
-    private static CardExchangeModel instance;
-    private final List<CardType> cards = new ArrayList<>();
-    private boolean reinforcementPhaseActive;
+	/**
+	 * Singleton instance holder
+	 */
+	private static CardExchangeModel instance;
 
-    private CardExchangeModel() {
-    }
+	/**
+	 * Cards
+	 */
+	private final List<CardType> cards = new ArrayList<>();
 
-    /**
-     * @return the instance
-     */
-    public static CardExchangeModel getInstance() {
-        if (instance == null) {
-            synchronized (CommandResultModel.class) {
-                if (instance == null) {
-                    instance = new CardExchangeModel();
-                }
-            }
-        }
-        return instance;
-    }
+	/**
+	 * Indicator for the reinforce phase
+	 */
+	private boolean reinforcementPhaseActive;
 
-    /**
-     * Clear this model
-     */
-    public static void clear() {
-        instance = null;
-    }
+	/**
+	 * Private constructor for singleton
+	 */
+	private CardExchangeModel() {
+	}
 
-    /**
-     * @param cards card to be added
-     */
-    public void addCards(List<CardType> cards) {
-        if (cards != null && !cards.isEmpty()) {
-            this.cards.clear();
-            this.cards.addAll(cards);
-            setChanged();
-            notifyObservers(this);
-        }
-    }
+	/**
+	 * @return the instance
+	 */
+	public static CardExchangeModel getInstance() {
+		if (instance == null) {
+			synchronized (CommandResultModel.class) {
+				if (instance == null) {
+					instance = new CardExchangeModel();
+				}
+			}
+		}
+		return instance;
+	}
 
-    /**
-     * @return true if the reinforce phase is active
-     */
-    public boolean isReinforcementPhaseActive() {
-        return reinforcementPhaseActive;
-    }
+	/**
+	 * Clear this model
+	 */
+	public static void clear() {
+		instance = null;
+	}
 
-    /**
-     * @param reinforcementPhaseActive true if the reinforce phase is active
-     */
-    public void setReinforcementPhaseActive(boolean reinforcementPhaseActive) {
-        this.reinforcementPhaseActive = reinforcementPhaseActive;
-    }
+	/**
+	 * @param cards card to be added
+	 */
+	public void addCards(List<CardType> cards) {
+		if (cards != null && !cards.isEmpty()) {
+			this.cards.clear();
+			this.cards.addAll(cards);
+			setChanged();
+			notifyObservers(this);
+		}
+	}
 
-    /**
-     * @return the list of the cards
-     */
-    public List<CardType> getCards() {
-        return cards;
-    }
+	/**
+	 * @return true if the reinforce phase is active
+	 */
+	public boolean isReinforcementPhaseActive() {
+		return reinforcementPhaseActive;
+	}
+
+	/**
+	 * @param reinforcementPhaseActive true if the reinforce phase is active
+	 */
+	public void setReinforcementPhaseActive(boolean reinforcementPhaseActive) {
+		this.reinforcementPhaseActive = reinforcementPhaseActive;
+	}
+
+	/**
+	 * @return the list of the cards
+	 */
+	public List<CardType> getCards() {
+		return cards;
+	}
 }

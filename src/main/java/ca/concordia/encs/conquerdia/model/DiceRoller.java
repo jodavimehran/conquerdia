@@ -8,7 +8,14 @@ import java.util.ArrayList;
  */
 public class DiceRoller {
 
+	/**
+	 * Randomizer
+	 */
 	private SecureRandom rand;
+
+	/**
+	 * Singleton holder
+	 */
 	private static DiceRoller instance;
 
 	/**
@@ -20,12 +27,17 @@ public class DiceRoller {
 		}
 		return instance;
 	}
+
 	/**
 	 * Clear this model
 	 */
 	public static void clear() {
 		instance = null;
 	}
+
+	/**
+	 * Private constructor for the singleton
+	 */
 	private DiceRoller() {
 		rand = new SecureRandom();
 	}
