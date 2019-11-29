@@ -24,8 +24,15 @@ public abstract class AbstractCommand implements Command {
         phaseLogList.clear();
         resultList.clear();
     }
-
     /**
+     * Get resultlist
+     * @return resultlist
+     */
+    public List<String> getResultList() {
+		return resultList;
+	}
+
+	/**
      * @param inputCommandParts the command line parameters.
      */
     @Override

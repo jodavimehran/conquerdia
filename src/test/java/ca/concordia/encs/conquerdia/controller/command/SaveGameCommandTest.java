@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
+@Ignore 
 public class SaveGameCommandTest {
 
 	@Before
@@ -20,6 +22,7 @@ public class SaveGameCommandTest {
 	/**
 	 * Test SaveGame command
 	 */
+
 	@Test
 	public void testSaveGameCommand() {
 		SaveGameCommand savegameCommand = new SaveGameCommand();
