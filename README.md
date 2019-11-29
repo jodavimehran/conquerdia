@@ -15,6 +15,13 @@ Advanced Programming Practices, SOEN 6441 --- Fall 2019
 
 - All the commands defined in the [build 2 requirements](https://users.encs.concordia.ca/~paquet/wiki/images/3/36/Build2Grading.SOEN6441.2019.2.pdf)
 
+- All the commands defined in the [build 3 requirements](https://users.encs.concordia.ca/~paquet/wiki/images/7/78/Build3Grading.SOEN6441.2019.2.pdf)
+
+
+**Maps**
+1. Domination https://sourceforge.net/projects/domination/
+2. Conquest http://www.windowsgames.co.uk/conquest_maps.html 
+
 **Tools & Technologies**
 - Java
 - Maven
@@ -27,4 +34,3 @@ Advanced Programming Practices, SOEN 6441 --- Fall 2019
 - Maps inside resourecs/maps are currently unused. To load existing maps, copy the files to the C:\maps folder and hit load map
 
 
-Map files from: https://sourceforge.net/projects/domination/
