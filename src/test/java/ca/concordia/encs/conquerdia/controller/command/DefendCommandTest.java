@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 
+/**
+ * Test for defend
+ */
 public class DefendCommandTest extends AttackPhaseCommandTest {
 	/**
 	 * TestsDefend command
