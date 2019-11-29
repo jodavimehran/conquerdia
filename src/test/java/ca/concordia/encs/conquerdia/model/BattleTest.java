@@ -159,6 +159,36 @@ public class BattleTest {
 	}
 
 	/**
+	 * Test if player can move valid no of armies after conquer
+	 * 
+	 * @throws ValidationException
+	 */
+	@Test
+	public void testEndOfGame() throws ValidationException {
+		/*
+		 * Player player = playersController.getCurrentPlayer(); boolean isConquerd =
+		 * false;
+		 * 
+		 * // Do 100 times to increase the chances of winning for (int i = 0; i < 100;
+		 * i++) { attackingCountry.setNumberOfArmies(Integer.MAX_VALUE);
+		 * player.attack("Iran", "Greece", 1, true, false);
+		 * 
+		 * isConquerd = player.getBattle().isConquered(); if (isConquerd) {
+		 * assertTrue(isConquerd); break; } }
+		 * 
+		 * if (isConquerd) { // Check valid move int lastNumDice =
+		 * player.getBattle().getNumberOfAttackerDices();
+		 * attackingCountry.setNumberOfArmies(lastNumDice + 1);
+		 * 
+		 * try { player.attackMove(lastNumDice - 1); } catch (Exception ex) { // Cannot
+		 * move less army than last dices count rolled by the attacker
+		 * assertNotNull(ex); }
+		 * 
+		 * player.attackMove(lastNumDice); }
+		 */
+	}
+
+	/**
 	 * Add players
 	 */
 	private static void addPlayers() throws ValidationException {
