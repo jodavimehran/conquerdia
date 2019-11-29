@@ -15,7 +15,7 @@ public class AttackCommand extends AbstractCommand {
         String countryNameFrom = "";
         String countyNameTo = "";
         int numberOfDices = -1;
-        if ("–noattack".equals(inputCommandParts.get(1))) {
+        if ("-noattack".equals(inputCommandParts.get(1))) {
             isNoAttack = true;
         } else {
             countryNameFrom = inputCommandParts.get(1);
