@@ -46,7 +46,7 @@ public class CommandController {
                         } else if (PhaseModel.getInstance().getCurrentPlayer().canPerformAttack()) {
                             commandStr = "attack countrynamefrom countynameto 1";
                         } else {
-                            commandStr = "attack –noattack";
+                            commandStr = "attack -noattack";
                         }
                         break;
                 }

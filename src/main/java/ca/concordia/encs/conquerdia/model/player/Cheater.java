@@ -1,6 +1,7 @@
 package ca.concordia.encs.conquerdia.model.player;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
+import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.Country;
 
 import java.util.ArrayList;
@@ -23,18 +24,18 @@ class Cheater extends AbstractComputerPlayer {
     }
 
     /**
+     * @param country doubles the number of armies on this country
+     */
+    private static void doubleNumberOfArmy(Country country) {
+        country.placeArmy(country.getNumberOfArmies());
+    }
+
+    /**
      * @return the Strategy of this player
      */
     @Override
     public String getStrategy() {
         return "cheater";
-    }
-
-    /**
-     * @param country doubles the number of armies on this country
-     */
-    private static void doubleNumberOfArmy(Country country) {
-        country.placeArmy(country.getNumberOfArmies());
     }
 
     @Override
@@ -58,12 +59,23 @@ class Cheater extends AbstractComputerPlayer {
 
     @Override
     public List<String> attack(String fromCountryName, String toCountryName, int numdice, boolean isAllOut, boolean noAttack) throws ValidationException {
+        List<String> result = new ArrayList<>();
         List<Country> toAddCountries = new ArrayList<>();
         countries.entrySet().stream().forEach(entry -> entry.getValue().getAdjacentCountries().stream().forEach(country -> {
             toAddCountries.add(country);
         }));
         toAddCountries.stream().forEach(country -> {
-                    country.getOwner().removeCountry(country.getName());
+                    Player defender = country.getOwner();
+                    defender.removeCountry(country.getName());
+                    if (defender.getNumberOfCountries() == 0) {
+                        result.add(String.format("%s is kicked out from game.", defender.getName()));
+                        PlayersModel.getInstance().getPlayers().remove(defender);
+                        if (defender.getCards().size() > 0) {
+                            result.add(String.format("Attacker (%s) wins all %d cards of kicked out player (%s).",
+                                    name, defender.getCards().size(), defender.getName()));
+                            cards.addAll(defender.getCards());
+                        }
+                    }
                     addCountry(country);
                 }
         );

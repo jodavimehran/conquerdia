@@ -102,6 +102,12 @@ public class PhaseModel extends Observable {
         return finished;
     }
 
+    /**
+     * @return true when the game reach max number of turn without any winner
+     */
+    public boolean isDraw() {
+        return draw;
+    }
 
     /**
      * @return The current Phase of the game
@@ -268,7 +274,7 @@ public class PhaseModel extends Observable {
                 break;
             }
         }
-        if (maxNumberOfTurns != -1 && PlayersModel.getInstance().getNumberOfTurns() >= maxNumberOfTurns) {
+        if (maxNumberOfTurns != -1 && !finished && PlayersModel.getInstance().getNumberOfTurns() >= maxNumberOfTurns) {
             draw = true;
             finished = true;
         }
@@ -396,6 +402,19 @@ public class PhaseModel extends Observable {
         }
     }
 
+    /**
+     * @return max Number Of Turns
+     */
+    public int getMaxNumberOfTurns() {
+        return maxNumberOfTurns;
+    }
+
+    /**
+     * @param maxNumberOfTurns max Number Of Turns
+     */
+    public void setMaxNumberOfTurns(int maxNumberOfTurns) {
+        this.maxNumberOfTurns = maxNumberOfTurns;
+    }
 
     /**
      * Phase Types

@@ -11,6 +11,7 @@ import ca.concordia.encs.conquerdia.view.CardExchangeView;
 import ca.concordia.encs.conquerdia.view.CommandResultView;
 import ca.concordia.encs.conquerdia.view.PhaseView;
 import ca.concordia.encs.conquerdia.view.PlayersWorldDominationView;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.io.PrintStream;
@@ -72,7 +73,7 @@ public class Starter extends JFrame {
                                         status = "maps";
                                         continue;
                                     }
-                                    throw new Exception();
+                                    throw new Exception("-M is required!");
                                 case "maps":
                                     if ("-P".equals(part) && maps.size() > 0) {
                                         status = "players";
@@ -82,7 +83,7 @@ public class Starter extends JFrame {
                                         maps.add(part);
                                         continue;
                                     }
-                                    throw new Exception();
+                                    throw new Exception("-P is required!");
                                 case "players":
                                     if ("-G".equals(part) && players.size() > 0) {
                                         status = "games";
@@ -92,9 +93,13 @@ public class Starter extends JFrame {
                                         if (playerTypes.contains(part.toLowerCase())) {
                                             players.add(part.toLowerCase());
                                             continue;
+                                        } else {
+                                            throw new Exception("Player type is not valid!");
                                         }
+                                    } else if (players.size() == 5) {
+                                        throw new Exception("max number of player is 5!!");
                                     }
-                                    throw new Exception();
+                                    throw new Exception("-G is required!");
                                 case "games":
                                     if ("-D".equals(part) && numberOfGames != -1) {
                                         status = "maxTurns";
@@ -114,14 +119,24 @@ public class Starter extends JFrame {
                                         if (integer >= 10 && integer <= 50) {
                                             maxNumberOfTurns = integer;
                                             continue;
+                                        } else {
+                                            throw new Exception("max turn is not valid!");
                                         }
                                     }
-                                    throw new Exception();
+                                    throw new Exception("");
 
                             }
                         }
                     }
+
+                    StringBuilder results = new StringBuilder();
+                    results.append("\t\t\t");
+                    for (int i = 0; i < numberOfGames; i++) {
+                        results.append("Game ").append(i + 1).append("\t\t");
+                    }
+                    int mapNumber = 1;
                     for (String map : maps) {
+                        results.append(System.getProperty("line.separator")).append("Map ").append(mapNumber++).append("\t\t");
                         for (int i = 0; i < numberOfGames; i++) {
                             String result;
                             CommandResultModel.clearModel();
@@ -131,29 +146,44 @@ public class Starter extends JFrame {
 
                             PlayersModel.getInstance().addObserver(new PlayersWorldDominationView(output));
                             PhaseModel.getInstance().addObserver(new PhaseView(output));
-
+                            PhaseModel.getInstance().setMaxNumberOfTurns(maxNumberOfTurns);
                             {
                                 commandController.executeCommand("loadmap " + map);
                             }
                             if (PhaseModel.getInstance().getCurrentPhase().equals(PhaseModel.PhaseTypes.START_UP)) {
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("gameplayer");
-
-                                for (String player : players) {
-                                    sb.append(" -add ").append(player).append(" ").append(player);
+                                {
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.append("gameplayer");
+                                    for (String player : players) {
+                                        sb.append(" -add ").append(player).append(" ").append(player);
+                                    }
+                                    commandController.executeCommand(sb.toString());
+                                    commandController.executeCommand("populatecountries");
                                 }
-                                commandController.executeCommand(sb.toString());
-                                commandController.executeCommand("populatecountries");
-                                result = PhaseModel.getInstance().getCurrentPlayer().getName();
+                                if (PhaseModel.getInstance().isDraw()) {
+                                    result = "Draw";
+                                } else {
+                                    result = PhaseModel.getInstance().getCurrentPlayer().getName();
+                                }
                             } else {
-                                result = "map not found!";
+                                result = "Error";
                             }
+                            results.append(StringUtils.rightPad(result, 10, " ")).append("\t");
                         }
                     }
+                    output.println(results.toString());
 
                 } catch (Exception ex) {
-                    output.println("Invalid Tournament Command! tournament -M listofmapfiles -P listofplayerstrategies -G numberofgames -D maxnumberofturns");
+                    output.println("Invalid Tournament Command! " + ex.getMessage() != null ? ex.getMessage() : "");
                 }
+                CommandResultModel.clearModel();
+                CommandResultModel.getInstance().addObserver(new CommandResultView(output));
+                PhaseModel.clear();
+                PhaseModel.getInstance().addObserver(new PhaseView(output));
+                CardExchangeModel.clear();
+                CardExchangeModel.getInstance().addObserver(new CardExchangeView(output));
+                PlayersModel.clear();
+                PlayersModel.getInstance().addObserver(new PlayersWorldDominationView(output));
             } else {
                 commandController.executeCommand(commandStr);
             }
