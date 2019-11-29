@@ -60,7 +60,12 @@ public class GameLoaderBuilder extends GameStateBuilder {
 			stateProduct.getPlayersModel().getPlayers().add(player);
 		}
 		stateProduct.getPlayersModel().setFirstPlayer(firstPlayer);
-		stateProduct.getPlayersModel().getCurrentPlayer().setBattle(battle);
+		if(battle.getToCountry() == null || battle.getFromCountry() == null) {
+			stateProduct.getPlayersModel().getCurrentPlayer().setBattle(null);
+
+		}else {
+			stateProduct.getPlayersModel().getCurrentPlayer().setBattle(battle);
+		}
 		//3.Updating the PlayersModel with the built state
 		PlayersModel.getInstance().setFirstPlayer(stateProduct.getPlayersModel().getFirstPlayer());
 		PlayersModel.getInstance().setPlayers(stateProduct.getPlayersModel().getPlayers());
