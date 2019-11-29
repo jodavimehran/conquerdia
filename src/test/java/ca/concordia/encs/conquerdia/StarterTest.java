@@ -6,9 +6,15 @@ import org.junit.Test;
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * Starter Test
+ */
 public class StarterTest {
 
 
+    /**
+     * tournament Test
+     */
     @Test
     public void tournamentTest() {
         try {
