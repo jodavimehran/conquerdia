@@ -7,13 +7,39 @@ package ca.concordia.encs.conquerdia.model.map.io;
  *
  */
 class CountryRow {
+	/**
+	 * Delimiter for the tokens
+	 */
 	private static final String delimeter = MapIO.TOKENS_DELIMETER;
 
+	/**
+	 * Number of the country
+	 */
 	private int number;
+
+	/**
+	 * Name of the country
+	 */
 	private String name;
+
+	/**
+	 * Continent number
+	 */
 	private int continentNumber;
+
+	/**
+	 * Position in x coord
+	 */
 	private int xPosition;
+
+	/**
+	 * Position in y coord
+	 */
 	private int yPosition;
+
+	/**
+	 * Adjacent countrynames
+	 */
 	private String[] adjacentCountryNames;
 
 	/**
