@@ -675,7 +675,7 @@ abstract class AbstractPlayer implements Player {
 	 * @return true if the battle is not Null; otherwise false;
 	 */
 	private boolean isInBattle() {
-		return battle != null;
+		return battle.getFromCountry() != null && battle.getToCountry() != null;
 	}
 
 	/**
