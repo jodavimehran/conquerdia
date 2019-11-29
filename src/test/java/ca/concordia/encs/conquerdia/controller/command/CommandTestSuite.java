@@ -6,14 +6,17 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-	DefendCommandTest.class,
-	CommandTypeTest.class,
-	AttackPhaseCommandTest.class,
-	AttackMoveCommandTest.class,
-	AttackCommandTest.class
+        DefendCommandTest.class,
+        CommandTypeTest.class,
+        AttackPhaseCommandTest.class,
+        AttackMoveCommandTest.class,
+        AttackCommandTest.class,
+        SaveGameCommandTest.class,
+        LoadGameCommandTest.class,
+        TournamentTest.class
 })
 /**
- * 
+ *
  * @author Sadegh Aalizadeh
  *
  */
