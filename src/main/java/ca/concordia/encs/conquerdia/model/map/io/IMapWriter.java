@@ -1,7 +1,5 @@
 package ca.concordia.encs.conquerdia.model.map.io;
 
-import ca.concordia.encs.conquerdia.model.map.WorldMap;
-
 /**
  * Map Writer interface
  */
