@@ -14,11 +14,30 @@ import java.util.Set;
  * Players Information
  */
 public class PlayersModel extends Observable {
+    /**
+     * current instance of this model
+     */
     private static PlayersModel instance;
 
+    /**
+     * Name of the players
+     */
     private final Set<String> playerNames = new HashSet<>();
+
+    /**
+     * players queue
+     */
     private Queue<Player> players = new LinkedList<>();
+
+    /**
+     * first player
+     */
     private Player firstPlayer;
+
+    /**
+     * number of turns
+     */
+    private int numberOfTurns = -1;
 
     /**
      * private Constructor to implementation of the Singleton Pattern
@@ -84,6 +103,13 @@ public class PlayersModel extends Observable {
     }
 
     /**
+     * @return number of turns
+     */
+    public int getNumberOfTurns() {
+        return numberOfTurns;
+    }
+
+    /**
      * @return number of players
      */
     public int getNumberOfPlayers() {
@@ -140,6 +166,7 @@ public class PlayersModel extends Observable {
         Player player = players.poll();
         player.cleanPlayerStatus();
         players.add(player);
+        numberOfTurns++;
     }
 
     /**
@@ -149,6 +176,7 @@ public class PlayersModel extends Observable {
         while (!firstPlayer.equals(getCurrentPlayer())) {
             giveTurnToAnotherPlayer();
         }
+        numberOfTurns = 0;
     }
 
     /**

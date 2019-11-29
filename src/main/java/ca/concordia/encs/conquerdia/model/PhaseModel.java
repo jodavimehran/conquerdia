@@ -6,7 +6,6 @@ import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.model.player.Player;
 import ca.concordia.encs.conquerdia.util.Observable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -18,23 +17,45 @@ import java.util.stream.Collectors;
  * This class represent the phases of the game
  */
 public class PhaseModel extends Observable {
-    private static PhaseModel instance;
-    private final List<String> phaseLog = new ArrayList<>();
     /**
-     * Gets PhaseLog
-     * @return PhaseLog
+     * current instance
      */
-    public List<String> getPhaseLog() {
-		return phaseLog;
-	}
+    private static PhaseModel instance;
 
+    /**
+     * List of phase log
+     */
+    private final List<String> phaseLog = new ArrayList<>();
 
-	private PhaseTypes currentPhase = PhaseTypes.NONE;
+    /**
+     * Current phase of the game
+     */
+    private PhaseTypes currentPhase = PhaseTypes.NONE;
 
+    /**
+     * number of initial armies
+     */
     private int numberOfInitialArmies = -1;
+
+    /**
+     * shows all Countries Are Populated or not
+     */
     private boolean allCountriesArePopulated;
 
+    /**
+     * true when game is finished
+     */
     private boolean finished;
+
+    /**
+     * true when game is draw
+     */
+    private boolean draw;
+
+    /**
+     * shows the max number of turns
+     */
+    private int maxNumberOfTurns = -1;
 
     /**
      * private Constructor to implementation of the Singleton Pattern
@@ -65,14 +86,24 @@ public class PhaseModel extends Observable {
         instance = null;
     }
 
+    /**
+     * Gets PhaseLog
+     *
+     * @return PhaseLog
+     */
+    public List<String> getPhaseLog() {
+        return phaseLog;
+    }
+
+    /**
+     * @return true if game is finished
+     */
     public boolean isFinished() {
         return finished;
     }
 
-    @JsonIgnore
 
     /**
-     *
      * @return The current Phase of the game
      */
     public PhaseTypes getCurrentPhase() {
@@ -92,13 +123,15 @@ public class PhaseModel extends Observable {
     public boolean isAllCountriesArePopulated() {
         return allCountriesArePopulated;
     }
+
     /**
      * Set the allCountriesArePopulated
+     *
      * @param allCountriesArePopulated
      */
-     public void setAllCountriesArePopulated(boolean allCountriesArePopulated){
-    	 this.allCountriesArePopulated = allCountriesArePopulated;
-     }
+    public void setAllCountriesArePopulated(boolean allCountriesArePopulated) {
+        this.allCountriesArePopulated = allCountriesArePopulated;
+    }
 
     /**
      * @return number of initial armies
@@ -106,14 +139,16 @@ public class PhaseModel extends Observable {
     public int getNumberOfInitialArmies() {
         return numberOfInitialArmies;
     }
+
     /**
      * Setter for the numberOfInitialArmies
+     *
      * @param numberOfInitialArmies
      */
-    public void  setNumberOfInitialArmies(int numberOfInitialArmies ) {
+    public void setNumberOfInitialArmies(int numberOfInitialArmies) {
         this.numberOfInitialArmies = numberOfInitialArmies;
     }
-    
+
     /**
      * @return current player
      */
@@ -233,11 +268,15 @@ public class PhaseModel extends Observable {
                 break;
             }
         }
+        if (maxNumberOfTurns != -1 && PlayersModel.getInstance().getNumberOfTurns() >= maxNumberOfTurns) {
+            draw = true;
+            finished = true;
+        }
         return results;
     }
 
     /**
-     * @param phaseTypes
+     * @param phaseTypes type to change
      */
     private void changePhase(PhaseTypes phaseTypes) {
         phaseLog.clear();
@@ -248,8 +287,8 @@ public class PhaseModel extends Observable {
     }
 
     /**
-     * @param commandType
-     * @return
+     * @param commandType command type
+     * @return true if valid
      */
     public boolean isValidCommand(CommandType commandType) {
         return currentPhase.validCommands.contains(commandType);
@@ -263,7 +302,7 @@ public class PhaseModel extends Observable {
     }
 
     /**
-     * @return
+     * @return the status of the game
      */
     public String getPhaseStatus() {
         StringBuilder sb = new StringBuilder();
@@ -280,7 +319,7 @@ public class PhaseModel extends Observable {
     }
 
     /**
-     * @param logs
+     * @param logs add this list to the list of the log
      */
     public void addPhaseLogs(List<String> logs) {
         if (logs != null && !logs.isEmpty()) {
@@ -369,7 +408,14 @@ public class PhaseModel extends Observable {
         ATTACK("Attack", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.ATTACK, CommandType.DEFEND, CommandType.ATTACK_MOVE, CommandType.SAVE_GAME))),
         FORTIFICATION("Fortification", new HashSet<>(Arrays.asList(CommandType.SHOW_MAP, CommandType.FORTIFY, CommandType.SAVE_GAME)));
 
+        /**
+         * name of the type
+         */
         private final String name;
+
+        /**
+         * the valid command for this phase
+         */
         private final Set<CommandType> validCommands;
 
         /**
