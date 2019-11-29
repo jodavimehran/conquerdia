@@ -41,12 +41,14 @@ public class PlaceAllCommand extends AbstractCommand {
         while (PlayersModel.getInstance().isThereAnyUnplacedArmy()) {
             Player currentPlayer = phaseModel.getCurrentPlayer();
             if (currentPlayer.getUnplacedArmies() > 0) {
-                Set<String> countryNames = currentPlayer.getCountryNames();
-                String[] countriesArray = new String[countryNames.size()];
-                countriesArray = countryNames.toArray(countriesArray);
-                String countryName = countriesArray[randomNumber.nextInt(countryNames.size())];
-                phaseModel.getCurrentPlayer().placeArmy(countryName);
-                phaseLogList.add(String.format("%s placed one army to %s", currentPlayer.getName(), countryName));
+                String countryName = "";
+                if (!currentPlayer.isComputer()) {
+                    Set<String> countryNames = currentPlayer.getCountryNames();
+                    String[] countriesArray = new String[countryNames.size()];
+                    countriesArray = countryNames.toArray(countriesArray);
+                    countryName = countriesArray[randomNumber.nextInt(countryNames.size())];
+                }
+                phaseLogList.add(phaseModel.getCurrentPlayer().placeArmy(countryName));
             }
             PlayersModel.getInstance().giveTurnToAnotherPlayer();
         }

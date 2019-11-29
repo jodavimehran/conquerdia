@@ -13,17 +13,13 @@ import ca.concordia.encs.conquerdia.view.PhaseView;
 import ca.concordia.encs.conquerdia.view.PlayersWorldDominationView;
 import org.apache.commons.lang.StringUtils;
 
-import javax.swing.*;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Project Starter
  */
-public class Starter extends JFrame {
+public class Starter {
     private final CommandController commandController = new CommandController();
 
     /**
@@ -55,8 +51,8 @@ public class Starter extends JFrame {
             if (PhaseModel.getInstance().getCurrentPhase().equals(PhaseModel.PhaseTypes.NONE) && commandStr.startsWith("tournament")) {
                 try {
                     HashSet<String> playerTypes = new HashSet<>(Arrays.asList("aggressive", "benevolent", "random", "cheater"));
-                    Set<String> maps = new HashSet<>();
-                    Set<String> players = new HashSet<>();
+                    Set<String> maps = new TreeSet<>();
+                    Set<String> players = new TreeSet<>();
                     int numberOfGames = -1;
                     int maxNumberOfTurns = -1;
                     String status = "start";
@@ -171,6 +167,7 @@ public class Starter extends JFrame {
                             results.append(StringUtils.rightPad(result, 10, " ")).append("\t");
                         }
                     }
+                    output.println("Tournament Finished Successfully.");
                     output.println(results.toString());
 
                 } catch (Exception ex) {

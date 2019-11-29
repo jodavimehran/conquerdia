@@ -117,4 +117,5 @@ abstract class AbstractComputerPlayer extends AbstractPlayer {
         return String.format("%s chooses to not exchange cards.", name);
 
     }
+
 }

@@ -274,7 +274,7 @@ public class PhaseModel extends Observable {
                 break;
             }
         }
-        if (maxNumberOfTurns != -1 && !finished && PlayersModel.getInstance().getNumberOfTurns() >= maxNumberOfTurns) {
+        if (maxNumberOfTurns != -1 && !finished && !(PhaseTypes.START_UP.equals(currentPhase) || PhaseTypes.NONE.equals(currentPhase)) && PlayersModel.getInstance().getNumberOfTurns() >= maxNumberOfTurns) {
             draw = true;
             finished = true;
         }

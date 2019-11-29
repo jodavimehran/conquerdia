@@ -89,7 +89,7 @@ public class WorldMap  {
     }
 
     /**
-     * Loading a map from an existing “domination” map file to edit or create a new map from scratch if the file does not
+     * Loading a map from an existing domination map file to edit or create a new map from scratch if the file does not
      * exist.
      *
      * @param fileName name of the map file file to edit
@@ -142,7 +142,7 @@ public class WorldMap  {
     }
 
     /**
-     * @return return true if load a map from an existing “domination” map file successfully. return false if the file does not exist.
+     * @return return true if load a map from an existing domination map file successfully. return false if the file does not exist.
      */
     private boolean openMapFile() {
         return gameMap.loadFrom(fileName);

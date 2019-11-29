@@ -51,6 +51,20 @@ public class CommandController {
                         break;
                 }
             }
+            if (PhaseModel.getInstance().getCurrentPlayer() != null && PhaseModel.getInstance().isAllCountriesArePopulated()) {
+                switch (PhaseModel.getInstance().getCurrentPhase()) {
+                    case ATTACK:
+                        if (PhaseModel.getInstance().getCurrentPlayer().canPerformDefend()) {
+                            if (PhaseModel.getInstance().getCurrentPlayer().getBattle().getToCountry().getOwner().isComputer()) {
+                                if (PhaseModel.getInstance().getCurrentPlayer().getBattle().getToCountry().getNumberOfArmies() > 2) {
+                                    commandStr = "defend 2";
+                                } else {
+                                    commandStr = "defend " + PhaseModel.getInstance().getCurrentPlayer().getBattle().getToCountry().getNumberOfArmies();
+                                }
+                            }
+                        }
+                }
+            }
 
             String[] inputCommandParts = commandStr.trim().split(" ");
             if (inputCommandParts.length <= 0) {
@@ -75,7 +89,7 @@ public class CommandController {
 //            }
         } while (PhaseModel.getInstance().getCurrentPlayer() != null &&
                 PhaseModel.getInstance().isAllCountriesArePopulated() &&
-                PhaseModel.getInstance().getCurrentPlayer().isComputer() &&
+                (PhaseModel.getInstance().getCurrentPlayer().isComputer() || (PhaseModel.PhaseTypes.ATTACK.equals(PhaseModel.getInstance().getCurrentPhase()) && PhaseModel.getInstance().getCurrentPlayer().canPerformDefend() && PhaseModel.getInstance().getCurrentPlayer().getBattle().getToCountry().getOwner().isComputer())) &&
                 !PhaseModel.getInstance().isFinished()
         );
     }

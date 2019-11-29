@@ -1,9 +1,8 @@
-package ca.concordia.encs.conquerdia.model;
+package ca.concordia.encs.conquerdia.model.player;
 
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
-import ca.concordia.encs.conquerdia.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 

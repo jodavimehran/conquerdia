@@ -1,5 +1,6 @@
-package ca.concordia.encs.conquerdia.model;
+package ca.concordia.encs.conquerdia.model.player;
 
+import ca.concordia.encs.conquerdia.model.BattleTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
