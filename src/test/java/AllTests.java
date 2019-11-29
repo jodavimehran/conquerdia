@@ -8,10 +8,14 @@ import ca.concordia.encs.conquerdia.model.map.MapTestSuite;
 import ca.concordia.encs.conquerdia.model.map.io.MapIOTestSuite;
 
 @RunWith(Suite.class)
-@SuiteClasses({CommandTestSuite.class,
-	AbstractPlayerTestSuite.class,
-	MapTestSuite.class,
-	MapIOTestSuite.class})
+@SuiteClasses({ CommandTestSuite.class,
+		AbstractPlayerTestSuite.class,
+		MapTestSuite.class,
+		MapIOTestSuite.class })
+
+/**
+ * Test suite for all the packages test suites classes
+ */
 public class AllTests {
 
 }

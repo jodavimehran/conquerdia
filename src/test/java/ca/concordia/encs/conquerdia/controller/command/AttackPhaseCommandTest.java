@@ -14,7 +14,14 @@ import org.junit.Ignore;
 @Ignore
 public abstract class AttackPhaseCommandTest {
 
+	/**
+	 * Worldmap
+	 */
 	protected static WorldMap map;
+
+	/**
+	 * Phase
+	 */
 	protected static PhaseModel phaseModel;
 
 	/**

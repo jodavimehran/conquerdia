@@ -1,5 +1,7 @@
 package ca.concordia.encs.conquerdia.controller.command;
+
 import static org.junit.Assert.assertEquals;
+
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -13,16 +15,28 @@ import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
-@Ignore 
+
+/**
+ * Save command
+ */
+
+@Ignore
 public class SaveGameCommandTest {
 
+	/**
+	 * Runs before each test
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
+
 	/**
 	 * Test SaveGame command
 	 */
 
+	/**
+	 * Test save game command
+	 */
 	@Test
 	public void testSaveGameCommand() {
 		SaveGameCommand savegameCommand = new SaveGameCommand();
@@ -43,7 +57,8 @@ public class SaveGameCommandTest {
 		} catch (ValidationException ex) {
 			message = ex.getMessage();
 		}
-		assertTrue(savegameCommand.getResultList().contains("Game state was saved in the game.state file successfuly! You can Exit the game."));
+		assertTrue(savegameCommand.getResultList()
+				.contains("Game state was saved in the game.state file successfuly! You can Exit the game."));
 
 	}
 

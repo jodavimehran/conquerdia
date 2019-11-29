@@ -1,4 +1,5 @@
 package ca.concordia.encs.conquerdia.controller.command;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -9,12 +10,20 @@ import org.junit.Ignore;
 import org.junit.Test;
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
+
 @Ignore
+/**
+ * Test for load game
+ */
 public class LoadGameCommandTest {
 
+	/**
+	 * Runs before each tests
+	 */
 	@Before
 	public void setUp() throws Exception {
 	}
+
 	/**
 	 * Test LoadGame command
 	 */
@@ -27,9 +36,9 @@ public class LoadGameCommandTest {
 		try {
 			loadgameCommand.runCommand(list);
 		} catch (ValidationException ex) {
-		} 
+		}
 		assertTrue(loadgameCommand.getResultList().contains("Game is Loaded Successfuly!"));
 		int numberOfPlayers = PlayersModel.getInstance().getPlayers().size();
-		assertEquals(numberOfPlayers , 3);
+		assertEquals(numberOfPlayers, 3);
 	}
 }

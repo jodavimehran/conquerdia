@@ -10,6 +10,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Tests for attack commands
+ */
 public class AttackCommandTest {
 	/**
 	 * Setup the data for attack validations

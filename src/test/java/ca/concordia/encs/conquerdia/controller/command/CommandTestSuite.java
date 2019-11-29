@@ -16,9 +16,7 @@ import org.junit.runners.Suite;
         TournamentTest.class
 })
 /**
- *
- * @author Sadegh Aalizadeh
- *
+ * Command package test suite
  */
 public class CommandTestSuite {
 
