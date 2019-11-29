@@ -1,23 +1,15 @@
 package ca.concordia.encs.conquerdia.model.io;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
-
-import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
-
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.Battle;
 import ca.concordia.encs.conquerdia.model.Battle.BattleState;
@@ -28,7 +20,11 @@ import ca.concordia.encs.conquerdia.model.map.Continent;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.model.player.Player;
-
+/**
+ * GameLoaderBuilder builds the gamestate from the saved gamestate file
+ * @author Sadegh Aalizadeh
+ *
+ */
 public class GameLoaderBuilder extends GameStateBuilder {
 	private String gameStateFileName;
 	private Queue<Player> players = new LinkedList<>();
@@ -42,10 +38,18 @@ public class GameLoaderBuilder extends GameStateBuilder {
     private boolean allCountriesArePopulated;
     private String mapFileName;
     private Map<String , List<String>> countriesProperties = new HashMap<String, List<String>>();
-	public GameLoaderBuilder(String fileName) throws ValidationException {
+	/**
+	 * 
+	 * @param fileName the file name to load the gamestate
+	 * @throws ValidationException
+	 */
+    public GameLoaderBuilder(String fileName) throws ValidationException {
 	    this.gameStateFileName = fileName; 
         parseGameStateFile();
 	}
+    /**
+     * build Playersmodel in game after loading the playermodel attributes from gamestate file
+     */
 	@Override
 	void buildPlayersModel() {
 		
@@ -61,7 +65,9 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		PlayersModel.getInstance().setFirstPlayer(stateProduct.getPlayersModel().getFirstPlayer());
 		PlayersModel.getInstance().setPlayers(stateProduct.getPlayersModel().getPlayers());
 	}
-
+	/**
+	 * build PhaseModel in game after loading the phasemodel attributes from gamestate file
+	 */
 	@Override
 	void buildPhaseModel() {
 		//1.Initial instantiation of state product with PhaseModel object after loading map
@@ -76,6 +82,9 @@ public class GameLoaderBuilder extends GameStateBuilder {
 		PhaseModel.getInstance().getPhaseLog().add("\n");
 		PhaseModel.getInstance().getPhaseLog().addAll(stateProduct.getPhaseModel().getPhaseLog());
 	}
+	/**
+	 * build Countries in game after loading the countries properties from gamestate file
+	 */
 	@Override
 	void buildCountries() {	
 		//1.Initial instantiation of state product with Countries object after loading map
@@ -103,7 +112,10 @@ public class GameLoaderBuilder extends GameStateBuilder {
 			WorldMap.getInstance().getCountriesHashMap().get(country.getName()).setAttackDeclared(country.isAttackDeclared());
 			}
 		}
-	
+	/**
+	 * Parse game state file to load attributes of the game PlayerModel,PhaseModel and countries
+	 * @throws ValidationException
+	 */
 	private void parseGameStateFile() throws ValidationException {
 		BufferedReader reader;
         try {

@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-
-import com.fasterxml.jackson.databind.deser.std.FromStringDeserializer;
-
 import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.Battle;
 import ca.concordia.encs.conquerdia.model.CardType;
@@ -20,12 +17,24 @@ import ca.concordia.encs.conquerdia.model.PlayersModel;
 import ca.concordia.encs.conquerdia.model.map.Country;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 import ca.concordia.encs.conquerdia.model.player.Player;
-
+/**
+ * This class has methods to save or load the state of the game  
+ * 
+ */
 public class GameIO {
 	private GameStateIO gameStateIO;
+	/**
+	 * The Game IO constructor
+	 */
 	public GameIO() {
 		this.gameStateIO = new GameStateIO();
 	}
+	/**
+	 * 
+	 * @param fileName the filename to save the game state 
+	 * @return Returns the result of the game state save
+	 * @throws ValidationException
+	 */
 	public String saveGame(String fileName) throws ValidationException {
 		gameStateIO.setBuilder(new GameSaverBuilder(fileName));
 		gameStateIO.constructGameState();
@@ -33,41 +42,42 @@ public class GameIO {
 		String saveGameLog = writeGameState(gameSaveState , fileName);	
 		return saveGameLog;
 	}
-	
+	/**
+	 * 
+	 * @param fileName the filename to load the game
+	 * @return message that shows the game load state.
+	 * @throws Exception
+	 */
 	public List<String> loadGame(String fileName) throws Exception {
 		gameStateIO.setBuilder(new GameLoaderBuilder(fileName));
 		gameStateIO.constructGameState();
 		List<String> message = new ArrayList<String>();
-		GameState gameLoadState = gameStateIO.getGameState();
-		//Assign gameLoadState objects to Game Model elements
-		//PlayersModel playersModel = PlayersModel.getInstance();
-		//PhaseModel phaseModel = PhaseModel.getInstance();
-		//playersModel = gameLoadState.getPlayersModel();
-		//phaseModel = gameLoadState.getPhaseModel();
 		message.add(("Game is Loaded Successfuly!"));
 		return message;
 	}
-	
+	/**
+	 * 
+	 * @param gameSaveState the GameState for the savegame
+	 * @param fileName fileName to save the gamestate
+	 * @return savegame log
+	 * @throws ValidationException
+	 */
 	private String  writeGameState(GameState gameSaveState, String fileName) throws ValidationException {
-		//Save gameSaveState in required file with a defined format
 		String saveGameLog = "";
 		PlayersModel playersModel = gameSaveState.getPlayersModel();  
 		Queue<Player> players = playersModel.getPlayers();
 		Player firstPlayers = playersModel.getFirstPlayer();
-		Player currentPlayer = playersModel.getCurrentPlayer();
 		PhaseModel phaseModel = gameSaveState.getPhaseModel();
 		PhaseTypes currentPhase = phaseModel.getCurrentPhase();
 		String phaseStatus = phaseModel.getPhaseStatus();
 		List<String> phaseLog = phaseModel.getPhaseLog();
 		Set<Country> countries = gameSaveState.getCountries();
-		
-
 		File file = new File(fileName +".state");
 		StringBuilder sb = new StringBuilder();
 		sb.append("$$MapFileName").append("\n");
 		sb.append(WorldMap.getInstance().getFileName()).append("\n");
 		sb.append("$$CountryProperties").append("\n");
-		sb.append("[CountryName,numberOfArmies,owner,attackDeclared]");
+		sb.append("[CountryName,numberOfArmies,owner,attackDeclared]").append("\n");
 		for(Country country :countries) {
 			sb.append(country.getName()).append("|");
 			sb.append(country.getNumberOfArmies()).append("|");
