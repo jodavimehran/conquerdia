@@ -1,8 +1,6 @@
 package ca.concordia.encs.conquerdia.model.io;
 
-import java.io.Serializable;
-
-public class GameStateIO implements Serializable{
+public class GameStateIO {
 	
     /**
      * The Director is to use a specific "build plan": the GameStateBuilder

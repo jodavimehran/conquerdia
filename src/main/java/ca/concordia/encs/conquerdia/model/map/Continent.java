@@ -2,8 +2,6 @@ package ca.concordia.encs.conquerdia.model.map;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
  * A Continent has a set of countries
  * A Continent belongs to a Map
  */
-public class Continent implements Serializable {
+public class Continent  {
 	private final Map<String, Country> countries = new HashMap<>();
 	private String name;
 	private int value;

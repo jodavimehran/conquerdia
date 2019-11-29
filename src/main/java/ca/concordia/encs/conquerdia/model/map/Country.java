@@ -1,8 +1,6 @@
 package ca.concordia.encs.conquerdia.model.map;
 
 import ca.concordia.encs.conquerdia.model.player.Player;
-
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +11,7 @@ import java.util.stream.Collectors;
  * <p>
  * A country can place on a Continent A country has a set of adjacent countries
  */
-public class Country implements Serializable {
+public class Country  {
 
     /**
      * name of the country

@@ -1,6 +1,4 @@
 package ca.concordia.encs.conquerdia.model.map;
-
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,7 +17,7 @@ import ca.concordia.encs.conquerdia.model.map.io.IGameMap;
 /**
  * Represents the world map of the game.
  */
-public class WorldMap implements Serializable {
+public class WorldMap  {
     private final static String NO_MAP_TO_EDIT_ERROR = "There is no map to %s. Use \"editmap filename\" command to load or create a map.";
     private static WorldMap instance;
     private final Map<String, Continent> continents = new HashMap<>();

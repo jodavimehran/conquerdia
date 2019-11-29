@@ -81,7 +81,11 @@ public class GameIO {
 		for(Country country :countries) {
 			sb.append(country.getName()).append("|");
 			sb.append(country.getNumberOfArmies()).append("|");
-			sb.append(country.getOwner().getName()).append("|");
+			if(country.getOwner() != null) {
+				sb.append(country.getOwner().getName()).append("|");
+			}else {
+				sb.append("").append("|");
+			}
 			sb.append(country.isAttackDeclared()).append("\n");
 		}
 		sb.append("$$PlayersModel").append("\n");

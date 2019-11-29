@@ -16,8 +16,15 @@ public abstract class AbstractCommand implements Command {
 
     protected final List<String> phaseLogList = new ArrayList<>();
     protected final List<String> resultList = new ArrayList<>();
-
     /**
+     * Gets the resultlist
+     * @return resultlist
+     */
+    public List<String> getResultList() {
+		return resultList;
+	}
+
+	/**
      * Clear all things
      */
     private void clear() {

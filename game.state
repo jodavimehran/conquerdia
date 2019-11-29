@@ -1,19 +1,68 @@
+$$MapFileName
+risk
+$$CountryProperties
+[CountryName,numberOfArmies,owner,attackDeclared]
+Southern-Europe|1|p1|false
+Mongolia|1|p2|false
+Brazil|1|p3|false
+Japan|1|p1|false
+Ukraine|1|p2|false
+Western-Australia|1|p3|false
+Siberia|1|p3|false
+Ural|1|p3|false
+Alberta|1|p3|false
+South-Africa|1|p3|false
+Congo|1|p2|false
+Irkutsk|1|p1|false
+Indonesia|1|p2|false
+Argentina|1|p1|false
+East-Africa|1|p3|false
+Western-Europe|1|p2|false
+Central-America|1|p1|false
+Kamchatka|1|p2|false
+Yakutsk|1|p3|false
+North-West-Territory|1|p1|false
+India|1|p1|false
+Eastern-United-States|1|p1|false
+Scandinavia|1|p1|false
+Ontario|1|p3|false
+Western-United-States|1|p3|false
+Middle-East|1|p2|false
+Greenland|1|p2|false
+New-Guinea|1|p3|false
+Siam|1|p1|false
+Northern-Europe|1|p3|false
+Alaska|1|p2|false
+Venezuela|1|p1|false
+Great-Britain|1|p2|false
+Afghanistan|1|p1|false
+Quebec|1|p3|false
+North-Africa|1|p2|false
+Iceland|1|p1|false
+China|1|p2|false
+Eastern-Australia|1|p2|false
+Madagascar|1|p2|false
+Egypt|1|p3|false
+Peru|1|p1|false
 $$PlayersModel
 $$Players
-[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames]
-p2|human|0|14|39|0|false|false|false|[]|[Ural, Egypt, Western-Europe, Congo, Iceland, India, Venezuela, Mongolia, North-Africa, Southern-Europe, Eastern-United-States, Ontario, East-Africa, Indonesia]
-p3|human|0|14|35|0|false|false|false|[]|[Central-America, Alberta, Siam, Ukraine, Quebec, Madagascar, Western-Australia, Scandinavia, Irkutsk, Western-United-States, North-West-Territory, Brazil, Greenland, South-Africa]
-p1|human|0|14|35|0|false|false|false|[]|[Afghanistan, Argentina, Eastern-Australia, Northern-Europe, Japan, Yakutsk, Great-Britain, New-Guinea, China, Siberia, Alaska, Kamchatka, Middle-East, Peru]
+[PlayerName,strategy,#Continents,#Countries,#TotalArmies,Cards,FortificationFinished, AttackFinished, SuccessfulAttack , ContinentNames,CountryNames, #unplacedArmies, #totalNumberoFArmies]
+p1|human|0|14|14|21|false|false|false|[]|[Afghanistan, Argentina, Central-America, Siam, Japan, Scandinavia, Iceland, India, Venezuela, Southern-Europe, Irkutsk, North-West-Territory, Eastern-United-States, Peru]|21|14
+p2|human|0|14|14|21|false|false|false|[]|[Eastern-Australia, Ukraine, Madagascar, Western-Europe, Congo, Great-Britain, Mongolia, North-Africa, China, Alaska, Kamchatka, Middle-East, Greenland, Indonesia]|21|14
+p3|human|0|14|14|21|false|false|false|[]|[Ural, Alberta, Northern-Europe, Quebec, Egypt, Western-Australia, Yakutsk, New-Guinea, Western-United-States, Siberia, Brazil, Ontario, East-Africa, South-Africa]|21|14
 $$FirstPlayer
-p2
+p1
 $$Battle
 [FromCountry,ToCountry,winner, #AttackerDice,#DefenderDice,state]
-Ural|China||2|0|Attacked
+
 $$PhaseModel
 $$CurrentPhase
-ATTACK
+NONE
 $$PhaseStatus
-Phase: Attack,Player: p2
-19:34:03.692 - Attack phase has start
-19:34:21.854 - Ural has attacked China with 2 number of dice(s).
+Phase: None
+$$PhaseLog
+$$NumberOfInitialArmies
+35
+$$AllCountriesArePopulated
+true
 $$End

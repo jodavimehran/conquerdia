@@ -28,7 +28,7 @@ public class LoadGameCommand extends AbstractCommand {
 				resultList.addAll(gameIO.loadGame(fileName));
 
 			} catch (Exception e) {
-				throw new ValidationException("FileName:"+fileName+"does not Exist.");
+				throw new ValidationException("FileName:"+fileName+"did not load properly.");
 			}
 		} else {
 			throw new ValidationException("Invalid input! " + getCommandHelpMessage());

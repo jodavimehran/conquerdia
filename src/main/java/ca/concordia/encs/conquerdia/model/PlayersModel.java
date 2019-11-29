@@ -113,7 +113,7 @@ public class PlayersModel extends Observable {
      * @return number of players
      */
     public int getNumberOfPlayers() {
-        return playerNames.size();
+    	return players.size();
     }
 
 
