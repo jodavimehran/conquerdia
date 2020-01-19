@@ -4,6 +4,7 @@ import ca.concordia.encs.conquerdia.Starter;
 import ca.concordia.encs.conquerdia.model.PhaseModel;
 import ca.concordia.encs.conquerdia.model.PlayersModel;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
@@ -21,6 +22,7 @@ public class TournamentTest {
      * tournament Test
      */
     @Test
+    @Ignore
     public void tournamentTest() {
         try {
             PlayersModel.clear();

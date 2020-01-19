@@ -449,7 +449,7 @@ abstract class AbstractPlayer implements Player {
         if (!isInBattle()) {
             throw new ValidationException("There is no attack to defend!");
         }
-        if (battle.isDefendPossible()) {
+        if (!battle.isDefendPossible()) {
             throw new ValidationException("Defend Command is not valid at this phase!");
         }
         if (numDice > 2) {

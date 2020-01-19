@@ -14,9 +14,7 @@ import ca.concordia.encs.conquerdia.exception.ValidationException;
 import ca.concordia.encs.conquerdia.model.map.WorldMap;
 
 /**
- * This class provides a set of methods to read a Conquest map file. It also
- * implements the {@link IDominationMapReader } interface to expose the map
- * reading method
+ * This class provides a set of methods to read a Conquest map file.
  *
  * @author Mosabbir
  */

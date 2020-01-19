@@ -18,7 +18,7 @@ import ca.concordia.encs.conquerdia.model.PlayersModel;
 public class LoadGameCommandTest {
 
 	/**
-	 * Runs before each tests
+	 * Runs before each tests.
 	 */
 	@Before
 	public void setUp() throws Exception {
