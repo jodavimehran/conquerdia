@@ -41,6 +41,7 @@ public class Starter extends JFrame {
      * @param output  the output stream
      */
     public void start(Scanner scanner, PrintStream output) {
+        output.println("Hello!");
         output.println("Welcome to Conquerdia Game");
         CommandResultModel.getInstance().addObserver(new CommandResultView(output));
         PhaseModel.getInstance().addObserver(new PhaseView(output));
