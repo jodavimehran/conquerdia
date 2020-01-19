@@ -24,6 +24,7 @@ public class CardExchangeView implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        System.out.println("something");
         CardExchangeModel cardExchangeModel = (CardExchangeModel) o;
         if (cardExchangeModel.isReinforcementPhaseActive() && !cardExchangeModel.getCards().isEmpty()) {
             output.println("****    Card Exchange View     ****************************************************************");
