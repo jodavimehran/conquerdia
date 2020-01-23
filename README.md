@@ -32,5 +32,3 @@ Advanced Programming Practices, SOEN 6441 --- Fall 2019
 **Limitations**
 - All the map files are created in the C:\maps drive. Due to this hardcoded nature of folder creation, 2 test classes are temporarily ignored. We are planning to fix the issue in the next release
 - Maps inside resourecs/maps are currently unused. To load existing maps, copy the files to the C:\maps folder and hit load map
-
-
