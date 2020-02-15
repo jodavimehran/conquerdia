@@ -32,6 +32,7 @@ public class Starter extends JFrame {
      * @param args input arguments
      */
     public static void main(String[] args) {
+    	System.out.print("this is a test Branch");
         FileHelper.CreateDirectoryIfNotExists(MapIO.MAPS_FOLDER_PATH);
         new Starter().start(new Scanner(System.in), System.out);
     }
